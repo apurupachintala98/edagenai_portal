@@ -42,12 +42,12 @@ function Header({
       </div>
       {(isSearchEnabled || isAuthenticated) && (
         <RightHeaderContainer>
-          {isSearchEnabled && (
+          {/* {isSearchEnabled && (
             <SearchField
               labelText={t("header.searchPlaceholder")}
               placeholder={t("header.searchPlaceholder")}
             />
-          )}
+          )} */}
           {isAuthenticated && checkValidUserInfo(userInfo) && (
             <AuthContainer>
               {t("header.welcomeText")} {userInfo.user.username}!

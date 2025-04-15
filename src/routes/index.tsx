@@ -13,8 +13,8 @@ import Spinner from "components/Spinner";
 function ReactRoute() {
   return (
     <BrowserRouter>
-      <Helmet defaultTitle="Data Genie UI">
-        <meta name="description" content="Data Genie UI" />
+      <Helmet defaultTitle="Elevance Data Intelligence Platform">
+        <meta name="description" content="Elevance Data Intelligence Platform" />
       </Helmet>
       <Suspense fallback={<Spinner />}>
         <Routes>

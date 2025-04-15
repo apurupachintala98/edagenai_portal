@@ -11,7 +11,7 @@ export const LoginLeftImage = styled.div<{ src?: string; height: number }>`
   ${(p) => p.src && `background-image: url(${p.src})`};
   background-repeat: no-repeat;
   background-attachment: fixed;
-  background-size: 50% 100%;
+  background-size: 85% 100%;
   ${(p) => p.height && `height: ${p.height}px`};
   background-position: left center;
 `;

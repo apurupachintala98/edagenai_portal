@@ -43,7 +43,7 @@ export const PageSection = styled.div`
 `;
 
 export const PageSectionHeading = styled.div`
-  background-color: ${(props) => props.theme.color.pageSeactionHeader};
+  // background-color: ${(props) => props.theme.color.pageSeactionHeader};
   color: ${(props) => props.theme.color.text};
   padding: ${(props) => props.theme.space["16"]} ${(props) => props.theme.space["16"]}
     ${(props) => props.theme.space["24"]} ${(props) => props.theme.space["16"]};

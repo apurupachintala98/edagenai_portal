@@ -1,6 +1,6 @@
 {
-  "name": "data-genie-ui",
-  "description": "Data Genie front-end",
+  "name": "edagenai-portal",
+  "description": "Elevance Data Intelligence Platform",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

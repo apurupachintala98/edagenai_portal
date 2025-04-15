@@ -22,7 +22,7 @@ import Header from "components/Header";
 
 import { useLoginForm, useWindowDimensions } from "utils/hooks";
 
-import LoginImage from "assests/images/Login-image.jpg";
+import LoginImage from "assests/images/Login-image.jpeg";
 import LoginImageV2 from "assests/images/Login-image-v2.svg";
 import { TypeProps } from "interface";
 
