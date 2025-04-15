@@ -46,7 +46,7 @@ function Login() {
 
   return (
     <Fragment>
-      <Header zIndex="999" type={TypeProps.Fixed} />
+      <Header zIndex="999" type={TypeProps.Fixed} sidebarType="mini" />
       <AppContainer>
         <Container height={height}>
           <LeftContainer>

@@ -18,6 +18,7 @@ export interface HeaderProps {
   zIndex?: string;
   type?: TypeProps;
   isSearchEnabled?: boolean;
+  sidebarType?: string;
 }
 
 export interface DataTableProps {

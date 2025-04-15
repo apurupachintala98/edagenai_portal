@@ -5,9 +5,11 @@ import {
   AvatarImage,
   Container,
   Logo,
+  LogoContainer,
   LogoutContainer,
   RightHeaderContainer,
   SearchField,
+  TagLine,
 } from "./styled.components";
 
 import { checkValidUserInfo } from "utils/common/index";
@@ -18,16 +20,26 @@ import LogoImg from "assests/images/Logo.svg";
 import { useAuth } from "contexts/AuthContext";
 import { HeaderProps, TypeProps } from "interface";
 
-function Header({ zIndex, type = TypeProps.Auto, isSearchEnabled = false }: HeaderProps) {
+function Header({
+  zIndex,
+  type = TypeProps.Auto,
+  isSearchEnabled = false,
+  sidebarType = "full",
+}: HeaderProps) {
   const { t } = useTranslation();
   const { isAuthenticated, userInfo } = useAuth();
   const { handleLogout } = useLogout();
 
-  console.log("isAuthenticated::", isAuthenticated);
-
   return (
     <Container zIndex={zIndex} type={type}>
-      <Logo src={LogoImg} alt="logo" />
+      <div>
+        {sidebarType === "mini" && (
+          <LogoContainer>
+            <Logo src={LogoImg} alt="logo" />
+            <TagLine>Elevance Data Intelligence Platform Dashboard </TagLine>
+          </LogoContainer>
+        )}
+      </div>
       {(isSearchEnabled || isAuthenticated) && (
         <RightHeaderContainer>
           {isSearchEnabled && (

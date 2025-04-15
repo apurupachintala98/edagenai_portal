@@ -33,7 +33,7 @@ function Home() {
   const navigate = useNavigate();
   return (
     <MainContainer height={height}>
-      <Header zIndex="999" type={TypeProps.Fixed} isSearchEnabled={true} />
+      <Header zIndex="999" type={TypeProps.Fixed} isSearchEnabled={true} sidebarType="mini" />
       <PageContainer>
         <HeaderContainer>
           <PageTitle>{t("home.title")}</PageTitle>

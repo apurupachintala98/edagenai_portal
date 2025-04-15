@@ -21,10 +21,11 @@ export const Container = styled.div<{ zIndex?: string; type?: string }>`
 `;
 
 export const Logo = styled.img`
-  padding-right: ${(props) => props.theme.space["16"]};
+  padding-right: ${(props) => props.theme.space["0"]};
   pointer-events: none;
   height: 3.2rem;
   width: 10.5rem;
+  border-right: 1px solid #d2d2d2;
 `;
 
 export const SearchField = styled(Search)`
@@ -50,8 +51,22 @@ export const AuthContainer = styled.div`
   justify-content: ${(props) => props.theme.justifyContent["space-between"]};
   column-gap: ${(props) => props.theme.space["14"]};
   align-items: ${(props) => props.theme.alignItems["center"]};
+  color: ${(props) => props.theme.color["black"]};
 `;
 
 export const LogoutContainer = styled.div`
   cursor: pointer;
+`;
+
+export const LogoContainer = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+export const TagLine = styled.div`
+  padding-left: ${(props) => props.theme.space["16"]};
+  font-size: ${(props) => props.theme.fontSize.md};
+  line-height: ${(props) => props.theme.lineHeight.md};
+  color: #000000;
+  font-weight: ${(props) => props.theme.fontWeight.medium};
 `;

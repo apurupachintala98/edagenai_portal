@@ -32,12 +32,3 @@ export const ChartImage = styled.div<{ src?: string; height: number }>`
   background-position: center center;
   background-color: ${(props) => props.theme.color.white};
 `;
-
-export const CopyrightText = styled.div`
-  font-size: ${(props) => props.theme.fontSize.sm};
-  line-height: ${(props) => props.theme.lineHeight["30"]};
-  color: #7896d7;
-  border-top: 1px solid #a6c8ff4d;
-  padding: ${(props) => props.theme.space["16"]};
-  margin-top: auto;
-`;

@@ -13,7 +13,7 @@ function Create() {
 
   return (
     <MainContainer height={height}>
-      <Header zIndex="999" type={TypeProps.Fixed} />
+      <Header zIndex="999" type={TypeProps.Fixed} sidebarType="mini" />
       <PageContainer>
         <PageTitle>{t("create.title")}</PageTitle>
       </PageContainer>

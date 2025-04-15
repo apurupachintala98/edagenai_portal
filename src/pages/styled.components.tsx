@@ -48,3 +48,25 @@ export const PageSectionHeading = styled.div`
   padding: ${(props) => props.theme.space["16"]} ${(props) => props.theme.space["16"]}
     ${(props) => props.theme.space["24"]} ${(props) => props.theme.space["16"]};
 `;
+
+export const TagLine = styled.span`
+  font-size: ${(props) => props.theme.fontSize.sm};
+  line-height: ${(props) => props.theme.lineHeight.md};
+  padding: 0 10px;
+  margin-left: 10px;
+  display: flex;
+  align-items: end;
+  border-left: 1px solid #d2d2d2;
+  width: 180px;
+`;
+
+export const ToggleContainer = styled.div`
+  background: #2e4e95;
+  border: 1px solid #637baf;
+  width: 40px;
+  height: 40px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
