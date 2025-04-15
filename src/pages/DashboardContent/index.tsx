@@ -3,9 +3,10 @@ import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
 import { HeaderContainer, MainContainer, PageContainer, PageTitle } from "../styled.components";
+
 import { useWindowDimensions } from "utils/hooks";
 
-function Home() {
+function DashboardContent() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { height } = useWindowDimensions();
@@ -29,4 +30,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default DashboardContent;
