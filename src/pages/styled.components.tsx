@@ -1,0 +1,50 @@
+import styled from "styled-components";
+
+export const MainContainer = styled.div<{ height: number }>`
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  ${(p) => p.height && `height: ${p.height}px`};
+  background-color: ${(props) => props.theme.color.background};
+`;
+
+export const PageContainer = styled.div`
+  padding: ${(props) => props.theme.space["20"]};
+`;
+
+export const HeaderContainer = styled.div`
+  display: ${(props) => props.theme.display["flex"]};
+  align-items: ${(props) => props.theme.alignItems["center"]};
+  justify-content: ${(props) => props.theme.alignContent["space-between"]};
+  margin-bottom: ${(props) => props.theme.space["16"]};
+`;
+
+export const PageTitle = styled.h2`
+  font-family: ${(props) => props.theme.fontFamily["IBM Plex Sans"]},
+    ${(props) => props.theme.fontFamily["sans-serif"]};
+  font-weight: ${(props) => props.theme.fontWeight.normal};
+  font-size: ${(props) => props.theme.fontSize["32"]};
+  line-height: ${(props) => props.theme.lineHeight.lg};
+  letter-spacing: ${(props) => props.theme.letterSpacing["0"]};
+  color: ${(props) => props.theme.color.black};
+`;
+
+export const PageSection = styled.div`
+  background-color: ${(props) => props.theme.color.white};
+  border: 1px solid ${(props) => props.theme.color.pageSectionBorder};
+  box-shadow: 0px 4px 4px 0px ${(props) => props.theme.color.pageSectionShadow};
+  padding: ${(props) => props.theme.space["5"]};
+  margin-top: ${(props) => props.theme.space["16"]};
+  .tableHeader,
+  .tableHeader th {
+    background-color: ${(props) => props.theme.color.pageSectionBackground};
+    color: ${(props) => props.theme.color.white};
+  }
+`;
+
+export const PageSectionHeading = styled.div`
+  background-color: ${(props) => props.theme.color.pageSeactionHeader};
+  color: ${(props) => props.theme.color.text};
+  padding: ${(props) => props.theme.space["16"]} ${(props) => props.theme.space["16"]}
+    ${(props) => props.theme.space["24"]} ${(props) => props.theme.space["16"]};
+`;
