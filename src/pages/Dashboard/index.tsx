@@ -124,7 +124,7 @@ function Dashboard() {
                   },
                 },
               }}
-              style={{ borderBottom: "1px solid #A6C8FF4D" }}
+              style={{ borderBottom: "1px solid #A6C8FF4D", justifyContent: "center" }}
             >
               <ListItemIcon
                 sx={{
