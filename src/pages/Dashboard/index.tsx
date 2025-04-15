@@ -173,8 +173,7 @@ function Dashboard() {
           component="main"
           sx={{
             flexGrow: 1,
-            p: 3,
-            mt: 8,
+            mt: 10,
             backgroundColor: "background.default",
             transition: "margin 0.3s ease",
           }}

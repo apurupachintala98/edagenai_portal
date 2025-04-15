@@ -5,7 +5,7 @@ const theme = {
     primary: "#161616",
     secondary: "#44b8f3",
     text: "#161616",
-    background: "#edf5ff",
+    background: "#DFEBFF",
     headerShadow: "#2a66d833",
     headerBorder: "#b6c7e6",
     pageSectionBackground: "#6f6f6f",
