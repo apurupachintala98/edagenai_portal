@@ -60,10 +60,9 @@ const projectFieldMap: Record<string, keyof project> = {
 function Project() {
   const navigate = useNavigate();
   const { height } = useWindowDimensions();
-  const { projects, loading } = useProjectData();
+  const { projects, loading, fetchProjects, addProject, editProject, removeProject } = useProjectData();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editMode, setEditMode] = useState(false);
-  const { addProject, editProject, removeProject } = useProjectData();
   // const [formData, setFormData] = useState<project>({
   //   SL_NO: "",
   //   STAFF_VP: "",
@@ -145,6 +144,7 @@ function Project() {
     } else {
       await addProject(formData);
     }
+    await fetchProjects();
     setIsModalOpen(false);
   };
 
