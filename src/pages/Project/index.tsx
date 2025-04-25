@@ -50,13 +50,12 @@ const projectFieldMap: Record<string, keyof project> = {
   Platform_Services: "PLATFORM_SERVICES",
   data: "DATA",
   Business_User: "BUSINESS_USER",
-  Start_Date: "START_DATE",
-  Deployment_Date: "DEPLOYMENT_DATE",
   Current_Phase: "CURRENT_PHASE",
   status: "STATUS",
   Link_to_Slide: "LINK_TO_SLIDE",
   Notes: "NOTES"
 };
+
 
 function Project() {
   const navigate = useNavigate();
