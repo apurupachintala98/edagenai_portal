@@ -78,14 +78,6 @@ function DashboardContent() {
       <PageContainer>
         <HeaderContainer>
           <PageTitle>{t("dashboard.title")}</PageTitle>
-          {/* <ButtonContainer>
-            <Button kind="primary" size="lg" onClick={() => {}} renderIcon={DocumentAdd}>
-              {t("home.createButtonText")}
-            </Button>
-            <Button kind="primary" size="lg" onClick={() => {}} renderIcon={Dashboard}>
-              {t("home.frameworkButtonText")}
-            </Button>
-          </ButtonContainer> */}
           <ButtonContainer style={{ display: "flex", gap: "1rem" }}>
             <DropdownButton
               icon={DocumentAdd}
