@@ -15,8 +15,11 @@ import {
   TextInput,
   Column,
   Grid,
+  DatePicker,
+  DatePickerInput,
   Button as CarbonButton
 } from "@carbon/react";
+
 import { Edit, TrashCan, Add } from '@carbon/icons-react';
 import { useNavigate } from "react-router-dom";
 import { ButtonContainer } from "./styled.components";
@@ -34,6 +37,29 @@ const headers = [
   { header: "Actions", key: "actions", isSortable: true },
 ];
 
+const emptyProject: project = {
+  SL_NO: "",
+  STAFF_VP: "",
+  DIRECTOR: "",
+  LEAD_NM: "",
+  TGOV_NO: "",
+  PROGRAM_TYPE: "",
+  PROJECT_NAME: "",
+  PROJECT_DESCRIPTION: "",
+  LLM_PLATFORM: "",
+  LLM_MODEL: "",
+  PLATFORM_SERVICES: "",
+  DATA: "",
+  BUSINESS_USER: "",
+  START_DATE: "",
+  DEPLOYMENT_DATE: "",
+  CURRENT_PHASE: "",
+  STATUS: "",
+  LINK_TO_SLIDE: "",
+  NOTES: ""
+};
+
+
 function Project() {
   const navigate = useNavigate();
   const { height } = useWindowDimensions();
@@ -41,31 +67,31 @@ function Project() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const { addProject, editProject, removeProject } = useProjectData();
-  const [formData, setFormData] = useState<project>({
-    SL_NO: "",
-    STAFF_VP: "",
-    DIRECTOR: "",
-    LEAD_NM: "",
-    TGOV_NO: "",
-    PROGRAM_TYPE: "",
-    PROJECT_NAME: "",
-    PROJECT_DESCRIPTION: "",
-    LLM_PLATFORM: "",
-    LLM_MODEL: "",
-    PLATFORM_SERVICES: "",
-    DATA: "",
-    BUSINESS_USER: "",
-    START_DATE: "",
-    DEPLOYMENT_DATE: "",
-    CURRENT_PHASE: "",
-    STATUS: "",
-    LINK_TO_SLIDE: "",
-    NOTES: ""
-  });
-  
+  // const [formData, setFormData] = useState<project>({
+  //   SL_NO: "",
+  //   STAFF_VP: "",
+  //   DIRECTOR: "",
+  //   LEAD_NM: "",
+  //   TGOV_NO: "",
+  //   PROGRAM_TYPE: "",
+  //   PROJECT_NAME: "",
+  //   PROJECT_DESCRIPTION: "",
+  //   LLM_PLATFORM: "",
+  //   LLM_MODEL: "",
+  //   PLATFORM_SERVICES: "",
+  //   DATA: "",
+  //   BUSINESS_USER: "",
+  //   START_DATE: "",
+  //   DEPLOYMENT_DATE: "",
+  //   CURRENT_PHASE: "",
+  //   STATUS: "",
+  //   LINK_TO_SLIDE: "",
+  //   NOTES: ""
+  // });
+  const [formData, setFormData] = useState<project>({ ...emptyProject });
   const openAddModal = () => {
     setEditMode(false);
-    setFormData({ ...formData, SL_NO: "" });
+    setFormData({ ...emptyProject });
     setIsModalOpen(true);
   };
 
@@ -180,7 +206,7 @@ function Project() {
             </DataTable>
           )}
         </TableContainer>
-        <Modal
+        {/* <Modal
           open={isModalOpen}
           modalHeading={editMode ? "Edit Project" : "Add Project"}
           primaryButtonText="Submit"
@@ -203,7 +229,56 @@ function Project() {
                   value={formData.LEAD_NM}
                   onChange={(e) => handleChange("LEAD_NM", e.target.value)}
                 />
-                {/* Add more fields here as needed */}
+                
+              </div>
+            </Column>
+          </Grid>
+        </Modal> */}
+        <Modal
+          open={isModalOpen}
+          modalHeading={editMode ? "Edit Project" : "Add Project"}
+          primaryButtonText="Submit"
+          secondaryButtonText="Cancel"
+          onRequestClose={() => setIsModalOpen(false)}
+          onRequestSubmit={handleSubmit}
+        >
+          <Grid fullWidth>
+            <Column sm={4} md={8} lg={16}>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: "1rem" }}>
+                {Object.keys(emptyProject).map((key) => {
+                  if (["START_DATE", "DEPLOYMENT_DATE"].includes(key)) return null;
+                  return (
+                    <TextInput
+                      key={key}
+                      id={key}
+                      labelText={key.replace(/_/g, ' ').toUpperCase()}
+                      value={(formData as any)[key]}
+                      onChange={(e) => handleChange(key as keyof project, e.target.value)}
+                    />
+                  );
+                })}
+                <DatePicker
+                  datePickerType="single"
+                  value={formData.START_DATE}
+                  onChange={(e: any) => handleChange("START_DATE", e[0])}
+                >
+                  <DatePickerInput
+                    id="START_DATE"
+                    labelText="Start Date"
+                    placeholder="yyyy-mm-dd"
+                  />
+                </DatePicker>
+                <DatePicker
+                  datePickerType="single"
+                  value={formData.DEPLOYMENT_DATE}
+                  onChange={(e: any) => handleChange("DEPLOYMENT_DATE", e[0])}
+                >
+                  <DatePickerInput
+                    id="DEPLOYMENT_DATE"
+                    labelText="Deployment Date"
+                    placeholder="yyyy-mm-dd"
+                  />
+                </DatePicker>
               </div>
             </Column>
           </Grid>
