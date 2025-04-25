@@ -31,7 +31,6 @@ function Home() {
           height: "100%",
           objectFit: "cover",
           zIndex: 0,
-          // opacity: 0.9,
         }}
       >
         <source src={backgroundVideo} type="video/mp4" />
