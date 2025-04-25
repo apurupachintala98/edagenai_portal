@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import ApiService from '../services/ApiService';
 
-interface Project {
+export interface project {
   SL_NO: string;
   STAFF_VP: string;
   DIRECTOR: string;
@@ -24,7 +24,7 @@ interface Project {
 }
 
 export function useProjectData() {
-  const [projects, setProjects] = useState<Project[]>([]);
+  const [projects, setProjects] = useState<project[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -43,19 +43,19 @@ export function useProjectData() {
     }
   };
 
-  const addProject = async (newProject: Project) => {
+  const addProject = async (newProject: project) => {
     try {
       const created = await ApiService.insertNewProjectDetails(newProject);
-      setProjects((prev: Project[]) => [...prev, created]);
+      setProjects((prev: project[]) => [...prev, created]);
     } catch (error) {
       console.error("Failed to add project:", error);
     }
   };
 
-  const editProject = async (sl_no: string, updatedProject: Project) => {
+  const editProject = async (sl_no: string, updatedProject: project) => {
     try {
       const updated = await ApiService.updateProjectDetails(sl_no, updatedProject);
-      setProjects((prev: Project[]) => prev.map(p => p.SL_NO === sl_no ? updated : p));
+      setProjects((prev: project[]) => prev.map(p => p.SL_NO === sl_no ? updated : p));
     } catch (error) {
       console.error("Failed to update project:", error);
     }
@@ -64,7 +64,7 @@ export function useProjectData() {
   const removeProject = async (sl_no: string) => {
     try {
       await ApiService.deleteProjectDetails(sl_no);
-      setProjects((prev: Project[]) => prev.filter(p => p.SL_NO !== sl_no));
+      setProjects((prev: project[]) => prev.filter(p => p.SL_NO !== sl_no));
     } catch (error) {
       console.error("Failed to delete project:", error);
     }
