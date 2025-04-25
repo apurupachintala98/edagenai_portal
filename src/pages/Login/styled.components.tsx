@@ -50,16 +50,14 @@ export const RightContainer = styled.div`
       ${(props) => props.theme.space["0"]} ${(props) => props.theme.space["80"]};
   }
   .Toastify {
-    font-family: ${(props) => props.theme.fontFamily["ZCOOL QingKe HuangYou"]},
-      ${(props) => props.theme.fontFamily["sans-serif"]};
+    font-family: ${(props) => props.theme.fontFamily.Poppins};
     font-size: ${(props) => props.theme.fontSize.sm};
     line-height: ${(props) => props.theme.lineHeight.md};
   }
 `;
 
 export const DataGenie = styled.div`
-  font-family: ${(props) => props.theme.fontFamily["ZCOOL QingKe HuangYou"]},
-    ${(props) => props.theme.fontFamily["sans-serif"]};
+  font-family: ${(props) => props.theme.fontFamily.Poppins};
   font-weight: ${(props) => props.theme.fontWeight.normal};
   font-size: ${(props) => props.theme.fontSize["30"]};
   line-height: ${(props) => props.theme.lineHeight.lg};

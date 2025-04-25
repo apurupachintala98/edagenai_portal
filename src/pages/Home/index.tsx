@@ -1,63 +1,76 @@
-import { Breadcrumb, BreadcrumbItem, Button } from "@carbon/react";
-import { Dashboard, DocumentAdd } from "@carbon/react/icons";
-import { useTranslation } from "react-i18next";
+import { ArrowRight } from "@carbon/react/icons";
 import { useNavigate } from "react-router-dom";
 
 import {
-  HeaderContainer,
-  MainContainer,
-  PageContainer,
-  PageSection,
-  PageSectionHeading,
-  PageTitle,
-} from "../styled.components";
-import {
-  ButtonContainer,
-  ChartImage,
-  LeftSection,
-  RightSection,
-  TopSection,
+  CenteredContent,
+  WelcomeText,
+  MainTitle,
+  SubText,
+  EnterButton,
+  TextBox
 } from "./styled.components";
-import DataTable from "components/DataTable";
 import Header from "components/Header";
-
-import { useWindowDimensions } from "utils/hooks";
-
-import { jobStatusHeaders, jobStatusRows, KPIHeaders, KPIRows } from "./mock";
-import chartImage from "assests/images/chart.svg";
 import { TypeProps } from "interface";
+import backgroundVideo from "assests/videos/home-bg.mp4";
 
 function Home() {
-  const { t } = useTranslation();
-  const { height } = useWindowDimensions();
   const navigate = useNavigate();
+
   return (
-    <MainContainer height={height}>
-      <Header zIndex="999" type={TypeProps.Fixed} isSearchEnabled={true} sidebarType="mini" />
-      <PageContainer>
-        <HeaderContainer>
-          <PageTitle>{t("home.title")}</PageTitle>
-          <ButtonContainer>
-            <Button kind="primary" size="lg" onClick={() => {}} renderIcon={DocumentAdd}>
-              {t("home.createButtonText")}
-            </Button>
-            <Button
-              kind="secondary"
-              size="lg"
-              onClick={() => navigate("/dashboard")}
-              renderIcon={Dashboard}
-              className="helpButton"
-            >
-              {t("home.helpButtonText")}
-            </Button>
-          </ButtonContainer>
-        </HeaderContainer>
-        <Breadcrumb>
-          <BreadcrumbItem isCurrentPage>{t("home.BreadcrumbHomeText")}</BreadcrumbItem>
-        </Breadcrumb>
-      </PageContainer>
-    </MainContainer>
+    <div style={{ height: "100vh", width: "100vw", overflow: "hidden", position: "relative" }}>
+      <video
+        autoPlay
+        loop
+        muted
+        playsInline
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          objectFit: "cover",
+          zIndex: 0,
+          // opacity: 0.9,
+        }}
+      >
+        <source src={backgroundVideo} type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
+      <div
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          backgroundColor: "rgba(0, 0, 0, 0.5)",
+          zIndex: 1,
+        }}
+      />
+
+      <div style={{ position: "relative", zIndex: 1, height: "100%", width: "100%" }}>
+        <Header zIndex="999" type={TypeProps.Fixed} isSearchEnabled={true} sidebarType="mini" />
+
+        <CenteredContent>
+          <TextBox>
+            <WelcomeText>Welcome to the</WelcomeText>
+            <MainTitle>Elevance Data <br />Intelligence Platform</MainTitle>
+            <SubText>
+              Unlock innovation with Generative AI solutions. Empower with cutting-edge AI solutions
+              using our<br /> state-of-the-art platforms, architectures, and frameworks. From guidance on AI
+              taskforce reviews<br /> to seamless project tracking, we’re here to drive success at every
+              step.
+            </SubText>
+            <EnterButton onClick={() => navigate("/dashboard")}>
+              Enter <ArrowRight />
+            </EnterButton>
+          </TextBox>
+        </CenteredContent>
+      </div>
+    </div>
   );
 }
 
 export default Home;
+

@@ -9,6 +9,11 @@ export interface ThemeProps {
   children: React.ReactNode;
 }
 
+export interface ProgressReportData {
+  name: string;
+  value: number;
+}
+
 export enum TypeProps {
   Auto = "auto",
   Fixed = "fixed",
@@ -43,6 +48,7 @@ export interface AuthContextType {
   isAuthenticated: boolean;
   login: (userInfo: UserInfo) => void;
   logout: () => void;
+  verifyAdminPassword: (input: string) => Promise<boolean>;
 }
 
 export interface AuthProviderProps {

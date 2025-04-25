@@ -1,5 +1,8 @@
 import "react-app-polyfill/ie11";
 import "react-app-polyfill/stable";
+import '@fontsource/poppins'; 
+import '@fontsource/poppins/300.css';
+import '@fontsource/poppins/600.css';
 import { Profiler } from "react";
 import ReactDOM from "react-dom/client";
 

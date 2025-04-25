@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { Slide, toast } from "react-toastify";
 
-import ApiService from "services";
+import ApiService from "../../services/ApiService";
 
 import { useAuth } from "contexts/AuthContext";
 

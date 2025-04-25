@@ -3,9 +3,9 @@ import { Helmet } from "react-helmet-async";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 
 const Login = lazy(() => import("pages/Login"));
-const Create = lazy(() => import("pages/Create"));
-const Home = lazy(() => import("pages/Home"));
 const Dashboard = lazy(() => import("pages/Dashboard"));
+const Home = lazy(() => import("pages/Home"));
+const Admin = lazy(() => import("pages/Admin"));
 
 import PrivateRoute from "components/PrivateRoute";
 import Spinner from "components/Spinner";
@@ -21,7 +21,7 @@ function ReactRoute() {
           <Route path="/" element={<Login />} />
           <Route path="/home" element={<PrivateRoute element={<Home />} />} />
           <Route path="/dashboard" element={<PrivateRoute element={<Dashboard />} />} />
-          <Route path="/create" element={<PrivateRoute element={<Create />} />} />
+          <Route path="/admin" element={<PrivateRoute element={<Admin />} />} />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </Suspense>

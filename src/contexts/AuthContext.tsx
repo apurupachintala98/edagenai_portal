@@ -1,7 +1,5 @@
 import React, { createContext, useContext, useState } from "react";
-
 import { checkValidUserInfo } from "utils/common";
-
 import { AuthContextType, AuthProviderProps, UserInfo } from "interface";
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -35,8 +33,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   console.log("isAuthenticated AUTH::", userInfo);
 
+  const verifyAdminPassword = async (input: string): Promise<boolean> => {
+    const correctPassword = "admin123";
+    return input === correctPassword;
+  };
+
   return (
-    <AuthContext.Provider value={{ userInfo, isAuthenticated, login, logout }}>
+    <AuthContext.Provider value={{ userInfo, isAuthenticated, login, logout, verifyAdminPassword }}>
       {children}
     </AuthContext.Provider>
   );

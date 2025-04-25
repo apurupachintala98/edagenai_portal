@@ -32,15 +32,3 @@ export const ChartImage = styled.div<{ src?: string; height: number }>`
   background-position: center center;
   background-color: ${(props) => props.theme.color.white};
 `;
-
-export const DashboardCardsWrapper = styled.div`
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 1.5rem;
-  margin-bottom: 2rem;
-margin: 0 20px;
-  @media (min-width: 768px) {
-    grid-template-columns: repeat(3, 1fr);
-  }
-`;
-
