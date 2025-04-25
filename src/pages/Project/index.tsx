@@ -96,7 +96,7 @@ function Project() {
                         <TableRow key={key} {...rowPropsWithoutKey}>
                           {row.cells.map((cell) => (
                             <TableCell key={cell.id}>
-                              {cell.info.header === "Actions" ? (
+                              {cell.info.header === "actions" ? (
                                 <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
                                   <Edit
                                     size={16}
