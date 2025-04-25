@@ -3,24 +3,24 @@ import ApiService from '../services/ApiService';
 
 interface Project {
   SL_NO: string;
-  Staff_VP: string;
-  Director: string;
+  STAFF_VP: string;
+  DIRECTOR: string;
   LEAD_NM: string;
   TGOV_NO: string;
-  Program_Type: string;
-  Project_Name: string;
-  Project_Description: string;
+  PROGRAM_TYPE: string;
+  PROJECT_NAME: string;
+  PROJECT_DESCRIPTION: string;
   LLM_PLATFORM: string;
   LLM_MODEL: string;
-  Platform_Services: string;
-  data: string;
-  Business_User: string;
-  Start_Date: string;
-  Deployment_Date: string;
-  Current_Phase: string;
-  status: string;
-  Link_to_Slide: string;
-  Notes: string;
+  PLATFORM_SERVICES: string;
+  DATA: string;
+  BUSINESS_USER: string;
+  START_DATE: string;
+  DEPLOYMENT_DATE: string;
+  CURRENT_PHASE: string;
+  STATUS: string;
+  LINK_TO_SLIDE: string;
+  NOTES: string;
 }
 
 export function useProjectData() {
