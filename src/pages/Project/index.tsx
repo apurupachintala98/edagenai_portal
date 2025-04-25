@@ -157,9 +157,9 @@ function Project() {
   };
 
   // Map only selected fields for each project
-  const projectRows = projects.map((proj) => ({
+  const projectRows = projects.map((proj, index) => ({
     id: proj.SL_NO, // Unique row id for DataTable
-    SL_NO: proj.SL_NO,
+    SL_NO: index + 1,
     PROJECT_NAME: proj.PROJECT_NAME,
     LEAD_NM: proj.LEAD_NM,
     STAFF_VP: proj.STAFF_VP,
@@ -208,37 +208,6 @@ function Project() {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {/* {rows.map((row) => {
-                      const { key, ...rowPropsWithoutKey } = getRowProps({ row });
-                      return (
-                        <TableRow key={key} {...rowPropsWithoutKey}>
-                          {row.cells.map((cell) => (
-                            <TableCell key={cell.id}>
-                              {cell.info.header === "actions" ? (
-                                <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-                                  <Edit
-                                    size={16}
-                                    style={{ cursor: 'pointer' }}
-                                    title="Edit"
-                                    onClick={() => openEditModal(projects.find(p => p.SL_NO === row.id)!)}
-                                  />
-                                  <TrashCan
-                                    size={16}
-                                    style={{ cursor: 'pointer' }}
-                                    title="Delete"
-                                    onClick={() => handleDelete(row.id)}
-                                  />
-                                </div>
-                              ) : cell.value !== null && cell.value !== undefined ? (
-                                cell.value
-                              ) : (
-                                "-"
-                              )}
-                            </TableCell>
-                          ))}
-                        </TableRow>
-                      );
-                    })} */}
                     {rows.map((row, index) => {
                       const { key, ...rowPropsWithoutKey } = getRowProps({ row });
                       const isLastRow = index === rows.length - 1;
@@ -279,34 +248,6 @@ function Project() {
             </DataTable>
           )}
         </TableContainer>
-        {/* <Modal
-          open={isModalOpen}
-          modalHeading={editMode ? "Edit Project" : "Add Project"}
-          primaryButtonText="Submit"
-          secondaryButtonText="Cancel"
-          onRequestClose={() => setIsModalOpen(false)}
-          onRequestSubmit={handleSubmit}
-        >
-          <Grid fullWidth>
-            <Column sm={4} md={8} lg={16}>
-              <div style={{ display: "flex", flexWrap: "wrap", gap: "1rem" }}>
-                <TextInput
-                  id="PROJECT_NAME"
-                  labelText="Project Name"
-                  value={formData.PROJECT_NAME}
-                  onChange={(e) => handleChange("PROJECT_NAME", e.target.value)}
-                />
-                <TextInput
-                  id="LEAD_NM"
-                  labelText="Lead Name"
-                  value={formData.LEAD_NM}
-                  onChange={(e) => handleChange("LEAD_NM", e.target.value)}
-                />
-                
-              </div>
-            </Column>
-          </Grid>
-        </Modal> */}
         <Modal
           open={isModalOpen}
           modalHeading={editMode ? "Edit Project" : "Add Project"}
