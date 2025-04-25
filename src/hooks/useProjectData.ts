@@ -23,6 +23,29 @@ export interface project {
   NOTES: string;
 }
 
+// Add this mapping helper
+const mapProjectToCamelCase = (project: project) => ({
+  SL_NO: project.SL_NO,
+  Staff_VP: project.STAFF_VP,
+  Director: project.DIRECTOR,
+  LEAD_NM: project.LEAD_NM,
+  TGOV_NO: project.TGOV_NO,
+  Program_Type: project.PROGRAM_TYPE,
+  Project_Name: project.PROJECT_NAME,
+  Project_Description: project.PROJECT_DESCRIPTION,
+  LLM_PLATFORM: project.LLM_PLATFORM,
+  LLM_MODEL: project.LLM_MODEL,
+  Platform_Services: project.PLATFORM_SERVICES,
+  data: project.DATA,
+  Business_User: project.BUSINESS_USER,
+  Start_Date: project.START_DATE,
+  Deployment_Date: project.DEPLOYMENT_DATE,
+  Current_Phase: project.CURRENT_PHASE,
+  status: project.STATUS,
+  Link_to_Slide: project.LINK_TO_SLIDE,
+  Notes: project.NOTES,
+});
+
 export function useProjectData() {
   const [projects, setProjects] = useState<project[]>([]);
   const [loading, setLoading] = useState(true);
@@ -43,19 +66,41 @@ export function useProjectData() {
     }
   };
 
+  // const addProject = async (newProject: project) => {
+  //   try {
+  //     const created = await ApiService.insertNewProjectDetails(newProject);
+  //     setProjects((prev: project[]) => [...prev, created]);
+  //   } catch (error) {
+  //     console.error("Failed to add project:", error);
+  //   }
+  // };
+
+  // const editProject = async (sl_no: string, updatedProject: project) => {
+  //   try {
+  //     const updated = await ApiService.updateProjectDetails(sl_no, updatedProject);
+  //     setProjects((prev: project[]) => prev.map(p => p.SL_NO === sl_no ? updated : p));
+  //   } catch (error) {
+  //     console.error("Failed to update project:", error);
+  //   }
+  // };
+
   const addProject = async (newProject: project) => {
     try {
-      const created = await ApiService.insertNewProjectDetails(newProject);
+      const payload = mapProjectToCamelCase(newProject);
+      const created = await ApiService.insertNewProjectDetails(payload);
       setProjects((prev: project[]) => [...prev, created]);
     } catch (error) {
       console.error("Failed to add project:", error);
     }
   };
-
+  
   const editProject = async (sl_no: string, updatedProject: project) => {
     try {
-      const updated = await ApiService.updateProjectDetails(sl_no, updatedProject);
-      setProjects((prev: project[]) => prev.map(p => p.SL_NO === sl_no ? updated : p));
+      const payload = mapProjectToCamelCase(updatedProject);
+      const updated = await ApiService.updateProjectDetails(sl_no, payload);
+      setProjects((prev: project[]) =>
+        prev.map((p) => (p.SL_NO === sl_no ? updated : p))
+      );
     } catch (error) {
       console.error("Failed to update project:", error);
     }
