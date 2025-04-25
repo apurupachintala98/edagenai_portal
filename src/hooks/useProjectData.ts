@@ -58,13 +58,15 @@ export function useProjectData() {
     setLoading(true);
     try {
       const data = await ApiService.getAllProjectDetails();
-      setProjects(data);
+      console.log("Fetched Projects:", data); // ← Add this for debugging
+      setProjects(data); // Ensure this is an array of `project`
     } catch (error) {
       console.error("Failed to fetch projects:", error);
     } finally {
       setLoading(false);
     }
   };
+  
 
   const addProject = async (newProject: project) => {
     try {

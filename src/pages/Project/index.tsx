@@ -229,8 +229,10 @@ function Project() {
                                     onClick={() => handleDelete(row.id)}
                                   />
                                 </div>
+                              ) : cell.value !== null && cell.value !== undefined ? (
+                                cell.value
                               ) : (
-                                cell.value ?? "-"
+                                "-"
                               )}
                             </TableCell>
                           ))}
