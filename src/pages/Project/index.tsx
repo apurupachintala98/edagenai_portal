@@ -208,7 +208,7 @@ function Project() {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {rows.map((row) => {
+                    {/* {rows.map((row) => {
                       const { key, ...rowPropsWithoutKey } = getRowProps({ row });
                       return (
                         <TableRow key={key} {...rowPropsWithoutKey}>
@@ -238,7 +238,40 @@ function Project() {
                           ))}
                         </TableRow>
                       );
+                    })} */}
+                    {rows.map((row, index) => {
+                      const { key, ...rowPropsWithoutKey } = getRowProps({ row });
+                      const isLastRow = index === rows.length - 1;
+                      return (
+                        <TableRow key={key} {...rowPropsWithoutKey} style={isLastRow ? { backgroundColor: 'yellow' } : {}}>
+                          {row.cells.map((cell) => (
+                            <TableCell key={cell.id}>
+                              {cell.info.header === "actions" ? (
+                                <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                                  <Edit
+                                    size={16}
+                                    style={{ cursor: 'pointer' }}
+                                    title="Edit"
+                                    onClick={() => openEditModal(projects.find(p => p.SL_NO === row.id)!)}
+                                  />
+                                  <TrashCan
+                                    size={16}
+                                    style={{ cursor: 'pointer' }}
+                                    title="Delete"
+                                    onClick={() => handleDelete(row.id)}
+                                  />
+                                </div>
+                              ) : cell.value !== null && cell.value !== undefined ? (
+                                cell.value
+                              ) : (
+                                "-"
+                              )}
+                            </TableCell>
+                          ))}
+                        </TableRow>
+                      );
                     })}
+
                   </TableBody>
 
                 </Table>
@@ -274,7 +307,7 @@ function Project() {
             </Column>
           </Grid>
         </Modal> */}
-    <Modal
+        <Modal
           open={isModalOpen}
           modalHeading={editMode ? "Edit Project" : "Add Project"}
           primaryButtonText="Submit"
