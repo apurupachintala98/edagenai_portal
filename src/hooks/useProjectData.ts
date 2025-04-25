@@ -66,29 +66,12 @@ export function useProjectData() {
     }
   };
 
-  // const addProject = async (newProject: project) => {
-  //   try {
-  //     const created = await ApiService.insertNewProjectDetails(newProject);
-  //     setProjects((prev: project[]) => [...prev, created]);
-  //   } catch (error) {
-  //     console.error("Failed to add project:", error);
-  //   }
-  // };
-
-  // const editProject = async (sl_no: string, updatedProject: project) => {
-  //   try {
-  //     const updated = await ApiService.updateProjectDetails(sl_no, updatedProject);
-  //     setProjects((prev: project[]) => prev.map(p => p.SL_NO === sl_no ? updated : p));
-  //   } catch (error) {
-  //     console.error("Failed to update project:", error);
-  //   }
-  // };
-
   const addProject = async (newProject: project) => {
     try {
       const payload = mapProjectToCamelCase(newProject);
       const created = await ApiService.insertNewProjectDetails(payload);
       setProjects((prev: project[]) => [...prev, created]);
+      await fetchProjects();
     } catch (error) {
       console.error("Failed to add project:", error);
     }
@@ -101,6 +84,7 @@ export function useProjectData() {
       setProjects((prev: project[]) =>
         prev.map((p) => (p.SL_NO === sl_no ? updated : p))
       );
+      await fetchProjects();
     } catch (error) {
       console.error("Failed to update project:", error);
     }
