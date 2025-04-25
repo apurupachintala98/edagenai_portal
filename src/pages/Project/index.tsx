@@ -37,28 +37,26 @@ const headers = [
   { header: "Actions", key: "actions", isSortable: true },
 ];
 
-const emptyProject: project = {
-  SL_NO: "",
-  STAFF_VP: "",
-  DIRECTOR: "",
-  LEAD_NM: "",
-  TGOV_NO: "",
-  PROGRAM_TYPE: "",
-  PROJECT_NAME: "",
-  PROJECT_DESCRIPTION: "",
-  LLM_PLATFORM: "",
-  LLM_MODEL: "",
-  PLATFORM_SERVICES: "",
-  DATA: "",
-  BUSINESS_USER: "",
-  START_DATE: "",
-  DEPLOYMENT_DATE: "",
-  CURRENT_PHASE: "",
-  STATUS: "",
-  LINK_TO_SLIDE: "",
-  NOTES: ""
+const projectFieldMap: Record<string, keyof project> = {
+  Staff_VP: "STAFF_VP",
+  Director: "DIRECTOR",
+  LEAD_NM: "LEAD_NM",
+  TGOV_NO: "TGOV_NO",
+  Program_Type: "PROGRAM_TYPE",
+  Project_Name: "PROJECT_NAME",
+  Project_Description: "PROJECT_DESCRIPTION",
+  LLM_PLATFORM: "LLM_PLATFORM",
+  LLM_MODEL: "LLM_MODEL",
+  Platform_Services: "PLATFORM_SERVICES",
+  data: "DATA",
+  Business_User: "BUSINESS_USER",
+  Start_Date: "START_DATE",
+  Deployment_Date: "DEPLOYMENT_DATE",
+  Current_Phase: "CURRENT_PHASE",
+  status: "STATUS",
+  Link_to_Slide: "LINK_TO_SLIDE",
+  Notes: "NOTES"
 };
-
 
 function Project() {
   const navigate = useNavigate();
@@ -88,16 +86,57 @@ function Project() {
   //   LINK_TO_SLIDE: "",
   //   NOTES: ""
   // });
-  const [formData, setFormData] = useState<project>({ ...emptyProject });
+  const [formData, setFormData] = useState<project>({} as project);
   const openAddModal = () => {
     setEditMode(false);
-    setFormData({ ...emptyProject });
+    const newSLNo = projects.length > 0 ? Math.max(...projects.map(p => parseInt(p.SL_NO))) + 1 : 1;
+    setFormData({
+      SL_NO: String(newSLNo),
+      STAFF_VP: "",
+      DIRECTOR: "",
+      LEAD_NM: "",
+      TGOV_NO: "",
+      PROGRAM_TYPE: "",
+      PROJECT_NAME: "",
+      PROJECT_DESCRIPTION: "",
+      LLM_PLATFORM: "",
+      LLM_MODEL: "",
+      PLATFORM_SERVICES: "",
+      DATA: "",
+      BUSINESS_USER: "",
+      START_DATE: "",
+      DEPLOYMENT_DATE: "",
+      CURRENT_PHASE: "",
+      STATUS: "",
+      LINK_TO_SLIDE: "",
+      NOTES: ""
+    });
     setIsModalOpen(true);
   };
 
   const openEditModal = (project: project) => {
     setEditMode(true);
-    setFormData(project);
+    setFormData({
+      SL_NO: project.SL_NO,
+      STAFF_VP: project.STAFF_VP || "",
+      DIRECTOR: project.DIRECTOR || "",
+      LEAD_NM: project.LEAD_NM || "",
+      TGOV_NO: project.TGOV_NO || "",
+      PROGRAM_TYPE: project.PROGRAM_TYPE || "",
+      PROJECT_NAME: project.PROJECT_NAME || "",
+      PROJECT_DESCRIPTION: project.PROJECT_DESCRIPTION || "",
+      LLM_PLATFORM: project.LLM_PLATFORM || "",
+      LLM_MODEL: project.LLM_MODEL || "",
+      PLATFORM_SERVICES: project.PLATFORM_SERVICES || "",
+      DATA: project.DATA || "",
+      BUSINESS_USER: project.BUSINESS_USER || "",
+      START_DATE: project.START_DATE || "",
+      DEPLOYMENT_DATE: project.DEPLOYMENT_DATE || "",
+      CURRENT_PHASE: project.CURRENT_PHASE || "",
+      STATUS: project.STATUS || "",
+      LINK_TO_SLIDE: project.LINK_TO_SLIDE || "",
+      NOTES: project.NOTES || ""
+    });
     setIsModalOpen(true);
   };
 
@@ -234,7 +273,7 @@ function Project() {
             </Column>
           </Grid>
         </Modal> */}
-        <Modal
+    <Modal
           open={isModalOpen}
           modalHeading={editMode ? "Edit Project" : "Add Project"}
           primaryButtonText="Submit"
@@ -245,18 +284,15 @@ function Project() {
           <Grid fullWidth>
             <Column sm={4} md={8} lg={16}>
               <div style={{ display: "flex", flexWrap: "wrap", gap: "1rem" }}>
-                {Object.keys(emptyProject).map((key) => {
-                  if (["START_DATE", "DEPLOYMENT_DATE"].includes(key)) return null;
-                  return (
-                    <TextInput
-                      key={key}
-                      id={key}
-                      labelText={key.replace(/_/g, ' ').toUpperCase()}
-                      value={(formData as any)[key]}
-                      onChange={(e) => handleChange(key as keyof project, e.target.value)}
-                    />
-                  );
-                })}
+                {Object.entries(projectFieldMap).map(([label, key]) => (
+                  <TextInput
+                    key={key}
+                    id={key}
+                    labelText={label.replace(/_/g, ' ')}
+                    value={formData[key]}
+                    onChange={(e) => handleChange(key, e.target.value)}
+                  />
+                ))}
                 <DatePicker
                   datePickerType="single"
                   value={formData.START_DATE}
