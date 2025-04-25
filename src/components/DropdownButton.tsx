@@ -1,0 +1,66 @@
+import { Button, ClickableTile } from "@carbon/react";
+import { useDropdown } from "../hooks/useDropdown";
+
+interface DropdownItem {
+  label: string;
+  url: string;
+}
+
+interface DropdownButtonProps {
+  icon: React.ComponentType<any>;
+  label: string;
+  items: DropdownItem[];
+}
+
+export const DropdownButton = ({ icon, label, items }: DropdownButtonProps) => {
+    const { open, setOpen, ref } = useDropdown();
+  
+    return (
+      <div style={{ position: "relative" }} ref={ref}>
+        <Button kind="primary" size="lg" renderIcon={icon} onClick={() => setOpen(!open)}>
+          {label}
+        </Button>
+  
+        {open && (
+          <ul
+            style={{
+              position: "absolute",
+              top: "100%",
+              marginTop: "4px",
+              background: "#fff",
+              border: "1px solid #e0e0e0",
+              borderRadius: "4px",
+              boxShadow: "0 2px 6px rgba(0,0,0,0.15)",
+              zIndex: 10,
+              minWidth: "160px",
+              listStyle: "none",
+              padding: 0,
+              margin: 0
+            }}
+          >
+            {items.map((item, idx) => (
+              <li
+                key={idx}
+                onClick={() => window.open(item.url, "_blank")}
+                style={{
+                  padding: "4px 10px",
+                  fontSize: "13px",
+                  fontWeight: "bold",
+                  cursor: "pointer",
+                  textAlign: "left",
+                  borderBottom: idx !== items.length - 1 ? "1px solid #e0e0e0" : "none",
+                  userSelect: "none"
+                }}
+                onMouseEnter={(e) => e.currentTarget.style.background = "#f4f4f4"}
+                onMouseLeave={(e) => e.currentTarget.style.background = "transparent"}
+              >
+                {item.label}
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+    );
+  };
+  
+  

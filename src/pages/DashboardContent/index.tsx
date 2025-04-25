@@ -1,6 +1,8 @@
 import { Breadcrumb, BreadcrumbItem, Dropdown, FilterableMultiSelect, Button, OverflowMenu, OverflowMenuItem } from "@carbon/react";
 import { useTranslation } from "react-i18next";
+import { DropdownButton } from "components/DropdownButton";
 import { useNavigate } from "react-router-dom";
+import { Dashboard, DocumentAdd } from "@carbon/react/icons";
 import DashboardChart from "components/DashboardChart"; // Bar chart
 import ProgressDonut from "../../components/ProgressDonut/ProgressDonut";
 import {
@@ -10,7 +12,7 @@ import {
   PageTitle,
 } from "../styled.components";
 import { useWindowDimensions } from "utils/hooks";
-import { DashboardCardsWrapper } from "./styled.components";
+import { DashboardCardsWrapper, ButtonContainer } from "./styled.components";
 import DashboardCard from "pages/DashboardCard";
 import { useRef, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
@@ -76,9 +78,46 @@ function DashboardContent() {
       <PageContainer>
         <HeaderContainer>
           <PageTitle>{t("dashboard.title")}</PageTitle>
-          
+          {/* <ButtonContainer>
+            <Button kind="primary" size="lg" onClick={() => {}} renderIcon={DocumentAdd}>
+              {t("home.createButtonText")}
+            </Button>
+            <Button kind="primary" size="lg" onClick={() => {}} renderIcon={Dashboard}>
+              {t("home.frameworkButtonText")}
+            </Button>
+          </ButtonContainer> */}
+          <ButtonContainer style={{ display: "flex", gap: "1rem" }}>
+            <DropdownButton
+              icon={DocumentAdd}
+              label={t("home.createButtonText")}
+              items= {[
+                {label: "CII SmartHelp", url: "https://sit1.evolve.antheminc.com" },
+                { label: "Clara.ai", url: "https://sit1.evolve.antheminc.com" },
+                { label: "EDM IntelliQ", url: "/" },
+                { label: "Prov360", url: "/" },
+                { label: "RMA.ai", url: "/" },
+                { label: "IQT", url: "/" },
+                { label: "Privia", url: "/" }]} 
+              
+            />
+            <DropdownButton
+              icon={Dashboard}
+              label={t("home.frameworkButtonText")}
+              items= {[
+                { label: "LLM Gateway", url: "/llm-gateway" },
+                { label: "RAG Chat Assist (Hedis)", url: "http://10.126.192.122:3020/" },
+                { label: "Text2SQL (SafetyNet)", url: "http://10.126.192.122:3010/" },
+                { label: "Workflow Manager (ARB Scheduler)", url: "https://arbassist.edagenaidev.awsdns.internal.das/" },
+                { label: "Semantic Router (ARB Assist)", url: "https://arbassist.edagenaidev.awsdns.internal.das/" },
+                { label: "Data Genie", url: "http://10.126.192.122:3040/" },
+                { label: "Knowledge Graph (EDA Ontology)", url: "/" },
+                { label: "Conversational Chat", url: "http://10.126.192.122:3050/" },
+                { label: "FHIR Chat", url: "http://10.126.192.122:3090/" },
+              ]}
+            />
+          </ButtonContainer>
         </HeaderContainer>
-      
+
         <Breadcrumb>
           <BreadcrumbItem isCurrentPage>
             {t("dashboard.BreadcrumbHomeText")}

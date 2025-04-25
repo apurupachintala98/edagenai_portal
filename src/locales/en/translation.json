@@ -18,6 +18,7 @@
     "title": "Home",
     "createButtonText": "Applications",
     "helpButtonText": "Dashboard",
+    "frameworkButtonText": "Frameworks",
     "BreadcrumbHomeText": "Home",
     "JobStatusHeaderText": "Job Status",
     "KPIHeaderText": "KPIHeaderText",

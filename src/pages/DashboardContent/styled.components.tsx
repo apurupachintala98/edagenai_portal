@@ -43,4 +43,3 @@ margin: 0 20px;
     grid-template-columns: repeat(3, 1fr);
   }
 `;
-
