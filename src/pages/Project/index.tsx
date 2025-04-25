@@ -25,13 +25,13 @@ const headers = [
   { header: "Status", key: "CURRENT_PHASE" },
   { header: "Platform", key: "LLM_PLATFORM" },
   { header: "Date", key: "DEPLOYMENT_DATE" },
-  { header: "Actions", key: "null" }, // <--- not null, use "actions"
+  { header: "Actions", key: "actions" }, 
 ];
 
 function Project() {
   const navigate = useNavigate();
   const { height } = useWindowDimensions();
-  const { projects, loading } = useProjectData(); // Hook to fetch API data
+  const { projects, loading } = useProjectData(); 
 
   const handleEdit = (id: string) => {
     console.log("Edit project with SL_NO:", id);
@@ -53,6 +53,7 @@ function Project() {
     CURRENT_PHASE: proj.STATUS,
     LLM_PLATFORM: proj.LLM_PLATFORM,
     DEPLOYMENT_DATE: proj.DEPLOYMENT_DATE,
+    actions: "",
   }));
 
   return (
