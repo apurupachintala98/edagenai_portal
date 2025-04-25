@@ -25,7 +25,7 @@ const headers = [
   { header: "Status", key: "CURRENT_PHASE" },
   { header: "Platform", key: "LLM_PLATFORM" },
   { header: "Date", key: "DEPLOYMENT_DATE" },
-  { header: "Actions", key: "actions" }, // <--- not null, use "actions"
+  { header: "Actions", key: "null" }, // <--- not null, use "actions"
 ];
 
 function Project() {
