@@ -297,19 +297,20 @@ const ProjectTimeline = () => {
       }
     },
     xAxis: {
-      min: minDate,
-      max: maxDate,
-      tickInterval: 30 * 24 * 3600 * 1000,
+      min: Math.min(...seriesData.map((item: any) => new Date(item.START_DT).getTime())),
+      max: Math.max(...seriesData.map((item: any) => new Date(item.END_DT).getTime())),
+      tickInterval: 30 * 24 * 3600 * 1000, // approx 1 month
       labels: {
-        format: '{value:%b}',
+        format: '{value:%b %Y}', // <-- Month and Year
         style: {
-          fontWeight: 'bold'
-        }
+          fontWeight: 'bold',
+        },
       },
       lineColor: '#bbb',
       lineWidth: 1,
-      plotBackgroundColor: "#f5f5f5"
+      plotBackgroundColor: "#f5f5f5",
     },
+    
     plotOptions: {
       series: {
         pointHeight: 48
