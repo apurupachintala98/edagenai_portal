@@ -138,7 +138,7 @@ const ProjectTimeline = () => {
 
   return (
     <div className="mt-6 grid" style={{ margin: "0 20px" }}>
-      <div className="bg-white rounded-md shadow-sm overflow-x-auto" style={{ width: '100%', minHeight: '400px', maxHeight: '700px' }}>
+      <div className="bg-white rounded-md shadow-sm overflow-x-auto" style={{ width: '100%', minHeight: '400px', maxHeight: '900px' }}>
         <HighchartsReact
           highcharts={Highcharts}
           constructorType={"ganttChart"}
