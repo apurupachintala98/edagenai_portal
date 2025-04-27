@@ -206,22 +206,33 @@ const ProjectTimeline = () => {
       try {
         const apiData = await ApiService.getAllDetailsGanttChart();
         console.log(apiData);
-        const mappedData = apiData.map((item: any, index: number) => ({
-          start: item.START_DATE,
-          end: item.END_DATE,
-          name: item.NAME,
-          assignee: item.ASSIGNEE,
-          status: item.STATUS,
-          milestone: item.MILESTONE || false,
-          y: index,
-        }));
+  
+        const mappedData = apiData.map((item: any, index: number) => {
+          const baseItem = {
+            start: item.START_DT,
+            end: item.END_DT,
+            name: item.NAME,
+            assignee: item.ASSIGNEE,
+            status: item.STATUS,
+            y: index,
+          };
+  
+          if (item.STATUS === "Completed") {
+            return { ...baseItem, milestone: true };
+          }
+  
+          return baseItem;
+        });
+  
         setSeriesData(mappedData);
       } catch (error) {
         console.error("Failed to fetch Gantt chart data:", error);
       }
     };
+  
     fetchGanttData();
   }, []);
+  
 
   const startDates = seriesData.map((task: any) => new Date(task.start).getTime());
   const endDates = seriesData.map((task: any) => new Date(task.end).getTime());
