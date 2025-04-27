@@ -741,6 +741,48 @@ function Project() {
                       ))}
                     </TableRow>
                   </TableHead>
+                  {/* <TableBody>
+                    {rows.length === 0 ? (
+                      <TableRow>
+                        <TableCell colSpan={tableHeaders.length} style={{ textAlign: "center", padding: "20px" }}>
+                          No Projects Found
+                        </TableCell>
+                      </TableRow>
+                    ) : (
+                      {rows.map((row, index) => {
+                        const { key, ...rowPropsWithoutKey } = getRowProps({ row });
+                        const isLastRow = index === rows.length - 1;
+                        return (
+                          <TableRow key={key} {...rowPropsWithoutKey} style={isLastRow ? { backgroundColor: 'yellow' } : {}}>
+                          {row.cells.map((cell) => (
+                              <TableCell key={cell.id}>
+                                {cell.info.header === "actions" ? (
+                                  <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                                    <Edit
+                                      size={16}
+                                      style={{ cursor: 'pointer' }}
+                                      title="Edit"
+                                      onClick={() => openEditModal(projects.find(p => p.SL_NO === row.id)!)}
+                                    />
+                                    <TrashCan
+                                      size={16}
+                                      style={{ cursor: 'pointer' }}
+                                      title="Delete"
+                                      onClick={() => handleDelete(row.id)}
+                                    />
+                                  </div>
+                                ) : cell.value !== null && cell.value !== undefined ? (
+                                  cell.value
+                                ) : (
+                                  "-"
+                                )}
+                              </TableCell>
+                            ))}
+                          </TableRow>
+                        );
+                      })
+                    )}
+                  </TableBody> */}
                   <TableBody>
                     {rows.length === 0 ? (
                       <TableRow>
@@ -749,13 +791,11 @@ function Project() {
                         </TableCell>
                       </TableRow>
                     ) : (
-                      rows.map((row) => {
+                      rows.map((row, index) => {
                         const { key, ...rowPropsWithoutKey } = getRowProps({ row });
+                        const isLastRow = index === rows.length - 1;
                         return (
-                          <TableRow
-                            key={key}
-                            {...rowPropsWithoutKey}
-                          >
+                          <TableRow key={key} {...rowPropsWithoutKey} style={isLastRow ? { backgroundColor: 'yellow' } : {}}>
                             {row.cells.map((cell) => (
                               <TableCell key={cell.id}>
                                 {cell.info.header === "actions" ? (
@@ -785,6 +825,7 @@ function Project() {
                       })
                     )}
                   </TableBody>
+
                 </Table>
               )}
             </DataTable>
