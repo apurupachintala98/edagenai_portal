@@ -131,7 +131,7 @@ const ProjectTimeline = ({ selectedFilters, showAllYears }: ProjectTimelineProps
             }
           },
           {
-            title: { text: 'Assignee' },
+            title: { text: 'Manager' },
             labels: {
               formatter(this: Highcharts.AxisLabelsFormatterContextObject) {
                 return seriesData[this.pos]?.assignee || '';
