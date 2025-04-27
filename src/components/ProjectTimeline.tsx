@@ -192,7 +192,7 @@ const ProjectTimeline = ({ selectedFilters, showAllYears }: ProjectTimelineProps
     series: [{
       name: "Project Tasks",
       data: seriesData,
-      color: 'hsl(var(--brand-blue))',
+      color: '#2caffe',
     }],
   }), [seriesData]);
 
