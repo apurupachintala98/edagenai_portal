@@ -4,8 +4,8 @@ import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Sector } from 'recha
 
 interface ProgressDonutProps {
   data: {
-    NAME: string;
-    VALUE: number;
+    name: string;
+    value: number;
     color: string;
   }[];
   subheading?: string;
@@ -104,7 +104,7 @@ const ProgressDonut = ({ data, subheading }: ProgressDonutProps) => {
         {data.map((entry, index) => (
           <div key={`legend-${index}`} className="flex items-center gap-1.5">
             <div className="w-3 h-3 rounded-sm" style={{ backgroundColor: COLORS[index] }} />
-            <span className="text-sm text-muted-foreground">{entry.NAME}</span>
+            <span className="text-sm text-muted-foreground">{entry.name}</span>
           </div>
         ))}
       </div>
