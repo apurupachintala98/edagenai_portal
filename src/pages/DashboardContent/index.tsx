@@ -18,84 +18,120 @@ import { useRef, useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import ProjectTimeline from "../../components/ProjectTimeline";
 import ApiService from "../../services/ApiService";
+import { useProjectData } from "../../hooks/useProjectData";
 
 const usersData = [
-  { name: "Non-Prod", value: 35, color: 'hsl(var(--brand-blue))' },
-  { name: "Pre-Pod", value: 30, color: 'hsl(var(--brand-teal))' },
-  { name: "Prod", value: 10, color: 'hsl(var(--muted-foreground))' },
+  { name: "Non-Prod", value: 31, color: 'hsl(var(--brand-blue))' },
+  { name: "Pre-Pod", value: 28, color: 'hsl(var(--brand-teal))' },
+  { name: "Prod", value: 7, color: 'hsl(var(--muted-foreground))' },
 ];
 
 const cortexCostData = [
-  { name: "Non-Prod", value: 497, value2: 0, color: 'hsl(var(--brand-blue))' },
-  { name: "Pre-Pod", value: 2314, value2: 0, color: 'hsl(var(--brand-teal))' },
-  { name: "Prod", value: 3100, value2: 0, color: 'hsl(var(--muted-foreground))' },
-];
-
-const managerOptions = [
-  { id: "1", label: "Anil Kumar" },
-  { id: "2", label: "Suman Dawn" },
-  { id: "3", label: "Pradip Hazra" },
-  { id: "4", label: "Apurupa Chintala" },
-  { id: "5", label: "Nitish Patel" },
-  { id: "6", label: "Richard Thompson" },
-  { id: "7", label: "Rick Skelton" }
-];
-
-const currentPhase = [
-  { id: "1", label: "Non-Prod" },
-  { id: "2", label: "Pre-Prod" },
-  { id: "3", label: "Prod" },
-];
-
-const platformOptions = [
-  { id: "1", label: "Cortex" },
-  { id: "2", label: "LLM Platform" },
+  { name: "January", value: 428.56, color: 'hsl(var(--brand-blue))' },
+  { name: "February", value: 2313.92, color: 'hsl(var(--brand-teal))' },
+  { name: "March", value: 5291.54, color: 'hsl(var(--muted-foreground))' },
+  { name: "April", value: 1743.26, color: 'hsl(var(--warning))' },
 ];
 
 function DashboardContent() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { height } = useWindowDimensions();
-  const [selectedManagers, setSelectedManagers] = useState<any[]>([]);
-  const [selectedPlatforms, setSelectedPlatforms] = useState<any[]>([]);
-  const [selectedPhase, setSelectedPhase] = useState<any[]>([]);
+  const [selectedFilters, setSelectedFilters] = useState({
+    managers: [] as any[],
+    platforms: [] as any[],
+    phases: [] as any[],
+  });
   const [progressReportData, setProgressReportData] = useState<any[]>([]);
-
+  const [dashboardTotals, setDashboardTotals] = useState({
+    totalProjects: 0,
+    totalUsers: 0,
+    totalCost: 0,
+  });
+  const [dropdownOptions, setDropdownOptions] = useState({
+    managers: [] as any[],
+    platforms: [] as any[],
+    phases: [] as any[],
+  });
+  const { projects, loading, fetchProjects } = useProjectData();
   const inputRef = useRef<HTMLInputElement>(null);
-
   const handleOpen = () => {
     inputRef.current?.focus();
     inputRef.current?.click();
   };
 
   useEffect(() => {
+    const totalUsers = usersData.reduce((acc, item) => acc + (item.value || 0), 0);
+    const totalCost = cortexCostData.reduce((acc, item) => acc + (item.value || 0), 0);
+  
+    setDashboardTotals((prev) => ({
+      ...prev,
+      totalUsers,
+      totalCost,
+    }));
+  }, []);
+  
+  useEffect(() => {
     const fetchProgressReportData = async () => {
       try {
         const apiData = await ApiService.getAllDetailsProjects();
         console.log(apiData);
-  
+
         const coloredData = apiData.map((item: any, index: number) => ({
-          name: item.NAME, 
+          name: item.NAME,
           value: item.VALUE,
           color:
             index % 3 === 0
               ? 'hsl(var(--brand-blue))'
               : index % 3 === 1
-              ? 'hsl(var(--brand-teal))'
-              : 'hsl(var(--muted-foreground))',
+                ? 'hsl(var(--brand-teal))'
+                : 'hsl(var(--muted-foreground))',
         }));
-  
+
         setProgressReportData(coloredData);
+        const totalProjects = coloredData.reduce((acc: any, item: any) => acc + (item.value || 0), 0);
+        setDashboardTotals((prev) => ({
+          ...prev,
+          totalProjects,
+        }));
         console.log(coloredData);
       } catch (error) {
         console.error("Failed to fetch project details:", error);
       }
     };
-  
+
     fetchProgressReportData();
   }, []);
-  
-  
+
+  const handleMultiSelectChange = (field: "managers" | "platforms" | "phases", selectedItems: any[]) => {
+    setSelectedFilters((prev) => ({
+      ...prev,
+      [field]: selectedItems ?? [],
+    }));
+  };
+
+  useEffect(() => {
+    if (projects.length > 0) {
+      const uniqueManagers = Array.from(new Set(projects.map((item) => item.STAFF_VP))).filter(Boolean);
+      const uniquePlatforms = Array.from(new Set(projects.map((item) => item.LLM_PLATFORM))).filter(Boolean);
+      const uniquePhases = Array.from(new Set(projects.map((item) => item.STATUS))).filter(Boolean);
+
+      setDropdownOptions({
+        managers: uniqueManagers.map((manager, index) => ({ id: String(index + 1), label: manager })),
+        platforms: uniquePlatforms.map((platform, index) => ({ id: String(index + 1), label: platform })),
+        phases: uniquePhases.map((phase, index) => ({ id: String(index + 1), label: phase })),
+      });
+    }
+  }, [projects]);
+
+  useEffect(() => {
+    setSelectedFilters({
+      managers: [],
+      platforms: [],
+      phases: [],
+    });
+  }, [projects]);
+
   return (
     <MainContainer height={height}>
       <PageContainer>
@@ -105,20 +141,20 @@ function DashboardContent() {
             <DropdownButton
               icon={DocumentAdd}
               label={t("home.createButtonText")}
-              items= {[
-                {label: "CII SmartHelp", url: "https://sit1.evolve.antheminc.com" },
+              items={[
+                { label: "CII SmartHelp", url: "https://sit1.evolve.antheminc.com" },
                 { label: "Clara.ai", url: "https://sit1.evolve.antheminc.com" },
                 { label: "EDM IntelliQ", url: "/" },
                 { label: "Prov360", url: "/" },
                 { label: "RMA.ai", url: "/" },
                 { label: "IQT", url: "/" },
-                { label: "Privia", url: "/" }]} 
-              
+                { label: "Privia", url: "/" }]}
+
             />
             <DropdownButton
               icon={Dashboard}
               label={t("home.frameworkButtonText")}
-              items= {[
+              items={[
                 { label: "LLM Gateway", url: "/llm-gateway" },
                 { label: "RAG Chat Assist (Hedis)", url: "http://10.126.192.122:3020/" },
                 { label: "Text2SQL (SafetyNet)", url: "http://10.126.192.122:3010/" },
@@ -142,15 +178,15 @@ function DashboardContent() {
 
       {/* 3-Column Layout for Charts */}
       <DashboardCardsWrapper>
-        <DashboardCard title="Projects" subheading="42 Included EDA and EAI Teams">
+        <DashboardCard title="Projects" subheading={`${dashboardTotals.totalProjects} Included all Projects`}>
           <ProgressDonut data={progressReportData} />
         </DashboardCard>
 
-        <DashboardCard title="Users" subheading="66 Includes EDA and EAI Teams">
+        <DashboardCard title="Users" subheading={`${dashboardTotals.totalUsers} Includes all Users`}>
           <DashboardChart data={usersData} />
         </DashboardCard>
 
-        <DashboardCard title="Cortex Cost" subheading="$6577 Provisioned Throughout Cost">
+        <DashboardCard title="Cortex Cost" subheading={`$${dashboardTotals.totalCost.toFixed(2)} Provisioned Throughout Cost`}>
           <DashboardChart data={cortexCostData} />
         </DashboardCard>
       </DashboardCardsWrapper>
@@ -166,13 +202,12 @@ function DashboardContent() {
               <FilterableMultiSelect
                 id="manage-multiselect"
                 titleText=""
-                items={managerOptions}
+                items={dropdownOptions.managers}
                 itemToString={(item) => (item ? item.label : "")}
                 placeholder="Search Manager Name"
                 selectionFeedback="top"
-                onChange={(event) => {
-                  setSelectedManagers(event.selectedItems ?? []);
-                }}
+                onChange={(event) => handleMultiSelectChange("managers", event.selectedItems)}
+
               />
             </div>
 
@@ -181,13 +216,12 @@ function DashboardContent() {
               <FilterableMultiSelect
                 id="platform-multiselect"
                 titleText=""
-                items={platformOptions}
+                items={dropdownOptions.platforms}
                 itemToString={(item) => (item ? item.label : "")}
                 placeholder="Search Platform Name"
                 selectionFeedback="top"
-                onChange={(event) => {
-                  setSelectedPlatforms(event.selectedItems ?? []);
-                }}
+                onChange={(event) => handleMultiSelectChange("platforms", event.selectedItems)}
+
               />
             </div>
 
@@ -196,13 +230,12 @@ function DashboardContent() {
               <FilterableMultiSelect
                 id="phase-multiselect"
                 titleText=""
-                items={currentPhase}
+                items={dropdownOptions.phases}
                 itemToString={(item) => (item ? item.label : "")}
                 placeholder="Search Phase"
                 selectionFeedback="top"
-                onChange={(event) => {
-                  setSelectedPhase(event.selectedItems ?? []);
-                }}
+                onChange={(event) => handleMultiSelectChange("phases", event.selectedItems)}
+
               />
             </div>
           </div>
