@@ -71,12 +71,6 @@ const ProjectTimeline = ({ selectedFilters, showAllYears, selectedYear }: Projec
     fetchGanttData();
   }, [selectedFilters, showAllYears, selectedYear]);
 
-  const startDates = seriesData.map((task: any) => new Date(task.start).getTime());
-  const endDates = seriesData.map((task: any) => new Date(task.end).getTime());
-
-  const minDate = Math.min(...startDates);
-  const maxDate = Math.max(...endDates);
-
   const ganttOptions = useMemo(() => ({
     chart: {
       type: "gantt",
@@ -135,8 +129,8 @@ const ProjectTimeline = ({ selectedFilters, showAllYears, selectedYear }: Projec
       }
     },
     xAxis: {
-      min: minDate,
-      max: maxDate,
+      min: Date.UTC(selectedYear, 0, 1),
+      max: Date.UTC(selectedYear, 11, 31),
       tickInterval: 30 * 24 * 3600 * 1000,
       labels: {
         format: '{value:%b}',
@@ -148,6 +142,7 @@ const ProjectTimeline = ({ selectedFilters, showAllYears, selectedYear }: Projec
       lineWidth: 1,
       plotBackgroundColor: "#f5f5f5",
     },
+    
    
     plotOptions: {
       series: {
