@@ -616,7 +616,7 @@ function Project() {
           </BreadcrumbItem>
           <BreadcrumbItem isCurrentPage>Project</BreadcrumbItem>
         </Breadcrumb>
-        <TableContainer style={{ marginTop: "20px" }}>
+        <TableContainer style={{ marginTop: "20px", height: "100%" }}>
           {loading ? (
             <div style={{ padding: "20px", textAlign: "center" }}>
               Loading Projects...</div>
