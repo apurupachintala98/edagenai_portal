@@ -58,6 +58,7 @@ const ProjectTimeline = () => {
       height: (seriesData.length + 1) * 48,
     },
     yAxis: {
+      uniqueNames: true,
       min: 0,
       max: seriesData.length,
       type: 'category',
@@ -122,7 +123,10 @@ const ProjectTimeline = () => {
       lineWidth: 1,
       plotBackgroundColor: "#f5f5f5",
     },
-
+    rangeSelector: {
+      enabled: true,
+      selected: 0
+  },
 
     plotOptions: {
       series: {
