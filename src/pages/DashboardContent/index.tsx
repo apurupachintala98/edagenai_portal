@@ -90,6 +90,7 @@ function DashboardContent() {
         }));
   
         setProgressReportData(coloredData);
+        console.log(progressReportData);
       } catch (error) {
         console.error("Failed to fetch project details:", error);
       }
