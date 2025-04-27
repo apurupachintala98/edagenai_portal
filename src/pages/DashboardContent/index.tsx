@@ -255,7 +255,7 @@ function DashboardContent() {
               className="bg-blue-600 text-white font-medium px-6 py-2 rounded-lg flex items-center gap-2"
             >
               <ChevronLeft size={16} />
-              <span>2024–25</span>
+              <span>2025</span>
               <ChevronRight size={16} className="opacity-60" />
             </button>
 

@@ -21,6 +21,7 @@ interface ProjectTimelineProps {
 
 const ProjectTimeline = ({ selectedFilters, showAllYears }: ProjectTimelineProps) => {
   const [seriesData, setSeriesData] = useState<any[]>([]);
+  const [originalSeriesData, setOriginalSeriesData] = useState<any[]>([]);
 
   // useEffect(() => {
   //   const fetchGanttData = async () => {
@@ -90,7 +91,7 @@ const ProjectTimeline = ({ selectedFilters, showAllYears }: ProjectTimelineProps
           }
           return baseItem;
         });
-  
+        setOriginalSeriesData(mappedData);
         setSeriesData(mappedData);
         console.log(mappedData);
       } catch (error) {
@@ -110,12 +111,12 @@ const ProjectTimeline = ({ selectedFilters, showAllYears }: ProjectTimelineProps
   const ganttOptions = useMemo(() => ({
     chart: {
       type: "gantt",
-      height: (seriesData.length + 1) * 48,
+      height: (originalSeriesData.length + 1) * 48,
     },
     yAxis: {
       uniqueNames: true,
       min: 0,
-      max: seriesData.length,
+      max: originalSeriesData.length,
       type: 'category',
       grid: {
         enabled: true,
