@@ -202,32 +202,6 @@ if (typeof HighchartsGantt === "function") {
 const ProjectTimeline = () => {
   const [seriesData, setSeriesData] = useState<any[]>([]);
 
-  const createYearBands = (data: any[]) => {
-    const years = Array.from(
-      new Set(data.map(item => new Date(item.start).getFullYear()))
-    );
-
-    return years.map((year) => {
-      const start = new Date(`${year}-01-01`).getTime();
-      const end = new Date(`${year + 1}-01-01`).getTime() - 1;
-
-      return {
-        color: 'rgba(0,0,0,0)', // transparent
-        label: {
-          text: String(year),
-          style: {
-            fontSize: '12px',
-            fontWeight: 'bold',
-            color: '#666',
-          },
-          y: -25, // move year label up
-        },
-        from: start,
-        to: end,
-      };
-    });
-  };
-
   useEffect(() => {
     const fetchGanttData = async () => {
       try {
@@ -335,7 +309,6 @@ const ProjectTimeline = () => {
       },
       lineColor: '#bbb',
       lineWidth: 1,
-      plotBands: createYearBands(seriesData), // <-- Add this (explained below)
       plotBackgroundColor: "#f5f5f5",
     },
 
