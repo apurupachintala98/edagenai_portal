@@ -25,12 +25,6 @@ const usersData = [
   { name: "Prod", value: 10, color: 'hsl(var(--muted-foreground))' },
 ];
 
-// const updatedProgressReportData = [
-//   { name: 'Non-Prod', value: 42, color: 'hsl(var(--brand-blue))' },
-//   { name: 'Pre-Prod', value: 28, color: 'hsl(var(--brand-teal))' },
-//   { name: 'Prod', value: 30, color: 'hsl(var(--muted-foreground))' },
-// ];
-
 const cortexCostData = [
   { name: "Non-Prod", value: 497, value2: 0, color: 'hsl(var(--brand-blue))' },
   { name: "Pre-Pod", value: 2314, value2: 0, color: 'hsl(var(--brand-teal))' },
@@ -79,8 +73,10 @@ function DashboardContent() {
       try {
         const apiData = await ApiService.getAllDetailsProjects();
         console.log(apiData);
+  
         const coloredData = apiData.map((item: any, index: number) => ({
-          ...item,
+          name: item.NAME, 
+          value: item.VALUE,
           color:
             index % 3 === 0
               ? 'hsl(var(--brand-blue))'
@@ -95,8 +91,10 @@ function DashboardContent() {
         console.error("Failed to fetch project details:", error);
       }
     };
+  
     fetchProgressReportData();
   }, []);
+  
   
   return (
     <MainContainer height={height}>
