@@ -54,6 +54,7 @@ function DashboardContent() {
     phases: [] as any[],
   });
   const { projects, loading, fetchProjects } = useProjectData();
+  const [showAllYears, setShowAllYears] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const handleOpen = () => {
     inputRef.current?.focus();
@@ -63,14 +64,14 @@ function DashboardContent() {
   useEffect(() => {
     const totalUsers = usersData.reduce((acc, item) => acc + (item.value || 0), 0);
     const totalCost = cortexCostData.reduce((acc, item) => acc + (item.value || 0), 0);
-  
+
     setDashboardTotals((prev) => ({
       ...prev,
       totalUsers,
       totalCost,
     }));
   }, []);
-  
+
   useEffect(() => {
     const fetchProgressReportData = async () => {
       try {
@@ -241,18 +242,30 @@ function DashboardContent() {
           </div>
           <div>
 
-            <button
+            {/* <button
               onClick={handleOpen}
               className="bg-blue-600 text-white font-medium px-6 py-2 rounded-lg flex items-center gap-2"
             >
               <ChevronLeft size={16} />
               <span>2024–25</span>
               <ChevronRight size={16} className="opacity-60" />
+            </button> */}
+            <button
+              onClick={() => setShowAllYears(true)}
+              className="bg-blue-600 text-white font-medium px-6 py-2 rounded-lg flex items-center gap-2"
+            >
+              <ChevronLeft size={16} />
+              <span>2024–25</span>
+              <ChevronRight size={16} className="opacity-60" />
             </button>
+
           </div>
         </div>
       </div>
-      <ProjectTimeline />
+      <ProjectTimeline 
+  selectedFilters={selectedFilters} 
+  showAllYears={showAllYears} 
+/>
     </MainContainer>
   );
 }

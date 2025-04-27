@@ -9,16 +9,74 @@ if (typeof HighchartsGantt === "function") {
   HighchartsGantt(Highcharts);
 }
 
-const ProjectTimeline = () => {
+interface ProjectTimelineProps {
+  selectedFilters: {
+    managers: any[];
+    platforms: any[];
+    phases: any[];
+  };
+  showAllYears: boolean;
+}
+
+
+const ProjectTimeline = ({ selectedFilters, showAllYears }: ProjectTimelineProps) => {
   const [seriesData, setSeriesData] = useState<any[]>([]);
+
+  // useEffect(() => {
+  //   const fetchGanttData = async () => {
+  //     try {
+  //       const apiData = await ApiService.getAllDetailsGanttChart();
+  //       console.log(apiData);
+
+  //       const mappedData = apiData.map((item: any, index: number) => {
+  //         const baseItem = {
+  //           start: item.START_DT,
+  //           end: item.END_DT,
+  //           name: item.NAME,
+  //           assignee: item.ASSIGNEE,
+  //           status: item.STATUS,
+  //           y: index,
+  //         };
+
+  //         if (item.STATUS === "Completed") {
+  //           return { ...baseItem, milestone: true };
+  //         }
+
+  //         return baseItem;
+  //       });
+
+  //       setSeriesData(mappedData);
+  //       console.log(mappedData);
+  //     } catch (error) {
+  //       console.error("Failed to fetch Gantt chart data:", error);
+  //     }
+  //   };
+
+  //   fetchGanttData();
+  // }, []);
 
   useEffect(() => {
     const fetchGanttData = async () => {
       try {
         const apiData = await ApiService.getAllDetailsGanttChart();
         console.log(apiData);
-
-        const mappedData = apiData.map((item: any, index: number) => {
+  
+        const filteredData = apiData
+          .filter((item: any) => {
+            const matchesManager = selectedFilters.managers.length === 0 || selectedFilters.managers.some(manager => manager.label === item.ASSIGNEE);
+            const matchesPlatform = selectedFilters.platforms.length === 0 || selectedFilters.platforms.some(platform => platform.label === item.PLATFORM);
+            const matchesPhase = selectedFilters.phases.length === 0 || selectedFilters.phases.some(phase => phase.label === item.STATUS);
+            return matchesManager && matchesPlatform && matchesPhase;
+          })
+          .filter((item: any) => {
+            if (showAllYears) {
+              return true;
+            }
+            const startYear = new Date(item.START_DT).getFullYear();
+            return startYear === new Date().getFullYear(); 
+          });
+  
+        const mappedData = filteredData.map((item: any, index: number) => {
           const baseItem = {
             start: item.START_DT,
             end: item.END_DT,
@@ -27,25 +85,22 @@ const ProjectTimeline = () => {
             status: item.STATUS,
             y: index,
           };
-
           if (item.STATUS === "Completed") {
             return { ...baseItem, milestone: true };
           }
-
           return baseItem;
         });
-
+  
         setSeriesData(mappedData);
         console.log(mappedData);
       } catch (error) {
         console.error("Failed to fetch Gantt chart data:", error);
       }
     };
-
+  
     fetchGanttData();
-  }, []);
-
-
+  }, [selectedFilters, showAllYears]); 
+  
   const startDates = seriesData.map((task: any) => new Date(task.start).getTime());
   const endDates = seriesData.map((task: any) => new Date(task.end).getTime());
 
