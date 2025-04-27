@@ -201,12 +201,39 @@ if (typeof HighchartsGantt === "function") {
 
 const ProjectTimeline = () => {
   const [seriesData, setSeriesData] = useState<any[]>([]);
+
+  const createYearBands = (data: any[]) => {
+    const years = Array.from(
+      new Set(data.map(item => new Date(item.start).getFullYear()))
+    );
+
+    return years.map((year) => {
+      const start = new Date(`${year}-01-01`).getTime();
+      const end = new Date(`${year + 1}-01-01`).getTime() - 1;
+
+      return {
+        color: 'rgba(0,0,0,0)', // transparent
+        label: {
+          text: String(year),
+          style: {
+            fontSize: '12px',
+            fontWeight: 'bold',
+            color: '#666',
+          },
+          y: -25, // move year label up
+        },
+        from: start,
+        to: end,
+      };
+    });
+  };
+
   useEffect(() => {
     const fetchGanttData = async () => {
       try {
         const apiData = await ApiService.getAllDetailsGanttChart();
         console.log(apiData);
-  
+
         const mappedData = apiData.map((item: any, index: number) => {
           const baseItem = {
             start: item.START_DT,
@@ -216,23 +243,23 @@ const ProjectTimeline = () => {
             status: item.STATUS,
             y: index,
           };
-  
+
           if (item.STATUS === "Completed") {
             return { ...baseItem, milestone: true };
           }
-  
+
           return baseItem;
         });
-  
+
         setSeriesData(mappedData);
       } catch (error) {
         console.error("Failed to fetch Gantt chart data:", error);
       }
     };
-  
+
     fetchGanttData();
   }, []);
-  
+
 
   const startDates = seriesData.map((task: any) => new Date(task.start).getTime());
   const endDates = seriesData.map((task: any) => new Date(task.end).getTime());
@@ -299,18 +326,20 @@ const ProjectTimeline = () => {
     xAxis: {
       min: Math.min(...seriesData.map(item => new Date(item.start).getTime())),
       max: Math.max(...seriesData.map(item => new Date(item.end).getTime())),
-      tickInterval: 30 * 24 * 3600 * 1000, // 1 month approx
+      tickInterval: 30 * 24 * 3600 * 1000, // around 1 month
       labels: {
-        format: '{value:%b %Y}', // Month + Year (example: Apr 2025)
+        format: '{value:%b}', // <-- Month only (Jan, Feb, etc.)
         style: {
           fontWeight: 'bold',
         },
       },
       lineColor: '#bbb',
       lineWidth: 1,
+      plotBands: createYearBands(seriesData), // <-- Add this (explained below)
       plotBackgroundColor: "#f5f5f5",
     },
-    
+
+
     plotOptions: {
       series: {
         pointHeight: 48
