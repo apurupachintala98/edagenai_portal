@@ -14,9 +14,10 @@ import {
 import { useWindowDimensions } from "utils/hooks";
 import { DashboardCardsWrapper, ButtonContainer } from "./styled.components";
 import DashboardCard from "pages/DashboardCard";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import ProjectTimeline from "../../components/ProjectTimeline";
+import ApiService from "../../services/ApiService";
 
 const usersData = [
   { name: "Non-Prod", value: 35, color: 'hsl(var(--brand-blue))' },
@@ -24,11 +25,11 @@ const usersData = [
   { name: "Prod", value: 10, color: 'hsl(var(--muted-foreground))' },
 ];
 
-const updatedProgressReportData = [
-  { name: 'Non-Prod', value: 42, color: 'hsl(var(--brand-blue))' },
-  { name: 'Pre-Prod', value: 28, color: 'hsl(var(--brand-teal))' },
-  { name: 'Prod', value: 30, color: 'hsl(var(--muted-foreground))' },
-];
+// const updatedProgressReportData = [
+//   { name: 'Non-Prod', value: 42, color: 'hsl(var(--brand-blue))' },
+//   { name: 'Pre-Prod', value: 28, color: 'hsl(var(--brand-teal))' },
+//   { name: 'Prod', value: 30, color: 'hsl(var(--muted-foreground))' },
+// ];
 
 const cortexCostData = [
   { name: "Non-Prod", value: 497, value2: 0, color: 'hsl(var(--brand-blue))' },
@@ -64,7 +65,7 @@ function DashboardContent() {
   const [selectedManagers, setSelectedManagers] = useState<any[]>([]);
   const [selectedPlatforms, setSelectedPlatforms] = useState<any[]>([]);
   const [selectedPhase, setSelectedPhase] = useState<any[]>([]);
-
+  const [progressReportData, setProgressReportData] = useState<any[]>([]);
 
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -73,6 +74,30 @@ function DashboardContent() {
     inputRef.current?.click();
   };
 
+  useEffect(() => {
+    const fetchProgressReportData = async () => {
+      try {
+        const apiData = await ApiService.getAllDetailsProjects();
+        console.log(apiData);
+        const coloredData = apiData.map((item: any, index: number) => ({
+          ...item,
+          color:
+            index % 3 === 0
+              ? 'hsl(var(--brand-blue))'
+              : index % 3 === 1
+              ? 'hsl(var(--brand-teal))'
+              : 'hsl(var(--muted-foreground))',
+        }));
+  
+        setProgressReportData(coloredData);
+      } catch (error) {
+        console.error("Failed to fetch project details:", error);
+      }
+    };
+  
+    fetchProgressReportData();
+  }, []);
+  
   return (
     <MainContainer height={height}>
       <PageContainer>
@@ -120,7 +145,7 @@ function DashboardContent() {
       {/* 3-Column Layout for Charts */}
       <DashboardCardsWrapper>
         <DashboardCard title="Projects" subheading="42 Included EDA and EAI Teams">
-          <ProgressDonut data={updatedProgressReportData} />
+          <ProgressDonut data={progressReportData} />
         </DashboardCard>
 
         <DashboardCard title="Users" subheading="66 Includes EDA and EAI Teams">

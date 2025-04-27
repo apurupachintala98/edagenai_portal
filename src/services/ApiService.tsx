@@ -49,6 +49,17 @@ const ApiService = {
     const response = await axios.post(`${Dashboard_BASE_URL}/delete_project_details/?sl_no=${sl_no}`);
     return response.data;
   },
+
+  getAllDetailsProjects: async () => {
+    const response = await axios.get(`${Dashboard_BASE_URL}/get_all_details_projects/`);
+    return response.status === 200 ? response.data : [];
+  },
+
+  getAllDetailsGanttChart: async () => {
+    const response = await axios.get(`${Dashboard_BASE_URL}/get_all_details_gantt_chart/`);
+    return response.status === 200 ? response.data : [];
+  }
+
 };
 
 export default ApiService;
