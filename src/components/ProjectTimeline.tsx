@@ -36,6 +36,7 @@ const ProjectTimeline = () => {
         });
 
         setSeriesData(mappedData);
+        console.log(mappedData);
       } catch (error) {
         console.error("Failed to fetch Gantt chart data:", error);
       }
