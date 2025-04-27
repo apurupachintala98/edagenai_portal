@@ -566,14 +566,20 @@ function Project() {
   };
 
   const filteredProjects = useMemo(() => {
-    const filtered = projects.filter((proj) => {
+    if (Object.keys(filters).length === 0) {
+      return projects;
+    }
+    
+    return projects.filter((proj) => {
       return Object.entries(filters).every(([key, values]) => {
         if (!values.length) return true;
-        return values.includes(proj[key as keyof project] as string);
+        const projValue = proj[key as keyof project];
+        if (projValue === undefined || projValue === null) return false;
+        return values.includes(projValue as string);
       });
     });
-    return filtered;
   }, [projects, filters]);
+  
 
   // Map only selected fields for each project
   const projectRows = useMemo(() => {
