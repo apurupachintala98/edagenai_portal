@@ -59,7 +59,7 @@ const ProjectTimeline = () => {
     },
     yAxis: {
       min: 0,
-      max: seriesData.length - 1,
+      max: seriesData.length,
       type: 'category',
       grid: {
         enabled: true,
