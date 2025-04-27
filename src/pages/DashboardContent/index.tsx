@@ -55,6 +55,8 @@ function DashboardContent() {
   });
   const { projects, loading, fetchProjects } = useProjectData();
   const [showAllYears, setShowAllYears] = useState(false);
+  const [availableYears, setAvailableYears] = useState<number[]>([]);
+  const [selectedYear, setSelectedYear] = useState<number>(new Date().getFullYear());
   const inputRef = useRef<HTMLInputElement>(null);
   const handleOpen = () => {
     inputRef.current?.focus();
@@ -132,6 +134,33 @@ function DashboardContent() {
       phases: [],
     });
   }, [projects]);
+
+  useEffect(() => {
+    const fetchYears = async () => {
+      try {
+        const apiData = await ApiService.getAllDetailsGanttChart();
+        const yearsSet = new Set<number>();
+
+        apiData.forEach((item: any) => {
+          const startYear = new Date(item.START_DT).getFullYear();
+          const endYear = new Date(item.END_DT).getFullYear();
+          yearsSet.add(startYear);
+          yearsSet.add(endYear);
+        });
+
+        const sortedYears = Array.from(yearsSet).sort((a, b) => a - b);
+        setAvailableYears(sortedYears);
+        if (sortedYears.length > 0) {
+          setSelectedYear(sortedYears[sortedYears.length - 1]); // default to latest year
+        }
+      } catch (error) {
+        console.error("Failed to fetch years from Gantt chart:", error);
+      }
+    };
+
+    fetchYears();
+  }, []);
+
 
   return (
     <MainContainer height={height}>
@@ -242,30 +271,41 @@ function DashboardContent() {
           </div>
           <div>
 
-            {/* <button
-              onClick={handleOpen}
-              className="bg-blue-600 text-white font-medium px-6 py-2 rounded-lg flex items-center gap-2"
-            >
-              <ChevronLeft size={16} />
-              <span>2024–25</span>
-              <ChevronRight size={16} className="opacity-60" />
-            </button> */}
-            <button
-              onClick={() => setShowAllYears(true)}
-              className="bg-blue-600 text-white font-medium px-6 py-2 rounded-lg flex items-center gap-2"
-            >
-              <ChevronLeft size={16} />
-              <span>2025</span>
-              <ChevronRight size={16} className="opacity-60" />
-            </button>
-
+            <div className="flex items-center justify-center bg-blue-600 text-white rounded-lg px-6 py-2 gap-4">
+              <button
+                onClick={() => {
+                  const currentIndex = availableYears.indexOf(selectedYear);
+                  if (currentIndex > 0) {
+                    setSelectedYear(availableYears[currentIndex - 1]);
+                  }
+                }}
+                disabled={availableYears.indexOf(selectedYear) === 0}
+                className="flex items-center justify-center disabled:opacity-50"
+              >
+                <ChevronLeft size={16} />
+              </button>
+              <span className="text-lg font-semibold">{selectedYear}</span>
+              <button
+                onClick={() => {
+                  const currentIndex = availableYears.indexOf(selectedYear);
+                  if (currentIndex < availableYears.length - 1) {
+                    setSelectedYear(availableYears[currentIndex + 1]);
+                  }
+                }}
+                disabled={availableYears.indexOf(selectedYear) === availableYears.length - 1}
+                className="flex items-center justify-center disabled:opacity-50"
+              >
+                <ChevronRight size={16} />
+              </button>
+            </div>
           </div>
         </div>
       </div>
-      <ProjectTimeline 
-  selectedFilters={selectedFilters} 
-  showAllYears={showAllYears} 
-/>
+      <ProjectTimeline
+        selectedFilters={selectedFilters}
+        showAllYears={showAllYears}
+        selectedYear={selectedYear}
+      />
     </MainContainer>
   );
 }

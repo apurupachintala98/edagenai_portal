@@ -16,52 +16,20 @@ interface ProjectTimelineProps {
     phases: any[];
   };
   showAllYears: boolean;
+  selectedYear: number;
 }
 
 
-const ProjectTimeline = ({ selectedFilters, showAllYears }: ProjectTimelineProps) => {
+const ProjectTimeline = ({ selectedFilters, showAllYears, selectedYear }: ProjectTimelineProps) => {
   const [seriesData, setSeriesData] = useState<any[]>([]);
   const [originalSeriesData, setOriginalSeriesData] = useState<any[]>([]);
-
-  // useEffect(() => {
-  //   const fetchGanttData = async () => {
-  //     try {
-  //       const apiData = await ApiService.getAllDetailsGanttChart();
-  //       console.log(apiData);
-
-  //       const mappedData = apiData.map((item: any, index: number) => {
-  //         const baseItem = {
-  //           start: item.START_DT,
-  //           end: item.END_DT,
-  //           name: item.NAME,
-  //           assignee: item.ASSIGNEE,
-  //           status: item.STATUS,
-  //           y: index,
-  //         };
-
-  //         if (item.STATUS === "Completed") {
-  //           return { ...baseItem, milestone: true };
-  //         }
-
-  //         return baseItem;
-  //       });
-
-  //       setSeriesData(mappedData);
-  //       console.log(mappedData);
-  //     } catch (error) {
-  //       console.error("Failed to fetch Gantt chart data:", error);
-  //     }
-  //   };
-
-  //   fetchGanttData();
-  // }, []);
 
   useEffect(() => {
     const fetchGanttData = async () => {
       try {
         const apiData = await ApiService.getAllDetailsGanttChart();
         console.log(apiData);
-  
+
         const filteredData = apiData
           .filter((item: any) => {
             const matchesManager = selectedFilters.managers.length === 0 || selectedFilters.managers.some(manager => manager.label === item.ASSIGNEE);
@@ -74,9 +42,10 @@ const ProjectTimeline = ({ selectedFilters, showAllYears }: ProjectTimelineProps
               return true;
             }
             const startYear = new Date(item.START_DT).getFullYear();
-            return startYear === new Date().getFullYear(); 
+            const endYear = new Date(item.END_DT).getFullYear();
+            return startYear === selectedYear || endYear === selectedYear;
           });
-  
+
         const mappedData = filteredData.map((item: any, index: number) => {
           const baseItem = {
             start: item.START_DT,
@@ -98,10 +67,10 @@ const ProjectTimeline = ({ selectedFilters, showAllYears }: ProjectTimelineProps
         console.error("Failed to fetch Gantt chart data:", error);
       }
     };
-  
+
     fetchGanttData();
-  }, [selectedFilters, showAllYears]); 
-  
+  }, [selectedFilters, showAllYears, selectedYear]);
+
   const startDates = seriesData.map((task: any) => new Date(task.start).getTime());
   const endDates = seriesData.map((task: any) => new Date(task.end).getTime());
 
@@ -168,9 +137,9 @@ const ProjectTimeline = ({ selectedFilters, showAllYears }: ProjectTimelineProps
     xAxis: {
       min: minDate,
       max: maxDate,
-      tickInterval: 30 * 24 * 3600 * 1000, 
+      tickInterval: 30 * 24 * 3600 * 1000,
       labels: {
-        format: '{value:%b}', 
+        format: '{value:%b}',
         style: {
           fontWeight: 'bold',
         },
@@ -182,7 +151,7 @@ const ProjectTimeline = ({ selectedFilters, showAllYears }: ProjectTimelineProps
     rangeSelector: {
       enabled: true,
       selected: 0
-  },
+    },
 
     plotOptions: {
       series: {
@@ -200,12 +169,20 @@ const ProjectTimeline = ({ selectedFilters, showAllYears }: ProjectTimelineProps
 
   return (
     <div className="mt-6 grid" style={{ margin: "0 20px 30px 20px" }}>
-      <div className="bg-white rounded-md shadow-sm overflow-x-auto" style={{ width: '100%', minHeight: '400px', maxHeight: '900px' }}>
-        <HighchartsReact
-          highcharts={Highcharts}
-          constructorType={"ganttChart"}
-          options={ganttOptions}
-        />
+      <div className="bg-white rounded-md shadow-sm overflow-x-auto" style={{ width: '100%' }}>
+        {seriesData.length === 0 ? (
+          <div className="flex items-center justify-center py-20 text-lg font-bold">
+            No Data Found
+          </div>
+        ) : (
+          <div style={{ minHeight: '400px', maxHeight: '900px' }}>
+            <HighchartsReact
+              highcharts={Highcharts}
+              constructorType={"ganttChart"}
+              options={ganttOptions}
+            />
+          </div>
+        )}
       </div>
     </div>
   );
