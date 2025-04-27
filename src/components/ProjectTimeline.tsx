@@ -187,6 +187,7 @@ const ProjectTimeline = ({ selectedFilters, showAllYears }: ProjectTimelineProps
     plotOptions: {
       series: {
         pointHeight: 48,
+        colorByPoint: false,
       }
     },
     series: [{
