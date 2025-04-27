@@ -148,11 +148,7 @@ const ProjectTimeline = ({ selectedFilters, showAllYears, selectedYear }: Projec
       lineWidth: 1,
       plotBackgroundColor: "#f5f5f5",
     },
-    rangeSelector: {
-      enabled: true,
-      selected: 0
-    },
-
+   
     plotOptions: {
       series: {
         pointHeight: 48,
