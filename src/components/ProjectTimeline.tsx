@@ -55,7 +55,7 @@ const ProjectTimeline = () => {
   const ganttOptions = useMemo(() => ({
     chart: {
       type: "gantt",
-      height: (seriesData.length) * 40 + 80,
+      height: (seriesData.length + 2) * 48,
     },
     yAxis: {
       min: 0,
@@ -138,7 +138,7 @@ const ProjectTimeline = () => {
 
   return (
     <div className="mt-6 grid" style={{ margin: "0 20px" }}>
-      <div className="bg-white rounded-md shadow-sm overflow-x-auto" style={{ width: '100%', minHeight: '400px' }}>
+      <div className="bg-white rounded-md shadow-sm overflow-x-auto" style={{ width: '100%', minHeight: '400px', maxHeight: '700px' }}>
         <HighchartsReact
           highcharts={Highcharts}
           constructorType={"ganttChart"}
