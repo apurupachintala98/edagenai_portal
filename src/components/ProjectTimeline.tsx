@@ -187,12 +187,12 @@ const ProjectTimeline = ({ selectedFilters, showAllYears }: ProjectTimelineProps
     plotOptions: {
       series: {
         pointHeight: 48,
-        color: "hsl(var(--brand-blue))",
       }
     },
     series: [{
       name: "Project Tasks",
       data: seriesData,
+      color: 'hsl(var(--brand-blue))',
     }],
   }), [seriesData]);
 
