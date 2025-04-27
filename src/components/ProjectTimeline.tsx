@@ -55,7 +55,7 @@ const ProjectTimeline = () => {
   const ganttOptions = useMemo(() => ({
     chart: {
       type: "gantt",
-      height: (seriesData.length + 2) * 48,
+      height: (seriesData.length + 3) * 48,
     },
     yAxis: {
       min: 0,
@@ -109,8 +109,8 @@ const ProjectTimeline = () => {
       }
     },
     xAxis: {
-      min: Math.min(...seriesData.map(item => new Date(item.start).getTime())),
-      max: Math.max(...seriesData.map(item => new Date(item.end).getTime())),
+      min: minDate,
+      max: maxDate,
       tickInterval: 30 * 24 * 3600 * 1000, // around 1 month
       labels: {
         format: '{value:%b}', // <-- Month only (Jan, Feb, etc.)
@@ -137,7 +137,7 @@ const ProjectTimeline = () => {
 
 
   return (
-    <div className="mt-6 grid" style={{ margin: "0 20px" }}>
+    <div className="mt-6 grid" style={{ margin: "0 20px 40px 20px" }}>
       <div className="bg-white rounded-md shadow-sm overflow-x-auto" style={{ width: '100%', minHeight: '400px', maxHeight: '900px' }}>
         <HighchartsReact
           highcharts={Highcharts}
