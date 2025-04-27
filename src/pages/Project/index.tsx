@@ -331,7 +331,6 @@ import { ButtonContainer, FilterIconActive, FilterIconDefault, CustomOverflowMen
 import { HeaderContainer, MainContainer, PageContainer, PageTitle } from "../styled.components";
 import { useWindowDimensions } from "utils/hooks";
 import { useProjectData, type project } from "../../hooks/useProjectData";
-import "./Project.css";
 
 // Extend the DataTableHeader type to include filterable
 interface CustomDataTableHeader {
