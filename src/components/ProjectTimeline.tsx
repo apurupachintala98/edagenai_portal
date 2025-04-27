@@ -1,7 +1,7 @@
 import Highcharts from "highcharts";
 import HighchartsGantt from "highcharts/modules/gantt";
 import HighchartsReact from "highcharts-react-official";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { Category } from "@carbon/icons-react";
 import ApiService from "../services/ApiService";
 
@@ -240,7 +240,7 @@ const ProjectTimeline = () => {
   const minDate = Math.min(...startDates);
   const maxDate = Math.max(...endDates);
 
-  const ganttOptions = {
+  const ganttOptions = useMemo(() => ({
     chart: {
       type: "gantt",
       height: seriesData.length * 48 + 80,
@@ -297,11 +297,11 @@ const ProjectTimeline = () => {
       }
     },
     xAxis: {
-      min: Math.min(...seriesData.map((item: any) => new Date(item.START_DT).getTime())),
-      max: Math.max(...seriesData.map((item: any) => new Date(item.END_DT).getTime())),
-      tickInterval: 30 * 24 * 3600 * 1000, // approx 1 month
+      min: Math.min(...seriesData.map(item => new Date(item.start).getTime())),
+      max: Math.max(...seriesData.map(item => new Date(item.end).getTime())),
+      tickInterval: 30 * 24 * 3600 * 1000, // 1 month approx
       labels: {
-        format: '{value:%b %Y}', // <-- Month and Year
+        format: '{value:%b %Y}', // Month + Year (example: Apr 2025)
         style: {
           fontWeight: 'bold',
         },
@@ -316,13 +316,11 @@ const ProjectTimeline = () => {
         pointHeight: 48
       }
     },
-    series: [
-      {
-        name: "Project Tasks",
-        data: seriesData
-      }
-    ]
-  };
+    series: [{
+      name: "Project Tasks",
+      data: seriesData,
+    }],
+  }), [seriesData]);
 
 
   return (
