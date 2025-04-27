@@ -55,7 +55,7 @@ const ProjectTimeline = () => {
   const ganttOptions = useMemo(() => ({
     chart: {
       type: "gantt",
-      height: (seriesData.length + 2) * 48 + 80,
+      height: (seriesData.length) * 40 + 80,
     },
     yAxis: {
       min: 0,
