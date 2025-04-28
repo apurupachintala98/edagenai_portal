@@ -1,6 +1,7 @@
 import axios from "axios";
 
 const API_BASE_URL = process.env.REACT_APP_SERVICE_URL;
+const BASE_URL = "https://llmgwassist.edagenaidev.awsdns.internal.das";
 const Dashboard_BASE_URL = "https://edadipassist.edagenaipreprod.awsdns.internal.das/backend";
 
 const axiosInstance = axios.create({
@@ -58,6 +59,21 @@ const ApiService = {
   getAllDetailsGanttChart: async () => {
     const response = await axios.get(`${Dashboard_BASE_URL}/get_all_details_gantt_chart/`);
     return response.status === 200 ? response.data : [];
+  },
+
+  getPlatforms: async () => {
+    const response = await axios.get(`${BASE_URL}/llm_platform`);
+    return response.data;
+  },
+
+  getModelsByPlatform: async (platform: any) => {
+    const response = await axios.get(`${BASE_URL}/llm_platform/${platform}/models`);
+    return response.data;
+  },
+
+  getLLMResponse: async (data: any) => {
+    const response = await axios.put(`${BASE_URL}/get_llm_response/`, data);
+    return response.data;
   }
 
 };

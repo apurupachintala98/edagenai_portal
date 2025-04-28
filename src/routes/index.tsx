@@ -1,16 +1,20 @@
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useState } from "react";
 import { Helmet } from "react-helmet-async";
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes, useNavigate } from "react-router-dom";
+import LlmGateway from "../pages/LlmGateway";
+
+import PrivateRoute from "components/PrivateRoute";
+import Spinner from "components/Spinner";
 
 const Login = lazy(() => import("pages/Login"));
 const Dashboard = lazy(() => import("pages/Dashboard"));
 const Home = lazy(() => import("pages/Home"));
 const Admin = lazy(() => import("pages/Admin"));
 
-import PrivateRoute from "components/PrivateRoute";
-import Spinner from "components/Spinner";
-
 function ReactRoute() {
+  const [sidebarType, setSidebarType] = useState<string>("default"); 
+  const theme = {}; 
+
   return (
     <BrowserRouter>
       <Helmet defaultTitle="Elevance Data Intelligence Platform">
@@ -22,6 +26,14 @@ function ReactRoute() {
           <Route path="/home" element={<PrivateRoute element={<Home />} />} />
           <Route path="/dashboard" element={<PrivateRoute element={<Dashboard />} />} />
           <Route path="/admin" element={<PrivateRoute element={<Admin />} />} />
+          <Route
+            path="/llm-gateway"
+            element={
+              <PrivateRoute
+                element={<LlmGateway sidebarType={sidebarType} setSidebarType={setSidebarType} theme={theme} />}
+              />
+            }
+          />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </Suspense>
