@@ -38,7 +38,8 @@ export const DashboardCardsWrapper = styled.div`
   grid-template-columns: 1fr;
   gap: 1.5rem;
   margin-bottom: 2rem;
-margin: 0 20px;
+  margin-top: 2rem;
+  // margin: 0 20px;
   @media (min-width: 768px) {
     grid-template-columns: repeat(3, 1fr);
   }
