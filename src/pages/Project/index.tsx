@@ -107,7 +107,7 @@ function Project() {
   const [errors, setErrors] = useState<{ startDate?: string; deploymentDate?: string }>({});
   const [modalKey, setModalKey] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
-  const pageSize = 10;
+  const pageSize = 12;
 
   useEffect(() => {
     // Update filters when projects change (e.g., after delete or edit)
@@ -447,7 +447,7 @@ function Project() {
                 <Button
                   kind="tertiary"
                   size="sm"
-                  style={{ padding: "0 12px" }}
+                  style={{ padding: "10px 12px" }}
                   onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
                   disabled={currentPage === 1}
                 >
@@ -459,7 +459,7 @@ function Project() {
                 <Button
                   kind="tertiary"
                   size="sm"
-                  style={{ padding: "0 12px" }}
+                  style={{ padding: "10px 12px" }}
                   onClick={() => setCurrentPage((prev) => Math.min(prev + 1, Math.ceil(projectRows.length / pageSize)))}
                   disabled={currentPage === Math.ceil(projectRows.length / pageSize)}
                 >
