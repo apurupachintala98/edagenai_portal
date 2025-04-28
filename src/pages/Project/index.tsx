@@ -204,14 +204,13 @@ function Project() {
     if (!validateForm()) {
       return;
     }
- 
+    setIsModalOpen(false);
     if (editMode) {
       await editProject(formData.SL_NO, formData);
     } else {
       await addProject(formData);
     }
     await fetchProjects();
-    setIsModalOpen(false);
   };
  
   const handleChange = (field: keyof project, value: string) => {
