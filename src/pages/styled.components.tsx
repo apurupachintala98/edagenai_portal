@@ -5,11 +5,14 @@ export const MainContainer = styled.div`
   padding: 0;
   overflow-y: auto;
   min-height: 100vh;
+  height: auto;
   background-color: ${(props) => props.theme.color.background};
 `;
 
 export const PageContainer = styled.div`
   padding: ${(props) => props.theme.space["20"]};
+  overflow-y: auto;
+  flex: 1;
 `;
 
 export const HeaderContainer = styled.div`

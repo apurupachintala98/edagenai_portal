@@ -24,7 +24,7 @@ function Metrics() {
           </BreadcrumbItem>
           <BreadcrumbItem isCurrentPage>Metrics</BreadcrumbItem>
         </Breadcrumb>
-        <div style={{ display: "flex", height: "70vh", alignItems: "center", justifyContent: "center", flexDirection: "column", textAlign: "center" }}>
+        <div style={{ display: "flex", minHeight: "70vh", alignItems: "center", justifyContent: "center", flexDirection: "column", textAlign: "center" }}>
           <h1 style={{ fontSize: "28px", fontWeight: "bold" }}>Coming Soon!!</h1>
           <p style={{ fontSize: "16px", color: "#6b7280", marginTop: "12px" }}>
             Exciting updates are on the way. Please check back later.
