@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -23,7 +23,7 @@ import {
 } from "@carbon/react";
 import { Edit, TrashCan, Add, Filter } from '@carbon/icons-react';
 import { useNavigate } from "react-router-dom";
-import { ButtonContainer } from "./styled.components";
+import { ButtonContainer, FilterIconActive, FilterIconDefault, CustomOverflowMenu } from "./styled.components";
 import { HeaderContainer, MainContainer, PageContainer, PageTitle } from "../styled.components";
 import { useWindowDimensions } from "utils/hooks";
 import { useProjectData, type project } from "../../hooks/useProjectData";
@@ -41,7 +41,7 @@ const headers: CustomDataTableHeader[] = [
   { header: "Key Projects/ Milestone", key: "PROJECT_NAME", isSortable: true, filterable: true },
   { header: "Lead", key: "LEAD_NM", isSortable: true, filterable: true },
   { header: "Staff VP", key: "STAFF_VP", isSortable: true, filterable: true },
-  { header: "Status", key: "CURRENT_PHASE", isSortable: true, filterable: true },
+  { header: "Status", key: "STATUS", isSortable: true, filterable: true },
   { header: "Platform", key: "LLM_PLATFORM", isSortable: true, filterable: true },
   { header: "Date", key: "DEPLOYMENT_DATE", isSortable: true },
   { header: "Actions", key: "actions", isSortable: true },
@@ -67,11 +67,14 @@ const projectFieldMap: Record<string, keyof project> = {
 };
  
 const CustomFilterIcon = ({ isFiltered }: { isFiltered: boolean }) => {
-  return (
-    <Filter
-      size={16}
-      className={isFiltered ? 'filter-icon-active' : 'filter-icon-default'}
-    />
+  return isFiltered ? (
+    <FilterIconActive>
+      <Filter size={16} />
+    </FilterIconActive>
+  ) : (
+    <FilterIconDefault>
+      <Filter size={16} />
+    </FilterIconDefault>
   );
 };
  
@@ -97,36 +100,34 @@ function Project() {
   const { projects, loading, fetchProjects, addProject, editProject, removeProject } = useProjectData();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editMode, setEditMode] = useState(false);
-  // const [formData, setFormData] = useState<project>({
-  //   SL_NO: "",
-  //   STAFF_VP: "",
-  //   DIRECTOR: "",
-  //   LEAD_NM: "",
-  //   TGOV_NO: "",
-  //   PROGRAM_TYPE: "",
-  //   PROJECT_NAME: "",
-  //   PROJECT_DESCRIPTION: "",
-  //   LLM_PLATFORM: "",
-  //   LLM_MODEL: "",
-  //   PLATFORM_SERVICES: "",
-  //   DATA: "",
-  //   BUSINESS_USER: "",
-  //   START_DATE: "",
-  //   DEPLOYMENT_DATE: "",
-  //   CURRENT_PHASE: "",
-  //   STATUS: "",
-  //   LINK_TO_SLIDE: "",
-  //   NOTES: ""
-  // });
   const [formData, setFormData] = useState<project>({} as project);
   const [filters, setFilters] = useState<Record<string, string[]>>({});
   const [modalReady, setModalReady] = useState(false);
   const [errors, setErrors] = useState<{ startDate?: string; deploymentDate?: string }>({});
+  const [modalKey, setModalKey] = useState(0);
+ 
+  useEffect(() => {
+    // Update filters when projects change (e.g., after delete or edit)
+    const updatedFilters = { ...filters };
+    Object.keys(filters).forEach((key) => {
+      const currentValues = getUniqueValues(key);
+      const filteredValues = filters[key] || [];
+      const validFilteredValues = filteredValues.filter(value => currentValues.includes(value));
+      if (validFilteredValues.length !== filteredValues.length) {
+        updatedFilters[key] = validFilteredValues;
+        if (validFilteredValues.length === 0) {
+          delete updatedFilters[key];
+        }
+      }
+    });
+    setFilters(updatedFilters);
+  }, [projects]); // Trigger on projects change
  
   const openAddModal = () => {
     setEditMode(false);
     setModalReady(false);
     setErrors({});
+    setModalKey(prev => prev + 1);
     const newSLNo = projects.length > 0 ? Math.max(...projects.map(p => parseInt(p.SL_NO))) + 1 : 1;
     const initialFormData = {
       SL_NO: String(newSLNo),
@@ -211,6 +212,7 @@ function Project() {
       await addProject(formData);
     }
     await fetchProjects();
+   
   };
  
   const handleChange = (field: keyof project, value: string) => {
@@ -228,13 +230,25 @@ function Project() {
   };
  
   const getUniqueValues = (key: string) => {
-    return [...new Set(projects.map((proj) => proj[key as keyof project] as string).filter(Boolean))];
+    let values = projects.map((proj) => proj[key as keyof project] as string).filter(Boolean);
+   
+    // Normalize LLM_PLATFORM values to remove duplicates due to formatting differences
+    if (key === "LLM_PLATFORM") {
+      values = values.map((value) => {
+        let normalized = value.trim();
+        normalized = normalized.split(/[(/]/)[0].trim();
+        return normalized.toLowerCase() === "open ai" ? "Open AI" : normalized;
+      });
+    }
+ 
+    return [...new Set(values)];
   };
  
   const handleFilterChange = (key: string, value: string, checked: boolean) => {
     setFilters((prev) => {
+      const currentValues = getUniqueValues(key);
       const currentFilters = prev[key] || [];
-      if (checked) {
+      if (checked && currentValues.includes(value)) {
         const updatedFilters = [...currentFilters, value];
         return { ...prev, [key]: updatedFilters };
       } else {
@@ -249,16 +263,25 @@ function Project() {
   };
  
   const filteredProjects = useMemo(() => {
-    const filtered = projects.filter((proj) => {
+    if (Object.keys(filters).length === 0) {
+      return projects;
+    }
+   
+    return projects.filter((proj) => {
       return Object.entries(filters).every(([key, values]) => {
         if (!values.length) return true;
-        return values.includes(proj[key as keyof project] as string);
+        let projValue = proj[key as keyof project] as string;
+        if (key === "LLM_PLATFORM") {
+          projValue = projValue.trim();
+          projValue = projValue.split(/[(/]/)[0].trim();
+          projValue = projValue.toLowerCase() === "open ai" ? "Open AI" : projValue;
+        }
+        if (projValue === undefined || projValue === null) return false;
+        return values.includes(projValue);
       });
     });
-    return filtered;
   }, [projects, filters]);
  
-  // Map only selected fields for each project
   const projectRows = useMemo(() => {
     return filteredProjects.map((proj, index) => ({
       id: proj.SL_NO,
@@ -266,7 +289,7 @@ function Project() {
       PROJECT_NAME: proj.PROJECT_NAME,
       LEAD_NM: proj.LEAD_NM,
       STAFF_VP: proj.STAFF_VP,
-      CURRENT_PHASE: proj.STATUS,
+      STATUS: proj.STATUS,
       LLM_PLATFORM: proj.LLM_PLATFORM,
       DEPLOYMENT_DATE: proj.DEPLOYMENT_DATE,
       actions: "",
@@ -293,7 +316,7 @@ function Project() {
           </BreadcrumbItem>
           <BreadcrumbItem isCurrentPage>Project</BreadcrumbItem>
         </Breadcrumb>
-        <TableContainer style={{ marginTop: "20px" }}>
+        <TableContainer style={{ marginTop: "20px", height: "100%" }}>
           {loading ? (
             <div style={{ padding: "20px", textAlign: "center" }}>
               Loading Projects...</div>
@@ -327,40 +350,41 @@ function Project() {
                                 }}
                                 direction="bottom"
                                 style={{ marginLeft: '0.5rem', zIndex: 1000 }}
-                                menuOptionsClass="custom-overflow-menu"
                               >
-                                <div style={{
-                                  maxHeight: '200px',
-                                  maxWidth: '300px',
-                                  overflowY: 'auto',
-                                  overflowX: 'auto',
-                                  padding: '0.5rem',
-                                  background: '#fff',
-                                  border: '1px solid #dfe3e6'
-                                }}>
-                                  {getUniqueValues(header.key).map((value) => (
-                                    <OverflowMenuItem
-                                      key={value}
-                                      itemText={
-                                        <div style={{
-                                          minWidth: '300px',
-                                          padding: '0.25rem 0',
-                                          whiteSpace: 'normal',
-                                          wordBreak: 'break-word'
-                                        }}>
-                                          <Checkbox
-                                            id={`${header.key}-${value}`}
-                                            labelText={value}
-                                            checked={filters[header.key]?.includes(value) || false}
-                                            onChange={(event) => handleFilterChange(header.key, value, event.target.checked)}
-                                            style={{ display: 'block' }}
-                                          />
-                                        </div>
-                                      }
-                                      onClick={(e) => e.stopPropagation()}
-                                    />
-                                  ))}
-                                </div>
+                                <CustomOverflowMenu>
+                                  <div style={{
+                                    maxHeight: '200px',
+                                    maxWidth: '300px',
+                                    overflowY: 'auto',
+                                    overflowX: 'auto',
+                                    padding: '0.5rem',
+                                    background: '#fff',
+                                    border: '1px solid #dfe3e6'
+                                  }}>
+                                    {getUniqueValues(header.key).map((value) => (
+                                      <OverflowMenuItem
+                                        key={value}
+                                        itemText={
+                                          <div style={{
+                                            minWidth: '300px',
+                                            padding: '0.25rem 0',
+                                            whiteSpace: 'normal',
+                                            wordBreak: 'break-word'
+                                          }}>
+                                            <Checkbox
+                                              id={`${header.key}-${value}`}
+                                              labelText={value}
+                                              checked={filters[header.key]?.includes(value) || false}
+                                              onChange={(event) => handleFilterChange(header.key, value, event.target.checked)}
+                                              style={{ display: 'block' }}
+                                            />
+                                          </div>
+                                        }
+                                        onClick={(e) => e.stopPropagation()}
+                                      />
+                                    ))}
+                                  </div>
+                                </CustomOverflowMenu>
                               </OverflowMenu>
                             )}
                           </div>
@@ -444,6 +468,7 @@ function Project() {
                     const formattedDate = dates[0] ? formatDateToString(dates[0]) : "";
                     handleChange("START_DATE", formattedDate);
                   }}
+                  key={`start-date-${modalKey}`}
                 >
                   <DatePickerInput
                     id="START_DATE"
@@ -464,6 +489,7 @@ function Project() {
                     const formattedDate = dates[0] ? formatDateToString(dates[0]) : "";
                     handleChange("DEPLOYMENT_DATE", formattedDate);
                   }}
+                  key={`deployment-date-${modalKey}`}
                 >
                   <DatePickerInput
                     id="DEPLOYMENT_DATE"
@@ -485,5 +511,5 @@ function Project() {
     </MainContainer>
   );
 }
-
+ 
 export default Project;
