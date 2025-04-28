@@ -4,6 +4,7 @@ export const MainContainer = styled.div`
   margin: 0;
   padding: 0;
   overflow-y: auto;
+  min-height: 100vh;
   background-color: ${(props) => props.theme.color.background};
 `;
 
