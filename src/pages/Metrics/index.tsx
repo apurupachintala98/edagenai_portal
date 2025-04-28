@@ -15,7 +15,6 @@ function Metrics() {
         <HeaderContainer>
           <PageTitle>Metrics</PageTitle>
         </HeaderContainer>
-
         <Breadcrumb>
           <BreadcrumbItem>
             <div style={{ cursor: "pointer" }} onClick={() => navigate("/home")}>
