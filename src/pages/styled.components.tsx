@@ -3,16 +3,20 @@ import styled from "styled-components";
 export const MainContainer = styled.div`
   margin: 0;
   padding: 0;
-  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
   min-height: 100vh;
   height: auto;
   background-color: ${(props) => props.theme.color.background};
+  overflow: hidden; 
 `;
 
 export const PageContainer = styled.div`
-  padding: ${(props) => props.theme.space["20"]};
-  overflow-y: auto;
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  padding: ${(props) => props.theme.space["20"]};
 `;
 
 export const HeaderContainer = styled.div`
