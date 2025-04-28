@@ -204,8 +204,9 @@ function DashboardContent() {
             {t("dashboard.BreadcrumbHomeText")}
           </BreadcrumbItem>
         </Breadcrumb>
+      </PageContainer>
 
-           {/* 3-Column Layout for Charts */}
+      {/* 3-Column Layout for Charts */}
       <DashboardCardsWrapper>
         <DashboardCard title="Projects" subheading={`${dashboardTotals.totalProjects} Included all Projects`}>
           <ProgressDonut data={progressReportData} />
@@ -305,9 +306,6 @@ function DashboardContent() {
         showAllYears={showAllYears}
         selectedYear={selectedYear}
       />
-      </PageContainer>
-
-   
     </MainContainer>
   );
 }

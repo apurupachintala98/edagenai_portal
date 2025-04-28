@@ -6,9 +6,7 @@ export const MainContainer = styled.div`
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  height: auto;
   background-color: ${(props) => props.theme.color.background};
-  overflow: hidden; 
 `;
 
 export const PageContainer = styled.div`
