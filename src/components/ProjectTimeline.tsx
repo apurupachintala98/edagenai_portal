@@ -33,7 +33,7 @@ const ProjectTimeline = ({ selectedFilters, showAllYears, selectedYear }: Projec
         const filteredData = apiData
           .filter((item: any) => {
             const matchesManager = selectedFilters.managers.length === 0 || selectedFilters.managers.some(manager => manager.label === item.ASSIGNEE);
-            const matchesPlatform = selectedFilters.platforms.length === 0 || selectedFilters.platforms.some(platform => platform.label === item.PLATFORM);
+            const matchesPlatform = selectedFilters.platforms.length === 0 || selectedFilters.platforms.some(platform => platform.label === item.PLATFORM); // Only filter, not displayed
             const matchesPhase = selectedFilters.phases.length === 0 || selectedFilters.phases.some(phase => phase.label === item.STATUS);
             return matchesManager && matchesPlatform && matchesPhase;
           })
