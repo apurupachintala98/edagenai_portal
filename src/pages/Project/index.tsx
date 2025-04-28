@@ -442,23 +442,31 @@ function Project() {
                   </TableBody>
                 </Table>
               )}
-            </DataTable><div style={{ display: "flex", justifyContent: "center", marginTop: "20px", gap: "1rem" }}>
+            </DataTable>
+              <div style={{ display: "flex", justifyContent: "end", marginTop: "20px", gap: "1rem" }}>
                 <Button
                   kind="tertiary"
+                  size="sm"
+                  style={{ padding: "0 12px" }}
                   onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
                   disabled={currentPage === 1}
                 >
                   Previous
                 </Button>
-                <span style={{ display: "flex", alignItems: "center" }}>Page {currentPage} of {Math.ceil(projectRows.length / pageSize)}</span>
+                <span style={{ display: "flex", alignItems: "center", fontSize: "14px" }}>
+                  Page {currentPage} of {Math.ceil(projectRows.length / pageSize)}
+                </span>
                 <Button
                   kind="tertiary"
+                  size="sm"
+                  style={{ padding: "0 12px" }}
                   onClick={() => setCurrentPage((prev) => Math.min(prev + 1, Math.ceil(projectRows.length / pageSize)))}
                   disabled={currentPage === Math.ceil(projectRows.length / pageSize)}
                 >
                   Next
                 </Button>
-              </div></>
+              </div>
+            </>
 
           )}
         </TableContainer>
