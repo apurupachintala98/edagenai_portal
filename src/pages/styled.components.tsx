@@ -1,32 +1,20 @@
 import styled from "styled-components";
 
-// export const MainContainer = styled.div`
-//   margin: 0;
-//   padding: 0;
-//   display: flex;
-//   flex-direction: column;
-//   min-height: 100vh;
-//   background-color: ${(props) => props.theme.color.background};
-// `;
-
-// export const PageContainer = styled.div`
-//   flex: 1;
-//   display: flex;
-//   flex-direction: column;
-//   overflow-y: auto;
-//   padding: ${(props) => props.theme.space["20"]};
-// `;
-
 export const MainContainer = styled.div`
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
   min-height: 100vh;
   background-color: ${(props) => props.theme.color.background};
 `;
 
 export const PageContainer = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
   padding: ${(props) => props.theme.space["20"]};
-  width: 100%;
-  max-width: 1440px;
-  margin: 0 auto;
 `;
 
 export const HeaderContainer = styled.div`

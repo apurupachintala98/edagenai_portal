@@ -28,7 +28,7 @@ import {
 } from "@mui/material";
 import { TypeProps } from "interface";
 import DashboardContent from "pages/DashboardContent";
-import Project from 'pages/Project';
+import Project from 'pages/Project/index';
 
 import {
   Modal, TextInput

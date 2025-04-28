@@ -52,39 +52,38 @@ export const FilterIconDefault = styled.div`
 `;
 
 export const CustomOverflowMenu = styled.div`
-  .cds--menu-item:first-child,
-  .cds--menu-item:first-child:hover,
-  .cds--menu-item:first-child:focus {
-    background-color: transparent !important;
-    outline: none !important;
-  }
-
-  .cds--checkbox-label::before {
-    background-color: #ffffff !important;
-    border: 1px solid #dfe3e6 !important;
-    box-shadow: none !important;
-  }
-
-  .cds--checkbox-label:focus::before {
-    box-shadow: none !important;
-    outline: none !important;
-  }
-
-  .cds--checkbox:checked + .cds--checkbox-label::before {
-    background-color: #0f62fe !important;
-    border-color: #0f62fe !important;
-  }
-
-  .cds--checkbox:checked + .cds--checkbox-label::after {
-    border-color: #ffffff !important;
-  }
-
-  .cds--checkbox:not(:checked) + .cds--checkbox-label::before {
-    background-color: #ffffff !important;
-  }
-
-  .cds--menu-item:hover,
-  .cds--menu-item:focus {
-    background-color: transparent !important;
-  }
-`;
+.custom-overflow-menu .cds--menu-item:first-child,
+.custom-overflow-menu .cds--menu-item:first-child:hover,
+.custom-overflow-menu .cds--menu-item:first-child:focus {
+  background-color: transparent !important;
+  outline: none !important;
+}
+ 
+.custom-overflow-menu .cds--checkbox-label::before {
+  background-color: #ffffff !important;
+  border: 1px solid #dfe3e6 !important;
+  box-shadow: none !important;
+}
+ 
+.custom-overflow-menu .cds--checkbox-label:focus::before {
+  box-shadow: none !important;
+  outline: none !important;
+}
+ 
+.custom-overflow-menu .cds--checkbox:checked + .cds--checkbox-label::before {
+  background-color: #0f62fe !important;
+  border-color: #0f62fe !important;
+}
+ 
+.custom-overflow-menu .cds--checkbox:checked + .cds--checkbox-label::after {
+  border-color: #ffffff !important;
+}
+ 
+.custom-overflow-menu .cds--checkbox:not(:checked) + .cds--checkbox-label::before {
+  background-color: #ffffff !important;
+}
+ 
+.custom-overflow-menu .cds--menu-item:hover,
+.custom-overflow-menu .cds--menu-item:focus {
+  background-color: transparent !important;
+}`;
