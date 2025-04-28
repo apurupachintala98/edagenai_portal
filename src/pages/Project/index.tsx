@@ -107,7 +107,7 @@ function Project() {
   const [errors, setErrors] = useState<{ startDate?: string; deploymentDate?: string }>({});
   const [modalKey, setModalKey] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
-  const pageSize = 15;
+  const pageSize = 10;
 
   useEffect(() => {
     // Update filters when projects change (e.g., after delete or edit)
