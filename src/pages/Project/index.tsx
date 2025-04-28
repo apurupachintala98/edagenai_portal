@@ -27,7 +27,7 @@ import { ButtonContainer, FilterIconActive, FilterIconDefault, CustomOverflowMen
 import { HeaderContainer, MainContainer, PageContainer, PageTitle } from "../styled.components";
 import { useWindowDimensions } from "utils/hooks";
 import { useProjectData, type project } from "../../hooks/useProjectData";
- 
+
 // Extend the DataTableHeader type to include filterable
 interface CustomDataTableHeader {
   header: React.ReactNode;
@@ -35,7 +35,7 @@ interface CustomDataTableHeader {
   isSortable?: boolean;
   filterable?: boolean;
 }
- 
+
 const headers: CustomDataTableHeader[] = [
   { header: "SL.NO", key: "SL_NO", isSortable: true },
   { header: "Key Projects/ Milestone", key: "PROJECT_NAME", isSortable: true, filterable: true },
@@ -46,7 +46,7 @@ const headers: CustomDataTableHeader[] = [
   { header: "Date", key: "DEPLOYMENT_DATE", isSortable: true },
   { header: "Actions", key: "actions", isSortable: true },
 ];
- 
+
 const projectFieldMap: Record<string, keyof project> = {
   Staff_VP: "STAFF_VP",
   Director: "DIRECTOR",
@@ -65,7 +65,7 @@ const projectFieldMap: Record<string, keyof project> = {
   Link_to_Slide: "LINK_TO_SLIDE",
   Notes: "NOTES"
 };
- 
+
 const CustomFilterIcon = ({ isFiltered }: { isFiltered: boolean }) => {
   return isFiltered ? (
     <FilterIconActive>
@@ -77,7 +77,7 @@ const CustomFilterIcon = ({ isFiltered }: { isFiltered: boolean }) => {
     </FilterIconDefault>
   );
 };
- 
+
 // Utility function to format a Date object to YYYY-MM-DD
 const formatDateToString = (date: Date | string | undefined): string => {
   if (!date) return "";
@@ -86,14 +86,15 @@ const formatDateToString = (date: Date | string | undefined): string => {
   if (isNaN(d.getTime())) return "";
   return d.toISOString().split("T")[0];
 };
- 
+
 // Utility function to parse a YYYY-MM-DD string to a Date object
 const parseDateString = (dateString: string | undefined): Date | undefined => {
   if (!dateString) return undefined;
   const date = new Date(dateString);
   return isNaN(date.getTime()) ? undefined : date;
 };
- 
+
+
 function Project() {
   const navigate = useNavigate();
   const { height } = useWindowDimensions();
@@ -105,7 +106,9 @@ function Project() {
   const [modalReady, setModalReady] = useState(false);
   const [errors, setErrors] = useState<{ startDate?: string; deploymentDate?: string }>({});
   const [modalKey, setModalKey] = useState(0);
- 
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 15;
+
   useEffect(() => {
     // Update filters when projects change (e.g., after delete or edit)
     const updatedFilters = { ...filters };
@@ -122,7 +125,8 @@ function Project() {
     });
     setFilters(updatedFilters);
   }, [projects]); // Trigger on projects change
- 
+
+
   const openAddModal = () => {
     setEditMode(false);
     setModalReady(false);
@@ -154,7 +158,7 @@ function Project() {
     setModalReady(true);
     setIsModalOpen(true);
   };
- 
+
   const openEditModal = (project: project) => {
     setEditMode(true);
     setModalReady(false);
@@ -183,11 +187,11 @@ function Project() {
     setModalReady(true);
     setIsModalOpen(true);
   };
- 
+
   const validateForm = (): boolean => {
     const newErrors: { startDate?: string; deploymentDate?: string } = {};
     let isValid = true;
- 
+
     if (!formData.START_DATE) {
       newErrors.startDate = "Start Date is required";
       isValid = false;
@@ -196,11 +200,11 @@ function Project() {
       newErrors.deploymentDate = "Deployment Date is required";
       isValid = false;
     }
- 
+
     setErrors(newErrors);
     return isValid;
   };
- 
+
   const handleSubmit = async () => {
     if (!validateForm()) {
       return;
@@ -212,9 +216,9 @@ function Project() {
       await addProject(formData);
     }
     await fetchProjects();
-   
+
   };
- 
+
   const handleChange = (field: keyof project, value: string) => {
     setFormData((prev: project) => ({ ...prev, [field]: value }));
     if (field === "START_DATE" && value) {
@@ -224,14 +228,14 @@ function Project() {
       setErrors((prev) => ({ ...prev, deploymentDate: undefined }));
     }
   };
- 
+
   const handleDelete = async (sl_no: string) => {
     await removeProject(sl_no);
   };
- 
+
   const getUniqueValues = (key: string) => {
     let values = projects.map((proj) => proj[key as keyof project] as string).filter(Boolean);
-   
+
     // Normalize LLM_PLATFORM values to remove duplicates due to formatting differences
     if (key === "LLM_PLATFORM") {
       values = values.map((value) => {
@@ -240,10 +244,10 @@ function Project() {
         return normalized.toLowerCase() === "open ai" ? "Open AI" : normalized;
       });
     }
- 
+
     return [...new Set(values)];
   };
- 
+
   const handleFilterChange = (key: string, value: string, checked: boolean) => {
     setFilters((prev) => {
       const currentValues = getUniqueValues(key);
@@ -261,12 +265,12 @@ function Project() {
       }
     });
   };
- 
+
   const filteredProjects = useMemo(() => {
     if (Object.keys(filters).length === 0) {
       return projects;
     }
-   
+
     return projects.filter((proj) => {
       return Object.entries(filters).every(([key, values]) => {
         if (!values.length) return true;
@@ -281,7 +285,7 @@ function Project() {
       });
     });
   }, [projects, filters]);
- 
+
   const projectRows = useMemo(() => {
     return filteredProjects.map((proj, index) => ({
       id: proj.SL_NO,
@@ -295,7 +299,14 @@ function Project() {
       actions: "",
     }));
   }, [filteredProjects]);
- 
+
+  const paginatedRows = useMemo(() => {
+    const startIndex = (currentPage - 1) * pageSize;
+    const endIndex = startIndex + pageSize;
+    return projectRows.slice(startIndex, endIndex);
+  }, [projectRows, currentPage]);
+
+
   return (
     <MainContainer>
       <PageContainer>
@@ -307,7 +318,7 @@ function Project() {
             </Button>
           </ButtonContainer>
         </HeaderContainer>
- 
+
         <Breadcrumb>
           <BreadcrumbItem>
             <div style={{ cursor: "pointer" }} onClick={() => navigate("/home")}>
@@ -321,7 +332,7 @@ function Project() {
             <div style={{ padding: "20px", textAlign: "center" }}>
               Loading Projects...</div>
           ) : (
-            <DataTable rows={projectRows} headers={headers}>
+            <><DataTable rows={paginatedRows} headers={headers}>
               {({ rows, headers: tableHeaders, getTableProps, getHeaderProps, getRowProps }) => (
                 <Table {...getTableProps()}>
                   <TableHead>
@@ -334,8 +345,7 @@ function Project() {
                               <OverflowMenu
                                 renderIcon={() => (
                                   <CustomFilterIcon
-                                    isFiltered={filters[header.key] && filters[header.key].length > 0}
-                                  />
+                                    isFiltered={filters[header.key] && filters[header.key].length > 0} />
                                 )}
                                 onClick={(e: any) => {
                                   e.stopPropagation();
@@ -364,24 +374,20 @@ function Project() {
                                     {getUniqueValues(header.key).map((value) => (
                                       <OverflowMenuItem
                                         key={value}
-                                        itemText={
-                                          <div style={{
-                                            minWidth: '300px',
-                                            padding: '0.25rem 0',
-                                            whiteSpace: 'normal',
-                                            wordBreak: 'break-word'
-                                          }}>
-                                            <Checkbox
-                                              id={`${header.key}-${value}`}
-                                              labelText={value}
-                                              checked={filters[header.key]?.includes(value) || false}
-                                              onChange={(event) => handleFilterChange(header.key, value, event.target.checked)}
-                                              style={{ display: 'block' }}
-                                            />
-                                          </div>
-                                        }
-                                        onClick={(e) => e.stopPropagation()}
-                                      />
+                                        itemText={<div style={{
+                                          minWidth: '300px',
+                                          padding: '0.25rem 0',
+                                          whiteSpace: 'normal',
+                                          wordBreak: 'break-word'
+                                        }}>
+                                          <Checkbox
+                                            id={`${header.key}-${value}`}
+                                            labelText={value}
+                                            checked={filters[header.key]?.includes(value) || false}
+                                            onChange={(event) => handleFilterChange(header.key, value, event.target.checked)}
+                                            style={{ display: 'block' }} />
+                                        </div>}
+                                        onClick={(e) => e.stopPropagation()} />
                                     ))}
                                   </div>
                                 </CustomOverflowMenu>
@@ -415,14 +421,12 @@ function Project() {
                                       size={16}
                                       style={{ cursor: 'pointer' }}
                                       title="Edit"
-                                      onClick={() => openEditModal(projects.find(p => p.SL_NO === row.id)!)}
-                                    />
+                                      onClick={() => openEditModal(projects.find(p => p.SL_NO === row.id)!)} />
                                     <TrashCan
                                       size={16}
                                       style={{ cursor: 'pointer' }}
                                       title="Delete"
-                                      onClick={() => handleDelete(row.id)}
-                                    />
+                                      onClick={() => handleDelete(row.id)} />
                                   </div>
                                 ) : cell.value !== null && cell.value !== undefined ? (
                                   cell.value
@@ -438,7 +442,24 @@ function Project() {
                   </TableBody>
                 </Table>
               )}
-            </DataTable>
+            </DataTable><div style={{ display: "flex", justifyContent: "center", marginTop: "20px", gap: "1rem" }}>
+                <Button
+                  kind="tertiary"
+                  onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                  disabled={currentPage === 1}
+                >
+                  Previous
+                </Button>
+                <span style={{ display: "flex", alignItems: "center" }}>Page {currentPage} of {Math.ceil(projectRows.length / pageSize)}</span>
+                <Button
+                  kind="tertiary"
+                  onClick={() => setCurrentPage((prev) => Math.min(prev + 1, Math.ceil(projectRows.length / pageSize)))}
+                  disabled={currentPage === Math.ceil(projectRows.length / pageSize)}
+                >
+                  Next
+                </Button>
+              </div></>
+
           )}
         </TableContainer>
         <Modal
@@ -511,5 +532,5 @@ function Project() {
     </MainContainer>
   );
 }
- 
+
 export default Project;
