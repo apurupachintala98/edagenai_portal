@@ -1,5 +1,6 @@
 import { Button, ClickableTile } from "@carbon/react";
 import { useDropdown } from "../hooks/useDropdown";
+import { useNavigate } from "react-router-dom";
 
 interface DropdownItem {
   label: string;
@@ -14,7 +15,16 @@ interface DropdownButtonProps {
 
 export const DropdownButton = ({ icon, label, items }: DropdownButtonProps) => {
     const { open, setOpen, ref } = useDropdown();
-  
+    const navigate = useNavigate();
+
+    const handleItemClick = (url: string) => {
+      if (url.startsWith("/")) {
+        navigate(url);  
+      } else {
+        window.open(url, "_blank"); 
+      }
+      setOpen(false); 
+    };
     return (
       <div style={{ position: "relative" }} ref={ref}>
         <Button kind="primary" size="lg" renderIcon={icon} onClick={() => setOpen(!open)}>
@@ -41,7 +51,7 @@ export const DropdownButton = ({ icon, label, items }: DropdownButtonProps) => {
             {items.map((item, idx) => (
               <li
                 key={idx}
-                onClick={() => window.open(item.url, "_blank")}
+                onClick={() => handleItemClick(item.url)}
                 style={{
                   padding: "4px 10px",
                   fontSize: "13px",
