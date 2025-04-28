@@ -10,7 +10,7 @@ function ProjectStatusChart() {
   const { height } = useWindowDimensions();
 
   return (
-    <MainContainer height={height}>
+    <MainContainer>
       <PageContainer>
         <HeaderContainer>
           <PageTitle>Project Status Chart</PageTitle>

@@ -10,7 +10,7 @@ function Metrics() {
   const navigate = useNavigate();
   const { height } = useWindowDimensions();
   return (
-    <MainContainer height={height}>
+    <MainContainer>
       <PageContainer>
         <HeaderContainer>
           <PageTitle>Metrics</PageTitle>

@@ -597,7 +597,7 @@ function Project() {
   }, [filteredProjects]);
 
   return (
-    <MainContainer height={height}>
+    <MainContainer>
       <PageContainer>
         <HeaderContainer>
           <PageTitle>Project</PageTitle>

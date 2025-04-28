@@ -163,7 +163,7 @@ function DashboardContent() {
 
 
   return (
-    <MainContainer height={height}>
+    <MainContainer>
       <PageContainer>
         <HeaderContainer>
           <PageTitle>{t("dashboard.title")}</PageTitle>

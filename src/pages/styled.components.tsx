@@ -1,10 +1,9 @@
 import styled from "styled-components";
 
-export const MainContainer = styled.div<{ height: number }>`
+export const MainContainer = styled.div`
   margin: 0;
   padding: 0;
   overflow-y: auto;
-  ${(p) => p.height && `height: ${p.height}px`};
   background-color: ${(props) => props.theme.color.background};
 `;
 
