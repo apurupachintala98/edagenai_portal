@@ -40,7 +40,7 @@
     "tsc:watch": "tsc --watch",
     "prepare": "husky install",
     "clean": "rm -rf build && rm -rf node_modules rm -r package-lock.json",
-    "start": "serve -s build -l 3000",
+    "start": "env-cmd -f .env.staging react-scripts start",
     "build:staging": "env-cmd -f .env.staging react-scripts build",
     "build:production": "env-cmd -f .env.production react-scripts build",
     "test": "react-scripts test",
