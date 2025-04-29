@@ -70,7 +70,7 @@ const ProgressDonut = ({ data, subheading }: ProgressDonutProps) => {
 
   return (
     <div className="h-full w-full">
-      <ResponsiveContainer width="100%" height={235}>
+      <ResponsiveContainer width="100%" height={250}>
         <PieChart>
           <Pie
             activeIndex={activeIndex}
@@ -78,8 +78,8 @@ const ProgressDonut = ({ data, subheading }: ProgressDonutProps) => {
             data={data}
             cx="50%"
             cy="50%"
-            innerRadius={60}
-            outerRadius={80}
+            innerRadius={65}
+            outerRadius={85}
             paddingAngle={2}
             dataKey="value"
             onMouseEnter={onPieEnter}
