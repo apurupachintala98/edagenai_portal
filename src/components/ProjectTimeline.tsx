@@ -74,7 +74,7 @@ const ProjectTimeline = ({ selectedFilters, showAllYears, selectedYear }: Projec
   const ganttOptions = useMemo(() => ({
     chart: {
       type: "gantt",
-      height: Math.max((originalSeriesData.length + 1) * 48, 400),
+      height: Math.max((originalSeriesData.length + 1) * 48, 100),
     },
     yAxis: {
       uniqueNames: true,
