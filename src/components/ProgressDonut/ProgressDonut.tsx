@@ -1,6 +1,5 @@
 import { useState } from 'react';
-import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Sector } from 'recharts';
-
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Sector, Label } from 'recharts';
 
 interface ProgressDonutProps {
   data: {
@@ -30,7 +29,7 @@ const renderActiveShape = (props: any) => {
 
   return (
     <g>
-      <text x={cx} y={cy} dy={8} textAnchor="middle" fill={fill}>
+      <text x={cx} y={cy} dy={8} textAnchor="middle" fill={fill} fontSize={16}>
         {payload.name}
       </text>
       <Sector
@@ -53,7 +52,7 @@ const renderActiveShape = (props: any) => {
       />
       <path d={`M${sx},${sy}L${mx},${my}L${ex},${ey}`} stroke={fill} fill="none" />
       <circle cx={ex} cy={ey} r={2} fill={fill} stroke="none" />
-      <text x={ex + (cos >= 0 ? 1 : -1) * 12} y={ey} textAnchor={textAnchor} fill="#333">{`PV ${value}`}</text>
+      <text x={ex + (cos >= 0 ? 1 : -1) * 12} y={ey} textAnchor={textAnchor} fill="#333">{`${value}`}</text>
       <text x={ex + (cos >= 0 ? 1 : -1) * 12} y={ey} dy={18} textAnchor={textAnchor} fill="#999">
         {`(Rate ${(percent * 100).toFixed(2)}%)`}
       </text>
@@ -88,6 +87,13 @@ const ProgressDonut = ({ data, subheading }: ProgressDonutProps) => {
             {data.map((entry, index) => (
               <Cell key={`cell-${index}`} fill={COLORS[index]} stroke="transparent" />
             ))}
+            {/* 👇 ADDED Label */}
+            <Label 
+              position="inside"
+              fill="#fff"
+              fontSize={12}
+              formatter={(value: any, entry: any) => entry.value} // just show value
+            />
           </Pie>
           <Tooltip
             contentStyle={{
@@ -96,7 +102,7 @@ const ProgressDonut = ({ data, subheading }: ProgressDonutProps) => {
               borderRadius: '0.5rem',
               boxShadow: '0 4px 12px rgba(0, 0, 0, 0.05)',
             }}
-            formatter={(value: number) => [`${value}`, 'Value']}
+            formatter={(value: number, name: string) => [`${value}`, name]}
           />
         </PieChart>
       </ResponsiveContainer>

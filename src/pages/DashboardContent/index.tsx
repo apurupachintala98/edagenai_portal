@@ -207,16 +207,16 @@ function DashboardContent() {
 
           {/* 3-Column Layout for Charts */}
       <DashboardCardsWrapper>
-        <DashboardCard title="Projects" subheading={`${dashboardTotals.totalProjects} Included all Projects`}>
+        <DashboardCard title="Projects" subheading={`Total Projects : ${dashboardTotals.totalProjects}`}>
           <ProgressDonut data={progressReportData} />
         </DashboardCard>
 
-        <DashboardCard title="Users" subheading={`${dashboardTotals.totalUsers} Includes all Users`}>
+        <DashboardCard title="Users" subheading={`Total Users: ${dashboardTotals.totalUsers}`}>
           <DashboardChart data={usersData} />
         </DashboardCard>
 
-        <DashboardCard title="Cortex Cost" subheading={`$${dashboardTotals.totalCost.toFixed(2)} Provisioned Throughout Cost`}>
-          <DashboardChart data={cortexCostData} />
+        <DashboardCard title="Cortex Cost" subheading={`Total Cost for the Projects : $${dashboardTotals.totalCost.toFixed(2)}`}>
+          <DashboardChart data={cortexCostData} isCurrency />
         </DashboardCard>
       </DashboardCardsWrapper>
 
