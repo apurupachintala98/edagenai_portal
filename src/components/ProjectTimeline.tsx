@@ -5,6 +5,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import { Category } from "@carbon/icons-react";
 import ApiService from "../services/ApiService";
 
+
 if (typeof HighchartsGantt === "function") {
   HighchartsGantt(Highcharts);
 }
@@ -64,7 +65,7 @@ const ProjectTimeline = ({ selectedFilters, showAllYears, selectedYear }: Projec
               end: deploymentDate,
               milestone: true
             };
-          }   
+          }
           return baseItem;
         });
         setOriginalSeriesData(mappedData);
@@ -76,6 +77,33 @@ const ProjectTimeline = ({ selectedFilters, showAllYears, selectedYear }: Projec
 
     fetchGanttData();
   }, [selectedFilters, showAllYears, selectedYear]);
+
+  function ganttTooltipFormatter(this: any): string {
+    const point = this.point as Highcharts.Point & {
+      name?: string;
+      start?: number;
+      end?: number;
+      milestone?: boolean;
+    };
+
+    const name = point.name || '';
+    const startDate = point.start
+      ? Highcharts.dateFormat('%A, %b %e, %Y', point.start)
+      : '—';
+    const endDate = point.end
+      ? Highcharts.dateFormat('%A, %b %e, %Y', point.end)
+      : '—';
+
+    return `
+      <b>${this.series.name}</b><br/>
+      <span style="font-weight: 500">${name}</span><br/>
+      ${!point.milestone
+        ? `<span>Start: ${startDate}</span><br/><span>End: ${endDate}</span>`
+        : `<span>Date: ${startDate}</span>`
+      }
+    `;
+  }
+
 
   const ganttOptions = useMemo(() => ({
     chart: {
@@ -92,14 +120,6 @@ const ProjectTimeline = ({ selectedFilters, showAllYears, selectedYear }: Projec
         borderColor: 'rgba(0,0,0,0.3)',
         borderWidth: 1,
         columns: [
-          // {
-          //   title: { text: 'Project' },
-          //   labels: {
-          //     formatter(this: Highcharts.AxisLabelsFormatterContextObject) {
-          //       return seriesData[this.pos]?.name || '';
-          //     }
-          //   }
-          // },
           {
             title: { text: 'Project' },
             labels: {
@@ -109,7 +129,7 @@ const ProjectTimeline = ({ selectedFilters, showAllYears, selectedYear }: Projec
                 return `<span style="display: block; text-align: left;">${name}</span>`;
               }
             }
-          },          
+          },
           {
             title: { text: 'Manager' },
             labels: {
@@ -166,11 +186,14 @@ const ProjectTimeline = ({ selectedFilters, showAllYears, selectedYear }: Projec
       lineWidth: 1,
       plotBackgroundColor: "#f5f5f5",
     },
-    
-   
+    tooltip: {
+      useHTML: true,
+      formatter: ganttTooltipFormatter,
+    },
+
     plotOptions: {
       series: {
-        pointHeight: 36, 
+        pointHeight: 36,
         colorByPoint: false,
       }
     },
