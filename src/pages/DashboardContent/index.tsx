@@ -117,7 +117,7 @@ function DashboardContent() {
     if (projects.length > 0) {
       const uniqueManagers = Array.from(new Set(projects.map((item) => item.STAFF_VP))).filter(Boolean);
       const uniquePlatforms = Array.from(new Set(projects.map((item) => item.LLM_PLATFORM))).filter(Boolean);
-      const uniquePhases = Array.from(new Set(projects.map((item) => item.STATUS))).filter(Boolean);
+      const uniquePhases = Array.from(new Set(projects.map((item) => item.CURRENT_PHASE))).filter(Boolean);
 
       setDropdownOptions({
         managers: uniqueManagers.map((manager, index) => ({ id: String(index + 1), label: manager })),

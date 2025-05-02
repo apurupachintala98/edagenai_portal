@@ -87,7 +87,7 @@ const ProjectTimeline = ({ selectedFilters, showAllYears, selectedYear }: Projec
         borderWidth: 1,
         columns: [
           {
-            title: { text: 'Task' },
+            title: { text: 'Project' },
             labels: {
               formatter(this: Highcharts.AxisLabelsFormatterContextObject) {
                 return seriesData[this.pos]?.name || '';

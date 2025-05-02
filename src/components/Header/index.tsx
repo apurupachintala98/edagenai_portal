@@ -25,6 +25,7 @@ function Header({
   type = TypeProps.Auto,
   isSearchEnabled = false,
   sidebarType = "full",
+  currentTab = "",
 }: HeaderProps) {
   const { t } = useTranslation();
   const { isAuthenticated, userInfo } = useAuth();
@@ -36,7 +37,11 @@ function Header({
         {sidebarType === "mini" && (
           <LogoContainer>
             <Logo src={LogoImg} alt="logo" />
-            <TagLine>Elevance Data Intelligence Platform Dashboard </TagLine>
+            <TagLine>
+              {currentTab === "dashboard"
+                ? "Data Intelligence Platform"
+                : "Elevance Data Intelligence Platform Dashboard"}
+            </TagLine>
           </LogoContainer>
         )}
       </div>

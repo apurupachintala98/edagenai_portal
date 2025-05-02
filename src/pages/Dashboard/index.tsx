@@ -5,7 +5,8 @@ import {
   SidePanelClose,
   SidePanelOpenFilled,
   UserAdmin,
-  View, ViewOff
+  View,
+  ViewOff,
 } from "@carbon/react/icons";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -28,11 +29,9 @@ import {
 } from "@mui/material";
 import { TypeProps } from "interface";
 import DashboardContent from "pages/DashboardContent";
-import Project from 'pages/Project/index';
+import Project from "pages/Project/index";
 
-import {
-  Modal, TextInput
-} from "@carbon/react";
+import { Modal, TextInput } from "@carbon/react";
 import { useAuth } from "contexts/AuthContext";
 import Metrics from "pages/Metrics";
 
@@ -47,8 +46,6 @@ const drawerWidth = {
   full: 350,
   mini: 80,
 };
-
-
 
 type SizeKey = "full" | "mini";
 
@@ -83,7 +80,7 @@ function Dashboard() {
   if (showAdminSubmenu) {
     menuItems.push(
       { text: "Project", icon: <IbmCloudProjects size={20} />, id: "project", submenu: true },
-      { text: "Metrics", icon: <Analytics size={20} />, id: "metrics", submenu: true }
+      { text: "Metrics", icon: <Analytics size={20} />, id: "metrics", submenu: true },
     );
   }
   return (
@@ -116,7 +113,11 @@ function Dashboard() {
           {!collapsed ? (
             <>
               <img src={logo} alt="Logo" style={{ height: "40px", width: "auto" }} />
-              <TagLine>Elevance Data Intelligence Platform Dashboard</TagLine>
+              <TagLine>
+                {currentTab === "dashboard"
+                  ? "Data Intelligence Platform"
+                  : "Elevance Data Intelligence Platform Dashboard"}
+              </TagLine>
               <ToggleContainer onClick={() => setSidebarType("mini")}>
                 <SidePanelClose size="20" />
               </ToggleContainer>
@@ -149,23 +150,23 @@ function Dashboard() {
                 textDecoration: "none",
                 bgcolor: currentTab === item.id ? "#A6C8FF" : "inherit",
                 color: currentTab === item.id ? "#000000" : "#fff",
-                "&:hover": item.id === "admin" && showAdminSubmenu
-                  ? {}
-                  : {
-                    bgcolor: "#A6C8FF",
-                    color: "#000000",
-                    svg: {
-                      bgcolor: "#A6C8FF",
-                      color: "#000000",
-                    },
-                  },
+                "&:hover":
+                  item.id === "admin" && showAdminSubmenu
+                    ? {}
+                    : {
+                        bgcolor: "#A6C8FF",
+                        color: "#000000",
+                        svg: {
+                          bgcolor: "#A6C8FF",
+                          color: "#000000",
+                        },
+                      },
               }}
               style={{
                 borderBottom: "1px solid #A6C8FF4D",
                 justifyContent: "center",
               }}
             >
-
               <ListItemIcon
                 sx={{
                   pl: item.submenu ? 1 : 0,
@@ -203,6 +204,7 @@ function Dashboard() {
           type={TypeProps.Fixed}
           isSearchEnabled={false}
           sidebarType={sidebarType}
+          currentTab={currentTab}
         />
       </AppBar>
       <Box
@@ -268,11 +270,8 @@ function Dashboard() {
             {showPassword ? <ViewOff size={16} /> : <View size={16} />}
           </div>
         </div>
-        {adminError && (
-          <div style={{ color: "red", marginTop: "8px" }}>{adminError}</div>
-        )}
+        {adminError && <div style={{ color: "red", marginTop: "8px" }}>{adminError}</div>}
       </Modal>
-
     </Box>
   );
 }

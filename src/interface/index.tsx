@@ -24,6 +24,7 @@ export interface HeaderProps {
   type?: TypeProps;
   isSearchEnabled?: boolean;
   sidebarType?: string;
+  currentTab?: string;
 }
 
 export interface DataTableProps {
