@@ -34,7 +34,7 @@ const ProjectTimeline = ({ selectedFilters, showAllYears, selectedYear }: Projec
           .filter((item: any) => {
             const matchesManager = selectedFilters.managers.length === 0 || selectedFilters.managers.some(manager => manager.label === item.ASSIGNEE);
             const matchesPlatform = selectedFilters.platforms.length === 0 || selectedFilters.platforms.some(platform => platform.label === item.PLATFORM); // Only filter, not displayed
-            const matchesPhase = selectedFilters.phases.length === 0 || selectedFilters.phases.some(phase => phase.label === item.STATUS);
+            const matchesPhase = selectedFilters.phases.length === 0 || selectedFilters.phases.some(phase => phase.label === item.CURRENT_PHASE);
             return matchesManager && matchesPlatform && matchesPhase;
           })
           .filter((item: any) => {
@@ -53,6 +53,7 @@ const ProjectTimeline = ({ selectedFilters, showAllYears, selectedYear }: Projec
             name: item.NAME,
             assignee: item.ASSIGNEE,
             status: item.STATUS,
+            current_phase: item.CURRENT_PHASE,
             y: index,
           };
           if (item.STATUS === "Completed") {
@@ -63,13 +64,11 @@ const ProjectTimeline = ({ selectedFilters, showAllYears, selectedYear }: Projec
               end: deploymentDate,
               milestone: true
             };
-          }
-          
+          }   
           return baseItem;
         });
         setOriginalSeriesData(mappedData);
         setSeriesData(mappedData);
-        console.log(mappedData);
       } catch (error) {
         console.error("Failed to fetch Gantt chart data:", error);
       }
@@ -131,7 +130,15 @@ const ProjectTimeline = ({ selectedFilters, showAllYears, selectedYear }: Projec
                   ">${status}</span>`;
               }
             }
-          }
+          },
+          {
+            title: { text: 'Current Phase' },
+            labels: {
+              formatter(this: Highcharts.AxisLabelsFormatterContextObject) {
+                return seriesData[this.pos]?.current_phase || '';
+              }
+            }
+          },
         ]
       }
     },
