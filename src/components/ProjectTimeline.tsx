@@ -92,14 +92,24 @@ const ProjectTimeline = ({ selectedFilters, showAllYears, selectedYear }: Projec
         borderColor: 'rgba(0,0,0,0.3)',
         borderWidth: 1,
         columns: [
+          // {
+          //   title: { text: 'Project' },
+          //   labels: {
+          //     formatter(this: Highcharts.AxisLabelsFormatterContextObject) {
+          //       return seriesData[this.pos]?.name || '';
+          //     }
+          //   }
+          // },
           {
             title: { text: 'Project' },
             labels: {
+              useHTML: true,
               formatter(this: Highcharts.AxisLabelsFormatterContextObject) {
-                return seriesData[this.pos]?.name || '';
+                const name = seriesData[this.pos]?.name || '';
+                return `<span style="display: block; text-align: left;">${name}</span>`;
               }
             }
-          },
+          },          
           {
             title: { text: 'Manager' },
             labels: {
