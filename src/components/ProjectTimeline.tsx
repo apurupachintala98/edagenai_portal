@@ -56,8 +56,15 @@ const ProjectTimeline = ({ selectedFilters, showAllYears, selectedYear }: Projec
             y: index,
           };
           if (item.STATUS === "Completed") {
-            return { ...baseItem, milestone: true };
+            const deploymentDate = new Date(item.DEPLOYMENT_DT || item.END_DT).getTime(); // fallback to END_DT
+            return {
+              ...baseItem,
+              start: deploymentDate,
+              end: deploymentDate,
+              milestone: true
+            };
           }
+          
           return baseItem;
         });
         setOriginalSeriesData(mappedData);
