@@ -53,16 +53,9 @@ const renderActiveShape = (props: any) => {
       <path d={`M${sx},${sy}L${mx},${my}L${ex},${ey}`} stroke={fill} fill="none" />
       <circle cx={ex} cy={ey} r={2} fill={fill} stroke="none" />
       {/* <text x={ex + (cos >= 0 ? 1 : -1) * 12} y={ey} textAnchor={textAnchor} fill="#333">{`${value}`}</text> */}
-      <text
-  x={ex + (cos >= 0 ? 1 : -1) * 12}
-  y={ey}
-  dy={14} // slightly higher
-  textAnchor={textAnchor}
-  fill="#999"
-  fontSize={11} // reduce font size
->
-  {`(Rate ${(percent * 100).toFixed(2)}%)`}
-</text>
+      <text x={ex + (cos >= 0 ? 1 : -1) * 12} y={ey} dy={18} textAnchor={textAnchor} fill="#999">
+        {`(Rate ${(percent * 100).toFixed(2)}%)`}
+      </text>
     </g>
   );
 };
@@ -77,7 +70,7 @@ const ProgressDonut = ({ data, subheading }: ProgressDonutProps) => {
 
   return (
     <div className="h-full w-full">
-      <ResponsiveContainer width="100%" height={250}>
+      <ResponsiveContainer width="100%" height={280}>
         <PieChart>
           <Pie
             activeIndex={activeIndex}
@@ -85,8 +78,8 @@ const ProgressDonut = ({ data, subheading }: ProgressDonutProps) => {
             data={data}
             cx="50%"
             cy="50%"
-            innerRadius={65}
-            outerRadius={85}
+            innerRadius={60}
+            outerRadius={75}
             paddingAngle={2}
             dataKey="value"
             onMouseEnter={onPieEnter}
@@ -94,15 +87,8 @@ const ProgressDonut = ({ data, subheading }: ProgressDonutProps) => {
             {data.map((entry, index) => (
               <Cell key={`cell-${index}`} fill={COLORS[index]} stroke="transparent" />
             ))}
-
-            <LabelList
-              dataKey="value"
-              position="inside"
-              fill="#fff"
-              fontSize={12}
-            />
+            <LabelList dataKey="value" position="inside" fill="#fff" fontSize={12} />
           </Pie>
-
           <Tooltip
             contentStyle={{
               backgroundColor: 'hsl(var(--background))',
