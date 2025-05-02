@@ -70,7 +70,7 @@ const ProgressDonut = ({ data, subheading }: ProgressDonutProps) => {
 
   return (
     <div className="h-full w-full">
-      <ResponsiveContainer width="100%" height={250}>
+      {/* <ResponsiveContainer width="100%" height={250}>
         <PieChart>
           <Pie
             activeIndex={activeIndex}
@@ -106,7 +106,38 @@ const ProgressDonut = ({ data, subheading }: ProgressDonutProps) => {
             formatter={(value: number, name: string) => [`${value}`, name]}
           />
         </PieChart>
+      </ResponsiveContainer> */}
+      <ResponsiveContainer width="100%" height={280}>
+        <PieChart>
+          <Pie
+            activeIndex={activeIndex}
+            activeShape={renderActiveShape}
+            data={data}
+            cx="50%"
+            cy="50%"
+            innerRadius={55}
+            outerRadius={70}
+            paddingAngle={2}
+            dataKey="value"
+            onMouseEnter={onPieEnter}
+          >
+            {data.map((entry, index) => (
+              <Cell key={`cell-${index}`} fill={COLORS[index]} stroke="transparent" />
+            ))}
+            <LabelList dataKey="value" position="inside" fill="#fff" fontSize={12} />
+          </Pie>
+          <Tooltip
+            contentStyle={{
+              backgroundColor: 'hsl(var(--background))',
+              borderColor: 'hsl(var(--border))',
+              borderRadius: '0.5rem',
+              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.05)',
+            }}
+            formatter={(value: number, name: string) => [`${value}`, name]}
+          />
+        </PieChart>
       </ResponsiveContainer>
+
       <div className="flex flex-wrap justify-center gap-3 mt-2">
         {data.map((entry, index) => (
           <div key={`legend-${index}`} className="flex items-center gap-1.5">
