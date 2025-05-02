@@ -215,7 +215,8 @@ function DashboardContent() {
           <DashboardChart data={usersData} />
         </DashboardCard>
 
-        <DashboardCard title="Cortex Cost" subheading={`Total Cost for the Projects : $${dashboardTotals.totalCost.toFixed(2)}`}>
+        <DashboardCard title="Cortex Cost" subheading={`Total Cost for the Projects : $${Math.round(dashboardTotals.totalCost).toLocaleString()}`}
+        >
           <DashboardChart data={cortexCostData} isCurrency />
         </DashboardCard>
       </DashboardCardsWrapper>

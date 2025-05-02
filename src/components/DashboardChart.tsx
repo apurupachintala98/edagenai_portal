@@ -23,7 +23,8 @@ interface DashboardChartProps {
 
 const DashboardChart = ({ data, isCurrency = false }: DashboardChartProps) => {
   const formatValue = (value: number) => {
-    return isCurrency ? `$${value.toLocaleString()}` : value.toLocaleString();
+    const rounded = Math.round(value);
+    return isCurrency ? `$${rounded.toLocaleString()}` : rounded.toLocaleString();
   };
 
   return (
