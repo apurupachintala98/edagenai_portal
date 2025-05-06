@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Navigate, RouteProps } from "react-router-dom";
 
 import { useAuth } from "contexts/AuthContext";
@@ -9,7 +9,25 @@ type PrivateRouteProps = RouteProps & {
 
 const PrivateRoute: React.FC<PrivateRouteProps> = ({ element }) => {
   const { isAuthenticated } = useAuth();
-  return isAuthenticated ? element : <Navigate to="/" />;
+  const hasAlreadyLogout = useRef<boolean>(false);
+  const [notAuth, setNotAuth] = useState(false);
+
+  useEffect(() => {
+    if (hasAlreadyLogout.current) {
+      return;
+    }
+    if (!isAuthenticated) {
+      hasAlreadyLogout.current = true;
+      setNotAuth(true);
+    }
+  }, [isAuthenticated]);
+
+  if(isAuthenticated){
+    return element;
+  }
+  if(notAuth) {
+    return <Navigate to="/" />;
+  }
 };
 
 export default PrivateRoute;

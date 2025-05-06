@@ -57,6 +57,7 @@ export function useLoginForm() {
       try {
         if (userName === "admin" && password === "admin1234") {
           login({ user: { username: userName } });
+          localStorage.setItem("egp_user", JSON.stringify({ user: { username: userName } }));
           navigate("/home"); // Navigate to the home page
         } else {
           toast.error(t("login.errorMessage"), {

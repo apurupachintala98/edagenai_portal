@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { checkValidUserInfo } from "utils/common";
 import { AuthContextType, AuthProviderProps, UserInfo } from "interface";
 
@@ -21,20 +21,30 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
   const [userInfo, setUserInfo] = useState<UserInfo>(initalUserInfo);
 
+  useEffect(() => {
+    const checkUserInfo = localStorage.getItem("egp_user");
+    const userInfo = checkUserInfo && JSON.parse(checkUserInfo);
+    if (userInfo) {
+      setUserInfo(userInfo);
+    }
+  }, []);
+
   const login = (userInfo: UserInfo) => {
     setUserInfo(userInfo);
   };
 
   const logout = () => {
+    localStorage.removeItem("egp_user");
+    localStorage.removeItem("edp_checkAdmin");
     setUserInfo(initalUserInfo);
   };
 
   const isAuthenticated = checkValidUserInfo(userInfo);
 
-  console.log("isAuthenticated AUTH::", userInfo);
-
   const verifyAdminPassword = async (input: string): Promise<boolean> => {
     const correctPassword = "admin123";
+    const checkCondition = input === correctPassword;
+    localStorage.setItem("edp_checkAdmin", checkCondition.toString());
     return input === correctPassword;
   };
 
