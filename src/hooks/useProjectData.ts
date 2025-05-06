@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import ApiService from '../services/ApiService';
 
 export interface project {
@@ -49,14 +49,21 @@ const mapProjectToCamelCase = (project: project) => ({
 export function useProjectData() {
   const [projects, setProjects] = useState<project[]>([]);
   const [loading, setLoading] = useState(true);
+  const hasFetchedAllProjectDetails = useRef<boolean>(false);
+  
 
   useEffect(() => {
-    fetchProjects();
+    if (hasFetchedAllProjectDetails.current) {
+      return;
+    }else{
+      fetchProjects();
+    }
   }, []);
 
   const fetchProjects = async () => {
     setLoading(true);
     try {
+      hasFetchedAllProjectDetails.current = true;
       const data = await ApiService.getAllProjectDetails();
       console.log("Fetched Projects:", data); // ← Add this for debugging
       setProjects(data); // Ensure this is an array of `project`

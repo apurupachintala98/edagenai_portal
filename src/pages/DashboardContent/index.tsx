@@ -62,6 +62,8 @@ function DashboardContent() {
     inputRef.current?.focus();
     inputRef.current?.click();
   };
+  const hasFetchedAllProjectDetails = useRef<boolean>(false);
+  const hasFetchedGanttChart = useRef<boolean>(false);
 
   useEffect(() => {
     const totalUsers = usersData.reduce((acc, item) => acc + (item.value || 0), 0);
@@ -77,6 +79,7 @@ function DashboardContent() {
   useEffect(() => {
     const fetchProgressReportData = async () => {
       try {
+        hasFetchedAllProjectDetails.current = true;
         const apiData = await ApiService.getAllDetailsProjects();
         console.log(apiData);
 
@@ -102,8 +105,11 @@ function DashboardContent() {
         console.error("Failed to fetch project details:", error);
       }
     };
-
-    fetchProgressReportData();
+    if(hasFetchedAllProjectDetails.current){
+      return ;
+    }else {
+      fetchProgressReportData();
+    }
   }, []);
 
   const handleMultiSelectChange = (field: "managers" | "platforms" | "phases", selectedItems: any[]) => {
@@ -138,6 +144,7 @@ function DashboardContent() {
   useEffect(() => {
     const fetchYears = async () => {
       try {
+        hasFetchedGanttChart.current = true;
         const apiData = await ApiService.getAllDetailsGanttChart();
         const yearsSet = new Set<number>();
 
@@ -157,8 +164,11 @@ function DashboardContent() {
         console.error("Failed to fetch years from Gantt chart:", error);
       }
     };
-
-    fetchYears();
+    if(hasFetchedGanttChart.current){
+      return;
+    }else{
+      fetchYears();
+    }
   }, []);
 
 

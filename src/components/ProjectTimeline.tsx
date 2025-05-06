@@ -1,7 +1,7 @@
 import Highcharts from "highcharts";
 import HighchartsGantt from "highcharts/modules/gantt";
 import HighchartsReact from "highcharts-react-official";
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useRef } from "react";
 import { Category } from "@carbon/icons-react";
 import ApiService from "../services/ApiService";
 
@@ -24,10 +24,13 @@ interface ProjectTimelineProps {
 const ProjectTimeline = ({ selectedFilters, showAllYears, selectedYear }: ProjectTimelineProps) => {
   const [seriesData, setSeriesData] = useState<any[]>([]);
   const [originalSeriesData, setOriginalSeriesData] = useState<any[]>([]);
+  const hasFetchedGanttChartData = useRef<boolean>(false);
+
 
   useEffect(() => {
     const fetchGanttData = async () => {
       try {
+        hasFetchedGanttChartData.current = true;
         const apiData = await ApiService.getAllDetailsGanttChart();
         console.log(apiData);
 
@@ -74,8 +77,11 @@ const ProjectTimeline = ({ selectedFilters, showAllYears, selectedYear }: Projec
         console.error("Failed to fetch Gantt chart data:", error);
       }
     };
-
-    fetchGanttData();
+    if (hasFetchedGanttChartData.current) {
+      return;
+    }else{
+      fetchGanttData();
+    }
   }, [selectedFilters, showAllYears, selectedYear]);
 
   function ganttTooltipFormatter(this: any): string {
