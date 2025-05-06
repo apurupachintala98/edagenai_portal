@@ -135,31 +135,31 @@ function DashboardContent() {
     });
   }, [projects]);
 
-  // useEffect(() => {
-  //   const fetchYears = async () => {
-  //     try {
-  //       const apiData = await ApiService.getAllDetailsGanttChart();
-  //       const yearsSet = new Set<number>();
+  useEffect(() => {
+    const fetchYears = async () => {
+      try {
+        const apiData = await ApiService.getAllDetailsGanttChart();
+        const yearsSet = new Set<number>();
 
-  //       apiData.forEach((item: any) => {
-  //         const startYear = new Date(item.START_DT).getFullYear();
-  //         const endYear = new Date(item.END_DT).getFullYear();
-  //         yearsSet.add(startYear);
-  //         yearsSet.add(endYear);
-  //       });
+        apiData.forEach((item: any) => {
+          const startYear = new Date(item.START_DT).getFullYear();
+          const endYear = new Date(item.END_DT).getFullYear();
+          yearsSet.add(startYear);
+          yearsSet.add(endYear);
+        });
 
-  //       const sortedYears = Array.from(yearsSet).sort((a, b) => a - b);
-  //       setAvailableYears(sortedYears);
-  //       if (sortedYears.length > 0) {
-  //         setSelectedYear(sortedYears[sortedYears.length - 1]); // default to latest year
-  //       }
-  //     } catch (error) {
-  //       console.error("Failed to fetch years from Gantt chart:", error);
-  //     }
-  //   };
+        const sortedYears = Array.from(yearsSet).sort((a, b) => a - b);
+        setAvailableYears(sortedYears);
+        if (sortedYears.length > 0) {
+          setSelectedYear(sortedYears[sortedYears.length - 1]); // default to latest year
+        }
+      } catch (error) {
+        console.error("Failed to fetch years from Gantt chart:", error);
+      }
+    };
 
-  //   fetchYears();
-  // }, []);
+    fetchYears();
+  }, []);
 
 
   return (
