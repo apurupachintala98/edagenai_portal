@@ -25,9 +25,21 @@ const GlobalStyle = createGlobalStyle`
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
+  
+  .highcharts-axis-title {
+    font-weight: bold !important;
+    font-size: 0.9em !important;
+    color: rgb(51,51,51) !important;
+  }
+
+  .highcharts-axis-labels.highcharts-yaxis-labels.highcharts-grid-axis span:first-child {
+    left: 20px !important;
+  }
 
   code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
   }`;
+
+  
 
 export default GlobalStyle;
