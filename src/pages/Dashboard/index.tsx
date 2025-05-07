@@ -1,3 +1,4 @@
+import { Modal, TextInput } from "@carbon/react";
 import {
   Analytics,
   Dashboard as DashboardIcon,
@@ -11,10 +12,11 @@ import {
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
+
 import { TagLine, ToggleContainer } from "../styled.components";
 import { CopyrightText } from "./styled.components";
 import Header from "components/Header";
-import Admin from "pages/Admin/index";
+
 import logo from "../../assests/images/logo.png";
 import {
   AppBar,
@@ -27,13 +29,12 @@ import {
   ListItemIcon,
   ListItemText,
 } from "@mui/material";
-import { TypeProps } from "interface";
-import DashboardContent from "pages/DashboardContent";
-import Project from "pages/Project/index";
-
-import { Modal, TextInput } from "@carbon/react";
 import { useAuth } from "contexts/AuthContext";
+import { TypeProps } from "interface";
+import Admin from "pages/Admin/index";
+import DashboardContent from "pages/DashboardContent";
 import Metrics from "pages/Metrics";
+import Project from "pages/Project/index";
 
 type MenuItem = {
   text: string;

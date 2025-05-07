@@ -1,9 +1,11 @@
+import { Category } from "@carbon/icons-react";
+import HighchartsReact from "highcharts-react-official";
+import React, { useEffect, useMemo, useRef,useState } from "react";
+
+import ApiService from "../services/ApiService";
+
 import Highcharts from "highcharts";
 import HighchartsGantt from "highcharts/modules/gantt";
-import HighchartsReact from "highcharts-react-official";
-import React, { useState, useEffect, useMemo, useRef } from "react";
-import { Category } from "@carbon/icons-react";
-import ApiService from "../services/ApiService";
 
 
 if (typeof HighchartsGantt === "function") {
@@ -25,12 +27,24 @@ const ProjectTimeline = ({ selectedFilters, showAllYears, selectedYear }: Projec
   const [seriesData, setSeriesData] = useState<any[]>([]);
   const [originalSeriesData, setOriginalSeriesData] = useState<any[]>([]);
   const hasFetchedGanttChartData = useRef<boolean>(false);
+  const hasFetchedFirstTimeGanttChartData = useRef<boolean>(false);
+  const [isFilterApplied, setIsFilterApplied] = useState<boolean>(false);
 
+  useEffect(()=>{
+    if((selectedFilters && (selectedFilters.managers.length > 0 || selectedFilters.phases.length > 0 || selectedFilters.platforms.length > 0))){
+      setIsFilterApplied(true);
+    }else{
+      setIsFilterApplied(false);
+    }
+  },[selectedFilters]);
 
   useEffect(() => {
+    if(isFilterApplied){
+      hasFetchedFirstTimeGanttChartData.current = !isFilterApplied;
+    }
     const fetchGanttData = async () => {
       try {
-        // hasFetchedGanttChartData.current = true;
+        hasFetchedFirstTimeGanttChartData.current = true;
         const apiData = await ApiService.getAllDetailsGanttChart();
         console.log(apiData);
 
@@ -77,14 +91,13 @@ const ProjectTimeline = ({ selectedFilters, showAllYears, selectedYear }: Projec
         console.error("Failed to fetch Gantt chart data:", error);
       }
     };
-    fetchGanttData();
-
-    // if (hasFetchedGanttChartData.current) {
-    //   return;
-    // }else{
-    //   fetchGanttData();
-    // }
-  }, [selectedFilters, showAllYears, selectedYear]);
+    if(hasFetchedFirstTimeGanttChartData.current){
+      return;
+    }else{
+      fetchGanttData();
+    }
+    
+  }, [selectedFilters, showAllYears, selectedYear, isFilterApplied]);
 
   function ganttTooltipFormatter(this: any): string {
     const point = this.point as Highcharts.Point & {

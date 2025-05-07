@@ -1,10 +1,11 @@
 import { lazy, Suspense, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { BrowserRouter, Navigate, Route, Routes, useNavigate } from "react-router-dom";
-import LlmGateway from "../pages/LlmGateway";
 
 import PrivateRoute from "components/PrivateRoute";
 import Spinner from "components/Spinner";
+
+import LlmGateway from "../pages/LlmGateway";
 
 const Login = lazy(() => import("pages/Login"));
 const Dashboard = lazy(() => import("pages/Dashboard"));

@@ -1,32 +1,40 @@
-import { useState, useMemo, useEffect } from "react";
+import { Add, Edit, Filter, TrashCan } from "@carbon/icons-react";
 import {
   Breadcrumb,
   BreadcrumbItem,
-  DataTable,
-  TableContainer,
-  Table,
-  TableHead,
-  TableRow,
-  TableHeader,
-  TableBody,
-  TableCell,
   Button,
-  Modal,
-  TextInput,
+  Checkbox,
   Column,
-  Grid,
+  DataTable,
   DatePicker,
   DatePickerInput,
+  Grid,
+  Modal,
   OverflowMenu,
   OverflowMenuItem,
-  Checkbox,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableHeader,
+  TableRow,
+  TextInput,
 } from "@carbon/react";
-import { Edit, TrashCan, Add, Filter } from '@carbon/icons-react';
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ButtonContainer, FilterIconActive, FilterIconDefault, CustomOverflowMenu } from "./styled.components";
+
 import { HeaderContainer, MainContainer, PageContainer, PageTitle } from "../styled.components";
+import {
+  ButtonContainer,
+  CustomOverflowMenu,
+  FilterIconActive,
+  FilterIconDefault,
+} from "./styled.components";
+
 import { useWindowDimensions } from "utils/hooks";
-import { useProjectData, type project } from "../../hooks/useProjectData";
+
+import { type project, useProjectData } from "../../hooks/useProjectData";
 
 // Extend the DataTableHeader type to include filterable
 interface CustomDataTableHeader {
@@ -63,7 +71,7 @@ const projectFieldMap: Record<string, keyof project> = {
   Current_Phase: "CURRENT_PHASE",
   status: "STATUS",
   Link_to_Slide: "LINK_TO_SLIDE",
-  Notes: "NOTES"
+  Notes: "NOTES",
 };
 
 const CustomFilterIcon = ({ isFiltered }: { isFiltered: boolean }) => {
@@ -79,13 +87,29 @@ const CustomFilterIcon = ({ isFiltered }: { isFiltered: boolean }) => {
 };
 
 // Utility function to format a Date object to YYYY-MM-DD
-const formatDateToString = (date: Date | string | undefined): string => {
+const formatDateToStringOld = (date: Date | string | undefined): string => {
   if (!date) return "";
   if (typeof date === "string") return date;
   const d = new Date(date);
   if (isNaN(d.getTime())) return "";
   return d.toISOString().split("T")[0];
 };
+
+export function formatDateToString(dateTime: Date): string {
+  if (!dateTime) {
+    return "";
+  }
+  const date = new Date(dateTime);
+
+  // Extract local date parts
+  const yyyy = date.getFullYear();
+  const mm = String(date.getMonth() + 1).padStart(2, "0");
+  const dd = String(date.getDate()).padStart(2, "0");
+
+  const finalDateTime = `${yyyy}-${mm}-${dd}`;
+
+  return finalDateTime;
+}
 
 // Utility function to parse a YYYY-MM-DD string to a Date object
 const parseDateString = (dateString: string | undefined): Date | undefined => {
@@ -94,11 +118,11 @@ const parseDateString = (dateString: string | undefined): Date | undefined => {
   return isNaN(date.getTime()) ? undefined : date;
 };
 
-
 function Project() {
   const navigate = useNavigate();
   const { height } = useWindowDimensions();
-  const { projects, loading, fetchProjects, addProject, editProject, removeProject } = useProjectData();
+  const { projects, loading, fetchProjects, addProject, editProject, removeProject } =
+    useProjectData();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [formData, setFormData] = useState<project>({} as project);
@@ -115,7 +139,7 @@ function Project() {
     Object.keys(filters).forEach((key) => {
       const currentValues = getUniqueValues(key);
       const filteredValues = filters[key] || [];
-      const validFilteredValues = filteredValues.filter(value => currentValues.includes(value));
+      const validFilteredValues = filteredValues.filter((value) => currentValues.includes(value));
       if (validFilteredValues.length !== filteredValues.length) {
         updatedFilters[key] = validFilteredValues;
         if (validFilteredValues.length === 0) {
@@ -126,13 +150,13 @@ function Project() {
     setFilters(updatedFilters);
   }, [projects]); // Trigger on projects change
 
-
   const openAddModal = () => {
     setEditMode(false);
     setModalReady(false);
     setErrors({});
-    setModalKey(prev => prev + 1);
-    const newSLNo = projects.length > 0 ? Math.max(...projects.map(p => parseInt(p.SL_NO))) + 1 : 1;
+    setModalKey((prev) => prev + 1);
+    const newSLNo =
+      projects.length > 0 ? Math.max(...projects.map((p) => parseInt(p.SL_NO))) + 1 : 1;
     const initialFormData = {
       SL_NO: String(newSLNo),
       STAFF_VP: "",
@@ -152,7 +176,7 @@ function Project() {
       CURRENT_PHASE: "",
       STATUS: "",
       LINK_TO_SLIDE: "",
-      NOTES: ""
+      NOTES: "",
     };
     setFormData(initialFormData);
     setModalReady(true);
@@ -216,7 +240,6 @@ function Project() {
       await addProject(formData);
     }
     await fetchProjects();
-
   };
 
   const handleChange = (field: keyof project, value: string) => {
@@ -306,7 +329,6 @@ function Project() {
     return projectRows.slice(startIndex, endIndex);
   }, [projectRows, currentPage]);
 
-
   return (
     <MainContainer>
       <PageContainer>
@@ -329,121 +351,152 @@ function Project() {
         </Breadcrumb>
         <TableContainer style={{ marginTop: "20px", height: "100%" }}>
           {loading ? (
-            <div style={{ padding: "20px", textAlign: "center" }}>
-              Loading Projects...</div>
+            <div style={{ padding: "20px", textAlign: "center" }}>Loading Projects...</div>
           ) : (
-            <><DataTable rows={paginatedRows} headers={headers}>
-              {({ rows, headers: tableHeaders, getTableProps, getHeaderProps, getRowProps }) => (
-                <Table {...getTableProps()}>
-                  <TableHead>
-                    <TableRow>
-                      {tableHeaders.map((header) => (
-                        <TableHeader {...getHeaderProps({ header })} key={header.key}>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                            {header.header}
-                            {(header as CustomDataTableHeader).filterable && (
-                              <OverflowMenu
-                                renderIcon={() => (
-                                  <CustomFilterIcon
-                                    isFiltered={filters[header.key] && filters[header.key].length > 0} />
-                                )}
-                                onClick={(e: any) => {
-                                  e.stopPropagation();
-                                }}
-                                onOpen={() => {
-                                  setTimeout(() => {
-                                    const activeElement = document.activeElement as HTMLElement;
-                                    if (activeElement && activeElement.closest('.cds--menu')) {
-                                      activeElement.blur();
-                                    }
-                                  }, 0);
-                                }}
-                                direction="bottom"
-                                style={{ marginLeft: '0.5rem', zIndex: 1000 }}
-                              >
-                                <CustomOverflowMenu>
-                                  <div style={{
-                                    maxHeight: '200px',
-                                    maxWidth: '300px',
-                                    overflowY: 'auto',
-                                    overflowX: 'auto',
-                                    padding: '0.5rem',
-                                    background: '#fff',
-                                    border: '1px solid #dfe3e6'
-                                  }}>
-                                    {getUniqueValues(header.key).map((value) => (
-                                      <OverflowMenuItem
-                                        key={value}
-                                        itemText={<div style={{
-                                          minWidth: '300px',
-                                          padding: '0.25rem 0',
-                                          whiteSpace: 'normal',
-                                          wordBreak: 'break-word'
-                                        }}>
-                                          <Checkbox
-                                            id={`${header.key}-${value}`}
-                                            labelText={value}
-                                            checked={filters[header.key]?.includes(value) || false}
-                                            onChange={(event) => handleFilterChange(header.key, value, event.target.checked)}
-                                            style={{ display: 'block' }} />
-                                        </div>}
-                                        onClick={(e) => e.stopPropagation()} />
-                                    ))}
-                                  </div>
-                                </CustomOverflowMenu>
-                              </OverflowMenu>
-                            )}
-                          </div>
-                        </TableHeader>
-                      ))}
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {rows.length === 0 ? (
+            <>
+              <DataTable rows={paginatedRows} headers={headers}>
+                {({ rows, headers: tableHeaders, getTableProps, getHeaderProps, getRowProps }) => (
+                  <Table {...getTableProps()}>
+                    <TableHead>
                       <TableRow>
-                        <TableCell colSpan={tableHeaders.length} style={{ textAlign: "center", padding: "20px" }}>
-                          No Projects Found
-                        </TableCell>
+                        {tableHeaders.map((header) => (
+                          <TableHeader {...getHeaderProps({ header })} key={header.key}>
+                            <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                              {header.header}
+                              {(header as CustomDataTableHeader).filterable && (
+                                <OverflowMenu
+                                  renderIcon={() => (
+                                    <CustomFilterIcon
+                                      isFiltered={
+                                        filters[header.key] && filters[header.key].length > 0
+                                      }
+                                    />
+                                  )}
+                                  onClick={(e: any) => {
+                                    e.stopPropagation();
+                                  }}
+                                  onOpen={() => {
+                                    setTimeout(() => {
+                                      const activeElement = document.activeElement as HTMLElement;
+                                      if (activeElement && activeElement.closest(".cds--menu")) {
+                                        activeElement.blur();
+                                      }
+                                    }, 0);
+                                  }}
+                                  direction="bottom"
+                                  style={{ marginLeft: "0.5rem", zIndex: 1000 }}
+                                >
+                                  <CustomOverflowMenu>
+                                    <div
+                                      style={{
+                                        maxHeight: "200px",
+                                        maxWidth: "300px",
+                                        overflowY: "auto",
+                                        overflowX: "auto",
+                                        padding: "0.5rem",
+                                        background: "#fff",
+                                        border: "1px solid #dfe3e6",
+                                      }}
+                                    >
+                                      {getUniqueValues(header.key).map((value) => (
+                                        <OverflowMenuItem
+                                          key={value}
+                                          itemText={
+                                            <div
+                                              style={{
+                                                minWidth: "300px",
+                                                padding: "0.25rem 0",
+                                                whiteSpace: "normal",
+                                                wordBreak: "break-word",
+                                              }}
+                                            >
+                                              <Checkbox
+                                                id={`${header.key}-${value}`}
+                                                labelText={value}
+                                                checked={
+                                                  filters[header.key]?.includes(value) || false
+                                                }
+                                                onChange={(event) =>
+                                                  handleFilterChange(
+                                                    header.key,
+                                                    value,
+                                                    event.target.checked,
+                                                  )
+                                                }
+                                                style={{ display: "block" }}
+                                              />
+                                            </div>
+                                          }
+                                          onClick={(e) => e.stopPropagation()}
+                                        />
+                                      ))}
+                                    </div>
+                                  </CustomOverflowMenu>
+                                </OverflowMenu>
+                              )}
+                            </div>
+                          </TableHeader>
+                        ))}
                       </TableRow>
-                    ) : (
-                      rows.map((row) => {
-                        const { key, ...rowPropsWithoutKey } = getRowProps({ row });
-                        return (
-                          <TableRow
-                            key={key}
-                            {...rowPropsWithoutKey}
+                    </TableHead>
+                    <TableBody>
+                      {rows.length === 0 ? (
+                        <TableRow>
+                          <TableCell
+                            colSpan={tableHeaders.length}
+                            style={{ textAlign: "center", padding: "20px" }}
                           >
-                            {row.cells.map((cell) => (
-                              <TableCell key={cell.id}>
-                                {cell.info.header === "actions" ? (
-                                  <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-                                    <Edit
-                                      size={16}
-                                      style={{ cursor: 'pointer' }}
-                                      title="Edit"
-                                      onClick={() => openEditModal(projects.find(p => p.SL_NO === row.id)!)} />
-                                    <TrashCan
-                                      size={16}
-                                      style={{ cursor: 'pointer' }}
-                                      title="Delete"
-                                      onClick={() => handleDelete(row.id)} />
-                                  </div>
-                                ) : cell.value !== null && cell.value !== undefined ? (
-                                  cell.value
-                                ) : (
-                                  "-"
-                                )}
-                              </TableCell>
-                            ))}
-                          </TableRow>
-                        );
-                      })
-                    )}
-                  </TableBody>
-                </Table>
-              )}
-            </DataTable>
-              <div style={{ display: "flex", justifyContent: "end", marginTop: "20px", gap: "1rem" }}>
+                            No Projects Found
+                          </TableCell>
+                        </TableRow>
+                      ) : (
+                        rows.map((row) => {
+                          const { key, ...rowPropsWithoutKey } = getRowProps({ row });
+                          return (
+                            <TableRow key={key} {...rowPropsWithoutKey}>
+                              {row.cells.map((cell) => (
+                                <TableCell key={cell.id}>
+                                  {cell.info.header === "actions" ? (
+                                    <div
+                                      style={{
+                                        display: "flex",
+                                        gap: "0.5rem",
+                                        alignItems: "center",
+                                      }}
+                                    >
+                                      <Edit
+                                        size={16}
+                                        style={{ cursor: "pointer" }}
+                                        title="Edit"
+                                        onClick={() =>
+                                          openEditModal(projects.find((p) => p.SL_NO === row.id)!)
+                                        }
+                                      />
+                                      <TrashCan
+                                        size={16}
+                                        style={{ cursor: "pointer" }}
+                                        title="Delete"
+                                        onClick={() => handleDelete(row.id)}
+                                      />
+                                    </div>
+                                  ) : cell.value !== null && cell.value !== undefined ? (
+                                    cell.value
+                                  ) : (
+                                    "-"
+                                  )}
+                                </TableCell>
+                              ))}
+                            </TableRow>
+                          );
+                        })
+                      )}
+                    </TableBody>
+                  </Table>
+                )}
+              </DataTable>
+              <div
+                style={{ display: "flex", justifyContent: "end", marginTop: "20px", gap: "1rem" }}
+              >
                 <Button
                   kind="tertiary"
                   size="sm"
@@ -460,14 +513,17 @@ function Project() {
                   kind="tertiary"
                   size="sm"
                   style={{ padding: "10px 12px" }}
-                  onClick={() => setCurrentPage((prev) => Math.min(prev + 1, Math.ceil(projectRows.length / pageSize)))}
+                  onClick={() =>
+                    setCurrentPage((prev) =>
+                      Math.min(prev + 1, Math.ceil(projectRows.length / pageSize)),
+                    )
+                  }
                   disabled={currentPage === Math.ceil(projectRows.length / pageSize)}
                 >
                   Next
                 </Button>
               </div>
             </>
-
           )}
         </TableContainer>
         <Modal
@@ -485,7 +541,7 @@ function Project() {
                   <TextInput
                     key={key}
                     id={key}
-                    labelText={label.replace(/_/g, ' ')}
+                    labelText={label.replace(/_/g, " ")}
                     value={formData[key] || ""}
                     onChange={(e) => handleChange(key, e.target.value)}
                   />
@@ -503,7 +559,7 @@ function Project() {
                     id="START_DATE"
                     labelText={
                       <span>
-                        Start Date <span style={{ color: 'red' }}>*</span>
+                        Start Date <span style={{ color: "red" }}>*</span>
                       </span>
                     }
                     placeholder="yyyy-mm-dd"
@@ -524,7 +580,7 @@ function Project() {
                     id="DEPLOYMENT_DATE"
                     labelText={
                       <span>
-                        Deployment Date <span style={{ color: 'red' }}>*</span>
+                        Deployment Date <span style={{ color: "red" }}>*</span>
                       </span>
                     }
                     placeholder="yyyy-mm-dd"

@@ -1,14 +1,14 @@
 import "react-app-polyfill/ie11";
 import "react-app-polyfill/stable";
-import '@fontsource/poppins'; 
-import '@fontsource/poppins/300.css';
-import '@fontsource/poppins/600.css';
 import { Profiler } from "react";
 import ReactDOM from "react-dom/client";
 
 import renderProfiler from "./utils/renderProfiler";
 import reportWebVitals from "./utils/reportWebVitals";
 
+import '@fontsource/poppins'; 
+import '@fontsource/poppins/300.css';
+import '@fontsource/poppins/600.css';
 import "./locales/i18n";
 import App from "./App";
 

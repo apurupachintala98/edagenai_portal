@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Sector, Label, LabelList } from 'recharts';
+
+import { Cell, Label, LabelList,Pie, PieChart, ResponsiveContainer, Sector, Tooltip } from 'recharts';
 
 interface ProgressDonutProps {
   data: {

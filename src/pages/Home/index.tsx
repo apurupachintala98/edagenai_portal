@@ -3,15 +3,15 @@ import { useNavigate } from "react-router-dom";
 
 import {
   CenteredContent,
-  WelcomeText,
+  EnterButton,
   MainTitle,
   SubText,
-  EnterButton,
-  TextBox
-} from "./styled.components";
+  TextBox,
+  WelcomeText} from "./styled.components";
 import Header from "components/Header";
-import { TypeProps } from "interface";
+
 import backgroundVideo from "assests/videos/home-bg.mp4";
+import { TypeProps } from "interface";
 
 function Home() {
   const navigate = useNavigate();

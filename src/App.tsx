@@ -1,10 +1,11 @@
 import { Theme } from "@carbon/react";
 import { StrictMode } from "react";
 import { HelmetProvider } from "react-helmet-async";
-import '@fontsource/poppins/400.css';
 
 import ThemeProvider from "./components/ThemeProvider";
 import GlobalStyle from "./styled.components";
+
+import '@fontsource/poppins/400.css';
 import './index.css';
 import "./App.scss";
 import { AuthProvider } from "./contexts/AuthContext";

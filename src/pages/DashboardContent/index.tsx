@@ -1,24 +1,30 @@
-import { Breadcrumb, BreadcrumbItem, Dropdown, FilterableMultiSelect, Button, OverflowMenu, OverflowMenuItem } from "@carbon/react";
-import { useTranslation } from "react-i18next";
-import { DropdownButton } from "components/DropdownButton";
-import { useNavigate } from "react-router-dom";
+import { Breadcrumb, BreadcrumbItem, Button, Dropdown, FilterableMultiSelect, OverflowMenu, OverflowMenuItem } from "@carbon/react";
 import { Dashboard, DocumentAdd } from "@carbon/react/icons";
-import DashboardChart from "components/DashboardChart"; // Bar chart
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useEffect,useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
+
 import ProgressDonut from "../../components/ProgressDonut/ProgressDonut";
+import ProjectTimeline from "../../components/ProjectTimeline";
 import {
   HeaderContainer,
   MainContainer,
   PageContainer,
   PageTitle,
 } from "../styled.components";
-import { useWindowDimensions } from "utils/hooks";
-import { DashboardCardsWrapper, ButtonContainer } from "./styled.components";
-import DashboardCard from "pages/DashboardCard";
-import { useRef, useState, useEffect } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import ProjectTimeline from "../../components/ProjectTimeline";
+import { ButtonContainer,DashboardCardsWrapper } from "./styled.components";
+import DashboardChart from "components/DashboardChart"; // Bar chart
+import { DropdownButton } from "components/DropdownButton";
+
 import ApiService from "../../services/ApiService";
+
+import { useWindowDimensions } from "utils/hooks";
+
 import { useProjectData } from "../../hooks/useProjectData";
+
+import DashboardCard from "pages/DashboardCard";
+import { Label } from "recharts";
 
 const usersData = [
   { name: "Non-Prod", value: 31, color: 'hsl(var(--brand-blue))' },
@@ -170,7 +176,6 @@ function DashboardContent() {
       fetchYears();
     }
   }, []);
-
 
   return (
     <MainContainer>
