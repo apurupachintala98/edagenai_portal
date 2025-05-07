@@ -32,10 +32,6 @@ const GlobalStyle = createGlobalStyle`
     color: rgb(51,51,51) !important;
   }
 
-  .highcharts-axis-labels.highcharts-yaxis-labels.highcharts-grid-axis span:first-child {
-    left: 20px !important;
-  }
-
   code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
   }`;
