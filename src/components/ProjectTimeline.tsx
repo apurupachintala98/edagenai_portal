@@ -30,7 +30,7 @@ const ProjectTimeline = ({ selectedFilters, showAllYears, selectedYear }: Projec
   useEffect(() => {
     const fetchGanttData = async () => {
       try {
-        hasFetchedGanttChartData.current = true;
+        // hasFetchedGanttChartData.current = true;
         const apiData = await ApiService.getAllDetailsGanttChart();
         console.log(apiData);
 
@@ -77,11 +77,13 @@ const ProjectTimeline = ({ selectedFilters, showAllYears, selectedYear }: Projec
         console.error("Failed to fetch Gantt chart data:", error);
       }
     };
-    if (hasFetchedGanttChartData.current) {
-      return;
-    }else{
-      fetchGanttData();
-    }
+    fetchGanttData();
+
+    // if (hasFetchedGanttChartData.current) {
+    //   return;
+    // }else{
+    //   fetchGanttData();
+    // }
   }, [selectedFilters, showAllYears, selectedYear]);
 
   function ganttTooltipFormatter(this: any): string {
