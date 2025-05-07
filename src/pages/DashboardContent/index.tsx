@@ -63,6 +63,8 @@ function DashboardContent() {
   const [showAllYears, setShowAllYears] = useState(false);
   const [availableYears, setAvailableYears] = useState<number[]>([]);
   const [selectedYear, setSelectedYear] = useState<number>(new Date().getFullYear());
+  const [isChangedSelectedYears, setIsChangedSelectedYears] = useState(false);
+
   const inputRef = useRef<HTMLInputElement>(null);
   const handleOpen = () => {
     inputRef.current?.focus();
@@ -292,6 +294,7 @@ function DashboardContent() {
                   const currentIndex = availableYears.indexOf(selectedYear);
                   if (currentIndex > 0) {
                     setSelectedYear(availableYears[currentIndex - 1]);
+                    setIsChangedSelectedYears(true);
                   }
                 }}
                 disabled={availableYears.indexOf(selectedYear) === 0}
@@ -305,6 +308,7 @@ function DashboardContent() {
                   const currentIndex = availableYears.indexOf(selectedYear);
                   if (currentIndex < availableYears.length - 1) {
                     setSelectedYear(availableYears[currentIndex + 1]);
+                    setIsChangedSelectedYears(true);
                   }
                 }}
                 disabled={availableYears.indexOf(selectedYear) === availableYears.length - 1}
@@ -320,6 +324,7 @@ function DashboardContent() {
         selectedFilters={selectedFilters}
         showAllYears={showAllYears}
         selectedYear={selectedYear}
+        isChangedSelectedYears={isChangedSelectedYears}
       />
       </PageContainer>
 

@@ -20,23 +20,23 @@ interface ProjectTimelineProps {
   };
   showAllYears: boolean;
   selectedYear: number;
+  isChangedSelectedYears: boolean;
 }
 
 
-const ProjectTimeline = ({ selectedFilters, showAllYears, selectedYear }: ProjectTimelineProps) => {
+const ProjectTimeline = ({ selectedFilters, showAllYears, selectedYear, isChangedSelectedYears }: ProjectTimelineProps) => {
   const [seriesData, setSeriesData] = useState<any[]>([]);
   const [originalSeriesData, setOriginalSeriesData] = useState<any[]>([]);
-  const hasFetchedGanttChartData = useRef<boolean>(false);
   const hasFetchedFirstTimeGanttChartData = useRef<boolean>(false);
   const [isFilterApplied, setIsFilterApplied] = useState<boolean>(false);
 
   useEffect(()=>{
-    if((selectedFilters && (selectedFilters.managers.length > 0 || selectedFilters.phases.length > 0 || selectedFilters.platforms.length > 0))){
+    if((selectedFilters && (selectedFilters.managers.length > 0 || selectedFilters.phases.length > 0 || selectedFilters.platforms.length > 0)) || isChangedSelectedYears){
       setIsFilterApplied(true);
     }else{
       setIsFilterApplied(false);
     }
-  },[selectedFilters]);
+  },[selectedFilters, isChangedSelectedYears]);
 
   useEffect(() => {
     if(isFilterApplied){
