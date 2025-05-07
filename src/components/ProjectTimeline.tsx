@@ -215,7 +215,6 @@ const ProjectTimeline = ({ selectedFilters, showAllYears, selectedYear, isChange
     plotOptions: {
       series: {
         pointHeight: 36,
-        pointPlacement: -0.5,
         colorByPoint: false,
       }
     },
