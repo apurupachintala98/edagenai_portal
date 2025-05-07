@@ -142,16 +142,14 @@ const ProjectTimeline = ({ selectedFilters, showAllYears, selectedYear, isChange
         borderWidth: 1,
         columns: [
           {
-            title: { text: 'Project' },
+            title: { 
+              text: 'Project',
+              align: 'left'
+            },
             labels: {
               formatter(this: Highcharts.AxisLabelsFormatterContextObject) {
                 return seriesData[this.pos]?.name || '';
               },
-              // useHTML: true,
-              // formatter(this: Highcharts.AxisLabelsFormatterContextObject) {
-              //   const name = seriesData[this.pos]?.name || '';
-              //   return `<span style="display: block; text-align: left;">${name}</span>`;
-              // }
               align: 'left'
             }
           },
