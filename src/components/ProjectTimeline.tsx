@@ -144,11 +144,15 @@ const ProjectTimeline = ({ selectedFilters, showAllYears, selectedYear, isChange
           {
             title: { text: 'Project' },
             labels: {
-              useHTML: true,
               formatter(this: Highcharts.AxisLabelsFormatterContextObject) {
-                const name = seriesData[this.pos]?.name || '';
-                return `<span style="display: block; text-align: left;">${name}</span>`;
-              }
+                return seriesData[this.pos]?.name || '';
+              },
+              // useHTML: true,
+              // formatter(this: Highcharts.AxisLabelsFormatterContextObject) {
+              //   const name = seriesData[this.pos]?.name || '';
+              //   return `<span style="display: block; text-align: left;">${name}</span>`;
+              // }
+              align: 'left'
             }
           },
           {
