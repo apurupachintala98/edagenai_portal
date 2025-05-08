@@ -203,6 +203,7 @@ function DashboardContent() {
               label={t("home.frameworkButtonText")}
               items={[
                 { label: "LLM Gateway", url: "/llm-gateway" },
+                { label: "Data FlyWheel", url: "http://10.126.192.122:5020/" },
                 { label: "RAG Chat Assist (Hedis)", url: "http://10.126.192.122:3020/" },
                 { label: "Text2SQL (SafetyNet)", url: "http://10.126.192.122:3010/" },
                 { label: "Workflow Manager (ARB Scheduler)", url: "https://arbassist.edagenaidev.awsdns.internal.das/" },
