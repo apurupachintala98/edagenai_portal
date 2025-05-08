@@ -144,9 +144,6 @@ const ProjectTimeline = ({ selectedFilters, showAllYears, selectedYear, isChange
           {
             title: { 
               text: 'Project',
-              style: {
-                textAlign: 'left',
-              }
             },
             labels: {
               formatter(this: Highcharts.AxisLabelsFormatterContextObject) {
