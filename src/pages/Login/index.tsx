@@ -68,7 +68,6 @@ function Login() {
                   labelText={t("login.usernameLabelText")}
                   size="lg"
                   invalidText={t("login.usernameError")}
-                  placeholder={t("login.usernamePlaceHolderText")}
                   onChange={(e) => handleUserName(e.target.value)}
                   invalid={userNameError}
                   autoComplete="off"
@@ -82,7 +81,6 @@ function Login() {
                   labelText={t("login.passwordLabelText")}
                   size="lg"
                   invalidText={t("login.passwordError")}
-                  placeholder={t("login.passwordPlaceHolderText")}
                   onChange={(e) => handlePassword(e.target.value)}
                   invalid={passwordError}
                   autoComplete="off"
