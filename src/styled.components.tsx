@@ -28,7 +28,7 @@ const GlobalStyle = createGlobalStyle`
   
   .highcharts-axis-title {
     font-weight: bold !important;
-    font-size: 0.9em !important;
+    font-size: 0.8em !important;
     color: rgb(51,51,51) !important;
   }
 

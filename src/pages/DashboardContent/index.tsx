@@ -218,6 +218,11 @@ function DashboardContent() {
         </HeaderContainer>
 
         <Breadcrumb>
+        <BreadcrumbItem>
+            <div style={{ cursor: "pointer" }} onClick={() => navigate("/home")}>
+              Home
+            </div>
+          </BreadcrumbItem>
           <BreadcrumbItem isCurrentPage>
             {t("dashboard.BreadcrumbHomeText")}
           </BreadcrumbItem>

@@ -66,6 +66,7 @@ const ProjectTimeline = ({ selectedFilters, showAllYears, selectedYear, isChange
 
         const mappedData = filteredData.map((item: any, index: number) => {
           const baseItem = {
+            sl_no: index+1,
             start: item.START_DT,
             end: item.END_DT,
             name: item.NAME,
@@ -143,6 +144,16 @@ const ProjectTimeline = ({ selectedFilters, showAllYears, selectedYear, isChange
         columns: [
           {
             title: { 
+              text: 'SL NO.',
+            },
+            labels: {
+              formatter(this: Highcharts.AxisLabelsFormatterContextObject) {
+                return seriesData[this.pos]?.sl_no ?? '';
+              },
+            }
+          },
+          {
+            title: { 
               text: 'Project',
             },
             labels: {
@@ -202,6 +213,7 @@ const ProjectTimeline = ({ selectedFilters, showAllYears, selectedYear, isChange
         format: '{value:%b}',
         style: {
           fontWeight: 'bold',
+          fontSize: '0.8em',
         },
       },
       lineColor: '#bbb',
