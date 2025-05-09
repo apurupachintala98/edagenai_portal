@@ -36,7 +36,8 @@ const cortexCostData = [
   { name: "January", value: 428.56, color: 'hsl(var(--brand-blue))' },
   { name: "February", value: 2313.92, color: 'hsl(var(--brand-teal))' },
   { name: "March", value: 5291.54, color: 'hsl(var(--muted-foreground))' },
-  { name: "April", value: 1743.26, color: 'hsl(var(--warning))' },
+  { name: "April", value: 1899.34, color: 'hsl(var(--warning))' },
+  { name: "May", value: 1900.34, color: 'hsl(var(--brand-blue-light))' },
 ];
 
 function DashboardContent() {
