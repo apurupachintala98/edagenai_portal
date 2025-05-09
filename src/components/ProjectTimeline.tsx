@@ -160,7 +160,8 @@ const ProjectTimeline = ({ selectedFilters, showAllYears, selectedYear, isChange
               formatter(this: Highcharts.AxisLabelsFormatterContextObject) {
                 return seriesData[this.pos]?.name || '';
               },
-              align: 'left'
+              align: 'left',
+              x: 10
             }
           },
           {
