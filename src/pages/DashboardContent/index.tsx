@@ -1,7 +1,7 @@
 import { Breadcrumb, BreadcrumbItem, Button, Dropdown, FilterableMultiSelect, OverflowMenu, OverflowMenuItem } from "@carbon/react";
 import { Dashboard, DocumentAdd } from "@carbon/react/icons";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { useEffect,useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
@@ -13,7 +13,7 @@ import {
   PageContainer,
   PageTitle,
 } from "../styled.components";
-import { ButtonContainer,DashboardCardsWrapper } from "./styled.components";
+import { ButtonContainer, DashboardCardsWrapper } from "./styled.components";
 import DashboardChart from "components/DashboardChart"; // Bar chart
 import { DropdownButton } from "components/DropdownButton";
 
@@ -26,19 +26,19 @@ import { useProjectData } from "../../hooks/useProjectData";
 import DashboardCard from "pages/DashboardCard";
 import { Label } from "recharts";
 
-const usersData = [
-  { name: "Non-Prod", value: 31, color: 'hsl(var(--brand-blue))' },
-  { name: "Pre-Pod", value: 28, color: 'hsl(var(--brand-teal))' },
-  { name: "Prod", value: 7, color: 'hsl(var(--muted-foreground))' },
-];
+// const usersData = [
+//   { name: "Non-Prod", value: 31, color: 'hsl(var(--brand-blue))' },
+//   { name: "Pre-Pod", value: 28, color: 'hsl(var(--brand-teal))' },
+//   { name: "Prod", value: 7, color: 'hsl(var(--muted-foreground))' },
+// ];
 
-const cortexCostData = [
-  { name: "January", value: 428.56, color: 'hsl(var(--brand-blue))' },
-  { name: "February", value: 2313.92, color: 'hsl(var(--brand-teal))' },
-  { name: "March", value: 5291.54, color: 'hsl(var(--muted-foreground))' },
-  { name: "April", value: 1899.34, color: 'hsl(var(--warning))' },
-  { name: "May", value: 1900.34, color: 'hsl(var(--brand-blue-light))' },
-];
+// const cortexCostData = [
+//   { name: "January", value: 428.56, color: 'hsl(var(--brand-blue))' },
+//   { name: "February", value: 2313.92, color: 'hsl(var(--brand-teal))' },
+//   { name: "March", value: 5291.54, color: 'hsl(var(--muted-foreground))' },
+//   { name: "April", value: 1899.34, color: 'hsl(var(--warning))' },
+//   { name: "May", value: 1900.34, color: 'hsl(var(--brand-blue-light))' },
+// ];
 
 function DashboardContent() {
   const { t } = useTranslation();
@@ -48,6 +48,10 @@ function DashboardContent() {
     managers: [] as any[],
     platforms: [] as any[],
     phases: [] as any[],
+  });
+  const [dashboardData, setDashboardData] = useState({
+    users: [] as any[],
+    costs: [] as any[],
   });
   const [progressReportData, setProgressReportData] = useState<any[]>([]);
   const [dashboardTotals, setDashboardTotals] = useState({
@@ -75,15 +79,74 @@ function DashboardContent() {
   const hasFetchedGanttChart = useRef<boolean>(false);
 
   useEffect(() => {
-    const totalUsers = usersData.reduce((acc, item) => acc + (item.value || 0), 0);
-    const totalCost = cortexCostData.reduce((acc, item) => acc + (item.value || 0), 0);
+    const fetchDashboardUsersAndCosts = async () => {
+      try {
+        console.log("Fetching dashboard users and cost details...");
 
-    setDashboardTotals((prev) => ({
-      ...prev,
-      totalUsers,
-      totalCost,
-    }));
+        const [usersRes, costRes] = await Promise.all([
+          ApiService.getAllUsersDetails(),
+          ApiService.getAllCostsDetails(),
+        ]);
+
+        console.log("Raw Users Response:", usersRes);
+        console.log("Raw Costs Response:", costRes);
+
+        const colorPalette = [
+          'hsl(var(--brand-blue))',
+          'hsl(var(--brand-teal))',
+          'hsl(var(--muted-foreground))',
+          'hsl(var(--warning))',
+          'hsl(var(--brand-blue-light))',
+        ];
+
+        const usersWithColor = usersRes.map((item: any, index: number) => ({
+          ...item,
+          color: colorPalette[index % colorPalette.length],
+        }));
+
+        const costsWithColor = costRes.map((item: any, index: number) => ({
+          ...item,
+          color: colorPalette[index % colorPalette.length],
+        }));
+
+        console.log("Colored Users Data:", usersWithColor);
+        console.log("Colored Costs Data:", costsWithColor);
+
+        setDashboardData({
+          users: usersWithColor,
+          costs: costsWithColor,
+        });
+
+        const totalUsers = usersWithColor?.length ?? 0;
+        const totalCost = costsWithColor?.reduce((acc: number, item: any) => acc + (item?.VALUE ?? 0), 0);
+
+        console.log("Calculated Total Users:", totalUsers);
+        console.log("Calculated Total Cost:", totalCost);
+
+        setDashboardTotals((prev) => ({
+          ...prev,
+          totalUsers,
+          totalCost,
+        }));
+      } catch (error) {
+        console.error("Failed to fetch dashboard users or costs:", error);
+      }
+    };
+
+    fetchDashboardUsersAndCosts();
   }, []);
+
+
+  // useEffect(() => {
+  //   const totalUsers = usersData.reduce((acc, item) => acc + (item.value || 0), 0);
+  //   const totalCost = cortexCostData.reduce((acc, item) => acc + (item.value || 0), 0);
+
+  //   setDashboardTotals((prev) => ({
+  //     ...prev,
+  //     totalUsers,
+  //     totalCost,
+  //   }));
+  // }, []);
 
   useEffect(() => {
     const fetchProgressReportData = async () => {
@@ -114,9 +177,9 @@ function DashboardContent() {
         console.error("Failed to fetch project details:", error);
       }
     };
-    if(hasFetchedAllProjectDetails.current){
-      return ;
-    }else {
+    if (hasFetchedAllProjectDetails.current) {
+      return;
+    } else {
       fetchProgressReportData();
     }
   }, []);
@@ -173,9 +236,9 @@ function DashboardContent() {
         console.error("Failed to fetch years from Gantt chart:", error);
       }
     };
-    if(hasFetchedGanttChart.current){
+    if (hasFetchedGanttChart.current) {
       return;
-    }else{
+    } else {
       fetchYears();
     }
   }, []);
@@ -219,7 +282,7 @@ function DashboardContent() {
         </HeaderContainer>
 
         <Breadcrumb>
-        <BreadcrumbItem>
+          <BreadcrumbItem>
             <div style={{ cursor: "pointer" }} onClick={() => navigate("/home")}>
               Home
             </div>
@@ -229,113 +292,118 @@ function DashboardContent() {
           </BreadcrumbItem>
         </Breadcrumb>
 
-          {/* 3-Column Layout for Charts */}
-      <DashboardCardsWrapper>
-        <DashboardCard title="Projects" subheading={`Total Projects : ${dashboardTotals.totalProjects}`}>
-          <ProgressDonut data={progressReportData} />
-        </DashboardCard>
+        {/* 3-Column Layout for Charts */}
+        <DashboardCardsWrapper>
+          <DashboardCard title="Projects" subheading={`Total Projects : ${dashboardTotals.totalProjects}`}>
+            <ProgressDonut data={progressReportData} />
+          </DashboardCard>
 
-        <DashboardCard title="Users" subheading={`Total Users: ${dashboardTotals.totalUsers}`}>
-          <DashboardChart data={usersData} />
-        </DashboardCard>
+          <DashboardCard title="Users" subheading={`Total Users: ${dashboardTotals.totalUsers}`}>
+            <DashboardChart
+              data={dashboardData.users.map((u) => ({ name: u.ENVIRONMENT, value: u.COUNT, color: u.color }))}
+            />
+          </DashboardCard>
 
-        <DashboardCard title="Cortex Cost" subheading={`Total Cost for the Projects : $${Math.round(dashboardTotals.totalCost).toLocaleString()}`}
-        >
-          <DashboardChart data={cortexCostData} isCurrency />
-        </DashboardCard>
-      </DashboardCardsWrapper>
+          <DashboardCard title="Cortex Cost" subheading={`Total Cost for the Projects : $${Math.round(dashboardTotals.totalCost).toLocaleString()}`}
+          >
+            <DashboardChart
+              data={dashboardData.costs.map((c) => ({ name: c.MONTH, value: c.VALUE, color: c.color }))}
+              isCurrency
+            />
+          </DashboardCard>
+        </DashboardCardsWrapper>
 
-      {/* Projects Status Section */}
-      <div className="mt-6 p-6 rounded-lg">
-        <h3 className="text-lg font-semibold mb-4">Projects Status</h3>
-        <div className="flex flex-wrap gap-4 items-end justify-between">
+        {/* Projects Status Section */}
+        <div className="mt-6 p-6 rounded-lg">
+          <h3 className="text-lg font-semibold mb-4">Projects Status</h3>
+          <div className="flex flex-wrap gap-4 items-end justify-between">
 
-          <div className="flex flex-wrap gap-4">
-            <div className="w-[280px]">
-              <label className="block mb-1 text-sm font-medium">Manager</label>
-              <FilterableMultiSelect
-                id="manage-multiselect"
-                titleText=""
-                items={dropdownOptions.managers}
-                itemToString={(item) => (item ? item.label : "")}
-                placeholder="Search Manager Name"
-                selectionFeedback="top"
-                onChange={(event) => handleMultiSelectChange("managers", event.selectedItems)}
+            <div className="flex flex-wrap gap-4">
+              <div className="w-[280px]">
+                <label className="block mb-1 text-sm font-medium">Manager</label>
+                <FilterableMultiSelect
+                  id="manage-multiselect"
+                  titleText=""
+                  items={dropdownOptions.managers}
+                  itemToString={(item) => (item ? item.label : "")}
+                  placeholder="Search Manager Name"
+                  selectionFeedback="top"
+                  onChange={(event) => handleMultiSelectChange("managers", event.selectedItems)}
 
-              />
+                />
+              </div>
+
+              <div className="w-[280px]">
+                <label className="block mb-1 text-sm font-medium">Platform</label>
+                <FilterableMultiSelect
+                  id="platform-multiselect"
+                  titleText=""
+                  items={dropdownOptions.platforms}
+                  itemToString={(item) => (item ? item.label : "")}
+                  placeholder="Search Platform Name"
+                  selectionFeedback="top"
+                  onChange={(event) => handleMultiSelectChange("platforms", event.selectedItems)}
+
+                />
+              </div>
+
+              <div className="w-[280px]">
+                <label className="block mb-1 text-sm font-medium">Current Phase</label>
+                <FilterableMultiSelect
+                  id="phase-multiselect"
+                  titleText=""
+                  items={dropdownOptions.phases}
+                  itemToString={(item) => (item ? item.label : "")}
+                  placeholder="Search Phase"
+                  selectionFeedback="top"
+                  onChange={(event) => handleMultiSelectChange("phases", event.selectedItems)}
+
+                />
+              </div>
             </div>
+            <div>
 
-            <div className="w-[280px]">
-              <label className="block mb-1 text-sm font-medium">Platform</label>
-              <FilterableMultiSelect
-                id="platform-multiselect"
-                titleText=""
-                items={dropdownOptions.platforms}
-                itemToString={(item) => (item ? item.label : "")}
-                placeholder="Search Platform Name"
-                selectionFeedback="top"
-                onChange={(event) => handleMultiSelectChange("platforms", event.selectedItems)}
-
-              />
-            </div>
-
-            <div className="w-[280px]">
-              <label className="block mb-1 text-sm font-medium">Current Phase</label>
-              <FilterableMultiSelect
-                id="phase-multiselect"
-                titleText=""
-                items={dropdownOptions.phases}
-                itemToString={(item) => (item ? item.label : "")}
-                placeholder="Search Phase"
-                selectionFeedback="top"
-                onChange={(event) => handleMultiSelectChange("phases", event.selectedItems)}
-
-              />
-            </div>
-          </div>
-          <div>
-
-            <div className="flex items-center justify-center bg-blue-600 text-white rounded-lg px-6 py-2 gap-4">
-              <button
-                onClick={() => {
-                  const currentIndex = availableYears.indexOf(selectedYear);
-                  if (currentIndex > 0) {
-                    setSelectedYear(availableYears[currentIndex - 1]);
-                    setIsChangedSelectedYears(true);
-                  }
-                }}
-                disabled={availableYears.indexOf(selectedYear) === 0}
-                className="flex items-center justify-center disabled:opacity-50"
-              >
-                <ChevronLeft size={16} />
-              </button>
-              <span className="text-lg font-semibold">{selectedYear}</span>
-              <button
-                onClick={() => {
-                  const currentIndex = availableYears.indexOf(selectedYear);
-                  if (currentIndex < availableYears.length - 1) {
-                    setSelectedYear(availableYears[currentIndex + 1]);
-                    setIsChangedSelectedYears(true);
-                  }
-                }}
-                disabled={availableYears.indexOf(selectedYear) === availableYears.length - 1}
-                className="flex items-center justify-center disabled:opacity-50"
-              >
-                <ChevronRight size={16} />
-              </button>
+              <div className="flex items-center justify-center bg-blue-600 text-white rounded-lg px-6 py-2 gap-4">
+                <button
+                  onClick={() => {
+                    const currentIndex = availableYears.indexOf(selectedYear);
+                    if (currentIndex > 0) {
+                      setSelectedYear(availableYears[currentIndex - 1]);
+                      setIsChangedSelectedYears(true);
+                    }
+                  }}
+                  disabled={availableYears.indexOf(selectedYear) === 0}
+                  className="flex items-center justify-center disabled:opacity-50"
+                >
+                  <ChevronLeft size={16} />
+                </button>
+                <span className="text-lg font-semibold">{selectedYear}</span>
+                <button
+                  onClick={() => {
+                    const currentIndex = availableYears.indexOf(selectedYear);
+                    if (currentIndex < availableYears.length - 1) {
+                      setSelectedYear(availableYears[currentIndex + 1]);
+                      setIsChangedSelectedYears(true);
+                    }
+                  }}
+                  disabled={availableYears.indexOf(selectedYear) === availableYears.length - 1}
+                  className="flex items-center justify-center disabled:opacity-50"
+                >
+                  <ChevronRight size={16} />
+                </button>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <ProjectTimeline
-        selectedFilters={selectedFilters}
-        showAllYears={showAllYears}
-        selectedYear={selectedYear}
-        isChangedSelectedYears={isChangedSelectedYears}
-      />
+        <ProjectTimeline
+          selectedFilters={selectedFilters}
+          showAllYears={showAllYears}
+          selectedYear={selectedYear}
+          isChangedSelectedYears={isChangedSelectedYears}
+        />
       </PageContainer>
 
-    
+
     </MainContainer>
   );
 }

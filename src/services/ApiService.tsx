@@ -61,6 +61,16 @@ const ApiService = {
     return response.status === 200 ? response.data : [];
   },
 
+  getAllCostsDetails: async () => {
+    const response = await axios.get(`${Dashboard_BASE_URL}/get_all_costs_details/`);
+    return response.status === 200 ? response.data : [];
+  },
+
+  getAllUsersDetails: async () => {
+    const response = await axios.get(`${Dashboard_BASE_URL}/get_all_users_details/`);
+    return response.status === 200 ? response.data : [];
+  },
+
   getPlatforms: async () => {
     const response = await axios.get(`${BASE_URL}/llm_platform`);
     return response.data;
