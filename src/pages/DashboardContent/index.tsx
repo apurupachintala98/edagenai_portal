@@ -4,7 +4,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
-
+import { useFilteredDashboardData } from "../../hooks/useFilteredDashboardData";
 import ProgressDonut from "../../components/ProgressDonut/ProgressDonut";
 import ProjectTimeline from "../../components/ProjectTimeline";
 import {
@@ -26,20 +26,6 @@ import { useProjectData } from "../../hooks/useProjectData";
 import DashboardCard from "pages/DashboardCard";
 import { Label } from "recharts";
 
-// const usersData = [
-//   { name: "Non-Prod", value: 31, color: 'hsl(var(--brand-blue))' },
-//   { name: "Pre-Pod", value: 28, color: 'hsl(var(--brand-teal))' },
-//   { name: "Prod", value: 7, color: 'hsl(var(--muted-foreground))' },
-// ];
-
-// const cortexCostData = [
-//   { name: "January", value: 428.56, color: 'hsl(var(--brand-blue))' },
-//   { name: "February", value: 2313.92, color: 'hsl(var(--brand-teal))' },
-//   { name: "March", value: 5291.54, color: 'hsl(var(--muted-foreground))' },
-//   { name: "April", value: 1899.34, color: 'hsl(var(--warning))' },
-//   { name: "May", value: 1900.34, color: 'hsl(var(--brand-blue-light))' },
-// ];
-
 function DashboardContent() {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -49,16 +35,25 @@ function DashboardContent() {
     platforms: [] as any[],
     phases: [] as any[],
   });
-  const [dashboardData, setDashboardData] = useState({
-    users: [] as any[],
-    costs: [] as any[],
-  });
-  const [progressReportData, setProgressReportData] = useState<any[]>([]);
-  const [dashboardTotals, setDashboardTotals] = useState({
-    totalProjects: 0,
-    totalUsers: 0,
-    totalCost: 0,
-  });
+  // const [dashboardData, setDashboardData] = useState({
+  //   users: [] as any[],
+  //   costs: [] as any[],
+  // });
+  // const [progressReportData, setProgressReportData] = useState<any[]>([]);
+  // const [dashboardTotals, setDashboardTotals] = useState({
+  //   totalProjects: 0,
+  //   totalUsers: 0,
+  //   totalCost: 0,
+  // });
+  const [rawProjectData, setRawProjectData] = useState<any[]>([]);
+const [rawDashboardData, setRawDashboardData] = useState({ users: [], costs: [] });
+
+const { progressData, dashboardData, totals } = useFilteredDashboardData(
+  rawProjectData,
+  rawDashboardData,
+  selectedFilters
+);
+
   const [dropdownOptions, setDropdownOptions] = useState({
     managers: [] as any[],
     platforms: [] as any[],
@@ -78,7 +73,103 @@ function DashboardContent() {
   const hasFetchedAllProjectDetails = useRef<boolean>(false);
   const hasFetchedGanttChart = useRef<boolean>(false);
 
-useEffect(() => {
+// useEffect(() => {
+//   const fetchDashboardUsersAndCosts = async () => {
+//     try {
+//       console.log("Fetching dashboard users and cost details...");
+
+//       const [usersRes, costRes] = await Promise.all([
+//         ApiService.getAllUsersDetails(),
+//         ApiService.getAllCostsDetails(),
+//       ]);
+
+//       console.log("Raw Users Response:", usersRes);
+//       console.log("Raw Costs Response:", costRes);
+
+//       const colorPalette = [
+//         'hsl(var(--brand-blue))',
+//         'hsl(var(--brand-teal))',
+//         'hsl(var(--muted-foreground))',
+//         'hsl(var(--warning))',
+//         'hsl(var(--brand-blue-light))',
+//       ];
+
+//       const usersWithColor = usersRes.map((item: any, index: number) => ({
+//         name: item.NAME || `User ${index + 1}`,
+//         value: Number(item.VALUE) || 0,
+//         color: colorPalette[index % colorPalette.length],
+//       }));
+
+//       const costsWithColor = costRes.map((item: any, index: number) => ({
+//         name: item.NAME || `Month ${index + 1}`,
+//         value: Number(item.VALUE) || 0,
+//         color: colorPalette[index % colorPalette.length],
+//       }));
+
+//       console.log("Formatted Users Data:", usersWithColor);
+//       console.log("Formatted Costs Data:", costsWithColor);
+
+//       setRawDashboardData({
+//         users: usersWithColor,
+//         costs: costsWithColor,
+//       });
+
+//       const totalUsers = usersWithColor.reduce((acc: number, item: any) => acc + item.value, 0);
+//       const totalCost = costsWithColor.reduce((acc: number, item: any) => acc + item.value, 0);
+
+//       console.log("Calculated Total Users:", totalUsers);
+//       console.log("Calculated Total Cost:", totalCost);
+
+//       setDashboardTotals((prev) => ({
+//         ...prev,
+//         totalUsers,
+//         totalCost,
+//       }));
+//     } catch (error) {
+//       console.error("Failed to fetch dashboard users or costs:", error);
+//     }
+//   };
+
+//   fetchDashboardUsersAndCosts();
+// }, []);
+
+  // useEffect(() => {
+  //   const fetchProgressReportData = async () => {
+  //     try {
+  //       hasFetchedAllProjectDetails.current = true;
+  //       const apiData = await ApiService.getAllDetailsProjects();
+  //       console.log(apiData);
+  //       setRawProjectData(apiData);
+  //       const coloredData = apiData.map((item: any, index: number) => ({
+  //         name: item.NAME,
+  //         value: item.VALUE,
+  //         color:
+  //           index % 3 === 0
+  //             ? 'hsl(var(--brand-blue))'
+  //             : index % 3 === 1
+  //               ? 'hsl(var(--brand-teal))'
+  //               : 'hsl(var(--muted-foreground))',
+  //       }));
+
+  //       setProgressReportData(coloredData);
+  //       const totalProjects = coloredData.reduce((acc: any, item: any) => acc + (item.value || 0), 0);
+  //       setDashboardTotals((prev) => ({
+  //         ...prev,
+  //         totalProjects,
+  //       }));
+  //       console.log(coloredData);
+  //     } catch (error) {
+  //       console.error("Failed to fetch project details:", error);
+  //     }
+  //   };
+  //   if (hasFetchedAllProjectDetails.current) {
+  //     return;
+  //   } else {
+  //     fetchProgressReportData();
+  //   }
+  // }, []);
+
+  useEffect(() => {
   const fetchDashboardUsersAndCosts = async () => {
     try {
       console.log("Fetching dashboard users and cost details...");
@@ -114,22 +205,12 @@ useEffect(() => {
       console.log("Formatted Users Data:", usersWithColor);
       console.log("Formatted Costs Data:", costsWithColor);
 
-      setDashboardData({
+      // This will trigger the filtering logic in the custom hook
+      setRawDashboardData({
         users: usersWithColor,
         costs: costsWithColor,
       });
 
-      const totalUsers = usersWithColor.reduce((acc: number, item: any) => acc + item.value, 0);
-      const totalCost = costsWithColor.reduce((acc: number, item: any) => acc + item.value, 0);
-
-      console.log("Calculated Total Users:", totalUsers);
-      console.log("Calculated Total Cost:", totalCost);
-
-      setDashboardTotals((prev) => ({
-        ...prev,
-        totalUsers,
-        totalCost,
-      }));
     } catch (error) {
       console.error("Failed to fetch dashboard users or costs:", error);
     }
@@ -138,54 +219,22 @@ useEffect(() => {
   fetchDashboardUsersAndCosts();
 }, []);
 
-
-
-  // useEffect(() => {
-  //   const totalUsers = usersData.reduce((acc, item) => acc + (item.value || 0), 0);
-  //   const totalCost = cortexCostData.reduce((acc, item) => acc + (item.value || 0), 0);
-
-  //   setDashboardTotals((prev) => ({
-  //     ...prev,
-  //     totalUsers,
-  //     totalCost,
-  //   }));
-  // }, []);
-
   useEffect(() => {
-    const fetchProgressReportData = async () => {
-      try {
-        hasFetchedAllProjectDetails.current = true;
-        const apiData = await ApiService.getAllDetailsProjects();
-        console.log(apiData);
-
-        const coloredData = apiData.map((item: any, index: number) => ({
-          name: item.NAME,
-          value: item.VALUE,
-          color:
-            index % 3 === 0
-              ? 'hsl(var(--brand-blue))'
-              : index % 3 === 1
-                ? 'hsl(var(--brand-teal))'
-                : 'hsl(var(--muted-foreground))',
-        }));
-
-        setProgressReportData(coloredData);
-        const totalProjects = coloredData.reduce((acc: any, item: any) => acc + (item.value || 0), 0);
-        setDashboardTotals((prev) => ({
-          ...prev,
-          totalProjects,
-        }));
-        console.log(coloredData);
-      } catch (error) {
-        console.error("Failed to fetch project details:", error);
-      }
-    };
-    if (hasFetchedAllProjectDetails.current) {
-      return;
-    } else {
-      fetchProgressReportData();
+  const fetchProgressReportData = async () => {
+    try {
+      hasFetchedAllProjectDetails.current = true;
+      const apiData = await ApiService.getAllDetailsProjects();
+      console.log("Raw Project Data:", apiData);
+      setRawProjectData(apiData);
+    } catch (error) {
+      console.error("Failed to fetch project details:", error);
     }
-  }, []);
+  };
+
+  if (!hasFetchedAllProjectDetails.current) {
+    fetchProgressReportData();
+  }
+}, []);
 
   const handleMultiSelectChange = (field: "managers" | "platforms" | "phases", selectedItems: any[]) => {
     setSelectedFilters((prev) => ({
@@ -297,17 +346,17 @@ useEffect(() => {
 
         {/* 3-Column Layout for Charts */}
         <DashboardCardsWrapper>
-          <DashboardCard title="Projects" subheading={`Total Projects : ${dashboardTotals.totalProjects}`}>
-            <ProgressDonut data={progressReportData} />
+          <DashboardCard title="Projects" subheading={`Total Projects : ${totals.totalProjects}`}>
+            <ProgressDonut data={progressData} />
           </DashboardCard>
 
-          <DashboardCard title="Users" subheading={`Total Users: ${dashboardTotals.totalUsers}`}>
+          <DashboardCard title="Users" subheading={`Total Users: ${totals.totalUsers}`}>
             <DashboardChart
               data={dashboardData.users}
             />
           </DashboardCard>
 
-          <DashboardCard title="Cortex Cost" subheading={`Total Cost for the Projects : $${Math.round(dashboardTotals.totalCost).toLocaleString()}`}>            <DashboardChart
+          <DashboardCard title="Cortex Cost" subheading={`Total Cost for the Projects : $${Math.round(totals.totalCost).toLocaleString()}`}>            <DashboardChart
               data={dashboardData.costs}
               isCurrency
             />
