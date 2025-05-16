@@ -78,7 +78,7 @@ function DashboardContent() {
   const hasFetchedAllProjectDetails = useRef<boolean>(false);
   const hasFetchedGanttChart = useRef<boolean>(false);
 
- useEffect(() => {
+useEffect(() => {
   const fetchDashboardUsersAndCosts = async () => {
     try {
       console.log("Fetching dashboard users and cost details...");
@@ -100,14 +100,14 @@ function DashboardContent() {
       ];
 
       const usersWithColor = usersRes.map((item: any, index: number) => ({
-        name: item.NAME,
-        value: item.VALUE,
+        name: item.NAME || `User ${index + 1}`,
+        value: Number(item.VALUE) || 0,
         color: colorPalette[index % colorPalette.length],
       }));
 
       const costsWithColor = costRes.map((item: any, index: number) => ({
-        name: item.NAME,
-        value: item.VALUE,
+        name: item.NAME || `Month ${index + 1}`,
+        value: Number(item.VALUE) || 0,
         color: colorPalette[index % colorPalette.length],
       }));
 
@@ -119,8 +119,8 @@ function DashboardContent() {
         costs: costsWithColor,
       });
 
-      const totalUsers = usersWithColor.reduce((acc: any, item: { value: any; }) => acc + (item.value || 0), 0);
-      const totalCost = costsWithColor.reduce((acc: any, item: { value: any; }) => acc + (item.value || 0), 0);
+      const totalUsers = usersWithColor.reduce((acc: number, item: any) => acc + item.value, 0);
+      const totalCost = costsWithColor.reduce((acc: number, item: any) => acc + item.value, 0);
 
       console.log("Calculated Total Users:", totalUsers);
       console.log("Calculated Total Cost:", totalCost);
@@ -137,6 +137,7 @@ function DashboardContent() {
 
   fetchDashboardUsersAndCosts();
 }, []);
+
 
 
   // useEffect(() => {
@@ -306,9 +307,7 @@ function DashboardContent() {
             />
           </DashboardCard>
 
-          <DashboardCard title="Cortex Cost" subheading={`Total Cost for the Projects : $${Math.round(dashboardTotals.totalCost).toLocaleString()}`}
-          >
-            <DashboardChart
+          <DashboardCard title="Cortex Cost" subheading={`Total Cost for the Projects : $${Math.round(dashboardTotals.totalCost).toLocaleString()}`}>            <DashboardChart
               data={dashboardData.costs.map((c) => ({ name: c.MONTH, value: c.VALUE, color: c.color }))}
               isCurrency
             />
