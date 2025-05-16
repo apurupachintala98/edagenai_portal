@@ -78,63 +78,65 @@ function DashboardContent() {
   const hasFetchedAllProjectDetails = useRef<boolean>(false);
   const hasFetchedGanttChart = useRef<boolean>(false);
 
-  useEffect(() => {
-    const fetchDashboardUsersAndCosts = async () => {
-      try {
-        console.log("Fetching dashboard users and cost details...");
+ useEffect(() => {
+  const fetchDashboardUsersAndCosts = async () => {
+    try {
+      console.log("Fetching dashboard users and cost details...");
 
-        const [usersRes, costRes] = await Promise.all([
-          ApiService.getAllUsersDetails(),
-          ApiService.getAllCostsDetails(),
-        ]);
+      const [usersRes, costRes] = await Promise.all([
+        ApiService.getAllUsersDetails(),
+        ApiService.getAllCostsDetails(),
+      ]);
 
-        console.log("Raw Users Response:", usersRes);
-        console.log("Raw Costs Response:", costRes);
+      console.log("Raw Users Response:", usersRes);
+      console.log("Raw Costs Response:", costRes);
 
-        const colorPalette = [
-          'hsl(var(--brand-blue))',
-          'hsl(var(--brand-teal))',
-          'hsl(var(--muted-foreground))',
-          'hsl(var(--warning))',
-          'hsl(var(--brand-blue-light))',
-        ];
+      const colorPalette = [
+        'hsl(var(--brand-blue))',
+        'hsl(var(--brand-teal))',
+        'hsl(var(--muted-foreground))',
+        'hsl(var(--warning))',
+        'hsl(var(--brand-blue-light))',
+      ];
 
-        const usersWithColor = usersRes.map((item: any, index: number) => ({
-          ...item,
-          color: colorPalette[index % colorPalette.length],
-        }));
+      const usersWithColor = usersRes.map((item: any, index: number) => ({
+        name: item.NAME,
+        value: item.VALUE,
+        color: colorPalette[index % colorPalette.length],
+      }));
 
-        const costsWithColor = costRes.map((item: any, index: number) => ({
-          ...item,
-          color: colorPalette[index % colorPalette.length],
-        }));
+      const costsWithColor = costRes.map((item: any, index: number) => ({
+        name: item.NAME,
+        value: item.VALUE,
+        color: colorPalette[index % colorPalette.length],
+      }));
 
-        console.log("Colored Users Data:", usersWithColor);
-        console.log("Colored Costs Data:", costsWithColor);
+      console.log("Formatted Users Data:", usersWithColor);
+      console.log("Formatted Costs Data:", costsWithColor);
 
-        setDashboardData({
-          users: usersWithColor,
-          costs: costsWithColor,
-        });
+      setDashboardData({
+        users: usersWithColor,
+        costs: costsWithColor,
+      });
 
-        const totalUsers = usersWithColor?.length ?? 0;
-        const totalCost = costsWithColor?.reduce((acc: number, item: any) => acc + (item?.VALUE ?? 0), 0);
+      const totalUsers = usersWithColor.reduce((acc: any, item: { value: any; }) => acc + (item.value || 0), 0);
+      const totalCost = costsWithColor.reduce((acc: any, item: { value: any; }) => acc + (item.value || 0), 0);
 
-        console.log("Calculated Total Users:", totalUsers);
-        console.log("Calculated Total Cost:", totalCost);
+      console.log("Calculated Total Users:", totalUsers);
+      console.log("Calculated Total Cost:", totalCost);
 
-        setDashboardTotals((prev) => ({
-          ...prev,
-          totalUsers,
-          totalCost,
-        }));
-      } catch (error) {
-        console.error("Failed to fetch dashboard users or costs:", error);
-      }
-    };
+      setDashboardTotals((prev) => ({
+        ...prev,
+        totalUsers,
+        totalCost,
+      }));
+    } catch (error) {
+      console.error("Failed to fetch dashboard users or costs:", error);
+    }
+  };
 
-    fetchDashboardUsersAndCosts();
-  }, []);
+  fetchDashboardUsersAndCosts();
+}, []);
 
 
   // useEffect(() => {
