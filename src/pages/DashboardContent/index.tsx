@@ -303,12 +303,12 @@ useEffect(() => {
 
           <DashboardCard title="Users" subheading={`Total Users: ${dashboardTotals.totalUsers}`}>
             <DashboardChart
-              data={dashboardData.users.map((u) => ({ name: u.ENVIRONMENT, value: u.COUNT, color: u.color }))}
+              data={dashboardData.users}
             />
           </DashboardCard>
 
           <DashboardCard title="Cortex Cost" subheading={`Total Cost for the Projects : $${Math.round(dashboardTotals.totalCost).toLocaleString()}`}>            <DashboardChart
-              data={dashboardData.costs.map((c) => ({ name: c.MONTH, value: c.VALUE, color: c.color }))}
+              data={dashboardData.costs}
               isCurrency
             />
           </DashboardCard>
