@@ -168,6 +168,12 @@ function DashboardContent() {
     }
   }, []);
 
+  useEffect(() => {
+  if (selectedFilters.managers.length > 0) {
+    fetchFilteredProjectsByManager();
+  }
+}, [selectedFilters.managers]);
+
 const fetchFilteredProjectsByManager = async () => {
   try {
     const selectedManagers = selectedFilters.managers.map((m) => m.label);
@@ -218,19 +224,10 @@ const fetchFilteredProjectsByManager = async () => {
   //   }));
   // };
  const handleMultiSelectChange = (field: "managers" | "platforms" | "phases", selectedItems: any[]) => {
-  setSelectedFilters((prev) => {
-    const newFilters = {
-      ...prev,
-      [field]: selectedItems ?? [],
-    };
-
-    // Trigger filter only when manager selection changes
-    if (field === "managers") {
-      setTimeout(() => fetchFilteredProjectsByManager(), 0);
-    }
-
-    return newFilters;
-  });
+ setSelectedFilters((prev) => ({
+    ...prev,
+    [field]: selectedItems ?? [],
+  }));
 };
 
   useEffect(() => {
