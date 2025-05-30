@@ -11,10 +11,12 @@ const Login = lazy(() => import("pages/Login"));
 const Dashboard = lazy(() => import("pages/Dashboard"));
 const Home = lazy(() => import("pages/Home"));
 const Admin = lazy(() => import("pages/Admin"));
+const ProjectDetails = lazy(() => import("pages/ProjectDetails"));
+
 
 function ReactRoute() {
-  const [sidebarType, setSidebarType] = useState<string>("default"); 
-  const theme = {}; 
+  const [sidebarType, setSidebarType] = useState<string>("default");
+  const theme = {};
 
   return (
     <BrowserRouter>
@@ -31,10 +33,17 @@ function ReactRoute() {
             path="/llm-gateway"
             element={
               <PrivateRoute
-                element={<LlmGateway sidebarType={sidebarType} setSidebarType={setSidebarType} theme={theme} />}
+                element={
+                  <LlmGateway
+                    sidebarType={sidebarType}
+                    setSidebarType={setSidebarType}
+                    theme={theme}
+                  />
+                }
               />
             }
           />
+          {/* <Route path="/dashboard/project/:projectID" element={<PrivateRoute element={<ProjectDetails />} />} /> */}
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </Suspense>

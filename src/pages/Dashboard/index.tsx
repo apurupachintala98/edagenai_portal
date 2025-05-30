@@ -11,7 +11,7 @@ import {
 } from "@carbon/react/icons";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 import { TagLine, ToggleContainer } from "../styled.components";
 import { CopyrightText } from "./styled.components";
@@ -35,6 +35,7 @@ import Admin from "pages/Admin/index";
 import DashboardContent from "pages/DashboardContent";
 import Metrics from "pages/Metrics";
 import Project from "pages/Project/index";
+import ProjectDetails from "pages/ProjectDetails";
 
 type MenuItem = {
   text: string;
@@ -62,8 +63,10 @@ function Dashboard() {
   const [adminError, setAdminError] = useState("");
   const [showAdminSubmenu, setShowAdminSubmenu] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [searchParams] = useSearchParams();
+  const projectName = searchParams.get("project");
 
-  useEffect(()=>{
+  useEffect(() => {
     const checkLocalVal = localStorage.getItem("edp_checkAdmin");
     if (checkLocalVal) {
       setShowAdminSubmenu(true);
@@ -79,6 +82,7 @@ function Dashboard() {
       return;
     }
     setCurrentTab(itemId);
+    navigate("/dashboard");
   };
 
   const menuItems: MenuItem[] = [
@@ -92,6 +96,17 @@ function Dashboard() {
       { text: "Metrics", icon: <Analytics size={20} />, id: "metrics", submenu: true },
     );
   }
+
+  useEffect(() => {
+    if (projectName) {
+      if(projectName === "all"){
+        setCurrentTab("dashboard");
+      }else{
+       setCurrentTab("projectDetails");
+      }
+    }
+  }, [projectName]);
+
   return (
     <Box sx={{ display: "flex", height: "100vh" }}>
       <CssBaseline />
@@ -229,6 +244,7 @@ function Dashboard() {
         {currentTab === "admin" && <Admin />}
         {currentTab === "project" && <Project />}
         {currentTab === "metrics" && <Metrics />}
+        {currentTab === "projectDetails" && <ProjectDetails />}
       </Box>
 
       <Modal

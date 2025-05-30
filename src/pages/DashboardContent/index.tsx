@@ -1,17 +1,26 @@
-import { Breadcrumb, BreadcrumbItem, Button, Dropdown, FilterableMultiSelect, OverflowMenu, OverflowMenuItem } from "@carbon/react";
-import { Dashboard, DocumentAdd, IbmCloudProjects, UserMultiple, SalesOps, /*CurrencyDollar*/ } from "@carbon/react/icons";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  Button,
+  Dropdown,
+  FilterableMultiSelect,
+  OverflowMenu,
+  OverflowMenuItem,
+} from "@carbon/react";
+import {
+  Dashboard,
+  DocumentAdd,
+  IbmCloudProjects,
+  UserMultiple,
+  SalesOps /*CurrencyDollar*/,
+} from "@carbon/react/icons";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import ProgressDonut from "../../components/ProgressDonut/ProgressDonut";
 import ProjectTimeline from "../../components/ProjectTimeline";
-import {
-  HeaderContainer,
-  MainContainer,
-  PageContainer,
-  PageTitle,
-} from "../styled.components";
+import { HeaderContainer, MainContainer, PageContainer, PageTitle } from "../styled.components";
 import { ButtonContainer, DashboardCardsWrapper } from "./styled.components";
 import DashboardChart from "components/DashboardChart"; // Bar chart
 import { DropdownButton } from "components/DropdownButton";
@@ -44,7 +53,6 @@ function DashboardContent() {
     totalUsers: 0,
     totalCost: 0,
   });
-
 
   const [dropdownOptions, setDropdownOptions] = useState({
     managers: [] as any[],
@@ -79,11 +87,11 @@ function DashboardContent() {
         console.log("Raw Costs Response:", costRes);
 
         const colorPalette = [
-          'hsl(var(--brand-blue))',
-          'hsl(var(--brand-teal))',
-          'hsl(var(--muted-foreground))',
-          'hsl(var(--warning))',
-          'hsl(var(--brand-blue-light))',
+          "hsl(var(--brand-blue))",
+          "hsl(var(--brand-teal))",
+          "hsl(var(--muted-foreground))",
+          "hsl(var(--warning))",
+          "hsl(var(--brand-blue-light))",
         ];
 
         const usersWithColor = usersRes.map((item: any, index: number) => ({
@@ -137,14 +145,17 @@ function DashboardContent() {
           value: item.VALUE,
           color:
             index % 3 === 0
-              ? 'hsl(var(--brand-blue))'
+              ? "hsl(var(--brand-blue))"
               : index % 3 === 1
-                ? 'hsl(var(--brand-teal))'
-                : 'hsl(var(--muted-foreground))',
+              ? "hsl(var(--brand-teal))"
+              : "hsl(var(--muted-foreground))",
         }));
 
         setProgressReportData(coloredData);
-        const totalProjects = coloredData.reduce((acc: any, item: any) => acc + (item.value || 0), 0);
+        const totalProjects = coloredData.reduce(
+          (acc: any, item: any) => acc + (item.value || 0),
+          0,
+        );
         setDashboardTotals((prev) => ({
           ...prev,
           totalProjects,
@@ -177,7 +188,7 @@ function DashboardContent() {
       }
 
       const filteredProjects = projects.filter((project: any) =>
-        selectedManagers.includes(project.STAFF_VP)
+        selectedManagers.includes(project.STAFF_VP),
       );
 
       console.log("Filtered Projects by Manager:", filteredProjects);
@@ -214,13 +225,15 @@ function DashboardContent() {
       ];
 
       console.log("Donut Data:", filteredProjectDonut);
-
     } catch (error) {
       console.error("Failed to fetch or filter project data:", error);
     }
   };
 
-  const handleMultiSelectChange = (field: "managers" | "platforms" | "phases", selectedItems: any[]) => {
+  const handleMultiSelectChange = (
+    field: "managers" | "platforms" | "phases",
+    selectedItems: any[],
+  ) => {
     setSelectedFilters((prev) => ({
       ...prev,
       [field]: selectedItems ?? [],
@@ -229,13 +242,25 @@ function DashboardContent() {
 
   useEffect(() => {
     if (projects.length > 0) {
-      const uniqueManagers = Array.from(new Set(projects.map((item) => item.STAFF_VP))).filter(Boolean);
-      const uniquePlatforms = Array.from(new Set(projects.map((item) => item.LLM_PLATFORM))).filter(Boolean);
-      const uniquePhases = Array.from(new Set(projects.map((item) => item.CURRENT_PHASE))).filter(Boolean);
+      const uniqueManagers = Array.from(new Set(projects.map((item) => item.STAFF_VP))).filter(
+        Boolean,
+      );
+      const uniquePlatforms = Array.from(new Set(projects.map((item) => item.LLM_PLATFORM))).filter(
+        Boolean,
+      );
+      const uniquePhases = Array.from(new Set(projects.map((item) => item.CURRENT_PHASE))).filter(
+        Boolean,
+      );
 
       setDropdownOptions({
-        managers: uniqueManagers.map((manager, index) => ({ id: String(index + 1), label: manager })),
-        platforms: uniquePlatforms.map((platform, index) => ({ id: String(index + 1), label: platform })),
+        managers: uniqueManagers.map((manager, index) => ({
+          id: String(index + 1),
+          label: manager,
+        })),
+        platforms: uniquePlatforms.map((platform, index) => ({
+          id: String(index + 1),
+          label: platform,
+        })),
         phases: uniquePhases.map((phase, index) => ({ id: String(index + 1), label: phase })),
       });
     }
@@ -295,8 +320,8 @@ function DashboardContent() {
                 { label: "Prov360", url: "/" },
                 { label: "RMA.ai", url: "/" },
                 { label: "IQT", url: "/" },
-                { label: "Privia", url: "/" }]}
-
+                { label: "Privia", url: "/" },
+              ]}
             />
             <DropdownButton
               icon={Dashboard}
@@ -306,8 +331,14 @@ function DashboardContent() {
                 { label: "Data FlyWheel", url: "http://10.126.192.122:5020/" },
                 { label: "RAG Chat Assist (Hedis)", url: "http://10.126.192.122:3020/" },
                 { label: "Text2SQL (SafetyNet)", url: "http://10.126.192.122:3010/" },
-                { label: "Workflow Manager (ARB Scheduler)", url: "https://arbassist.edagenaidev.awsdns.internal.das/" },
-                { label: "Semantic Router (ARB Assist)", url: "https://arbassist.edagenaidev.awsdns.internal.das/" },
+                {
+                  label: "Workflow Manager (ARB Scheduler)",
+                  url: "https://arbassist.edagenaidev.awsdns.internal.das/",
+                },
+                {
+                  label: "Semantic Router (ARB Assist)",
+                  url: "https://arbassist.edagenaidev.awsdns.internal.das/",
+                },
                 { label: "Data Genie", url: "http://10.126.192.122:3040/" },
                 { label: "Knowledge Graph (EDA Ontology)", url: "/" },
                 { label: "Conversational Chat", url: "http://10.126.192.122:3050/" },
@@ -323,27 +354,36 @@ function DashboardContent() {
               Home
             </div>
           </BreadcrumbItem>
-          <BreadcrumbItem isCurrentPage>
-            {t("dashboard.BreadcrumbHomeText")}
-          </BreadcrumbItem>
+          <BreadcrumbItem isCurrentPage>{t("dashboard.BreadcrumbHomeText")}</BreadcrumbItem>
         </Breadcrumb>
 
         {/* 3-Column Layout for Charts */}
         <DashboardCardsWrapper>
-          <DashboardCard title="Projects" icon={<IbmCloudProjects size={20} />} subheading={`Total Projects : ${dashboardTotals.totalProjects}`}>
+          <DashboardCard
+            title="Projects"
+            icon={<IbmCloudProjects size={20} />}
+            subheading={`Total Projects : ${dashboardTotals.totalProjects}`}
+          >
             <ProgressDonut data={progressReportData} />
           </DashboardCard>
 
-          <DashboardCard title="Users" icon={<UserMultiple size={20} />} subheading={`Total Users: ${dashboardTotals.totalUsers}`}>
-            <DashboardChart
-              data={dashboardData.users}
-            />
+          <DashboardCard
+            title="Users"
+            icon={<UserMultiple size={20} />}
+            subheading={`Total Users: ${dashboardTotals.totalUsers}`}
+          >
+            <DashboardChart data={dashboardData.users} />
           </DashboardCard>
 
-          <DashboardCard title="Cortex Cost" icon={<SalesOps size={20} />} subheading={`Total Cost for the Projects : $${Math.round(dashboardTotals.totalCost).toLocaleString()}`}>            <DashboardChart
-              data={dashboardData.costs}
-              isCurrency
-            />
+          <DashboardCard
+            title="Cortex Cost"
+            icon={<SalesOps size={20} />}
+            subheading={`Total Cost for the Projects : $${Math.round(
+              dashboardTotals.totalCost,
+            ).toLocaleString()}`}
+          >
+            {" "}
+            <DashboardChart data={dashboardData.costs} isCurrency />
           </DashboardCard>
         </DashboardCardsWrapper>
 
@@ -351,7 +391,6 @@ function DashboardContent() {
         <div className="mt-6 p-6 rounded-lg">
           <h3 className="text-lg font-semibold mb-4">Projects Status</h3>
           <div className="flex flex-wrap gap-4 items-end justify-between">
-
             <div className="flex flex-wrap gap-4">
               <div className="w-[280px]">
                 <label className="block mb-1 text-sm font-medium">Manager</label>
@@ -363,7 +402,6 @@ function DashboardContent() {
                   placeholder="Search Manager Name"
                   selectionFeedback="top"
                   onChange={(event) => handleMultiSelectChange("managers", event.selectedItems)}
-
                 />
               </div>
 
@@ -377,7 +415,6 @@ function DashboardContent() {
                   placeholder="Search Platform Name"
                   selectionFeedback="top"
                   onChange={(event) => handleMultiSelectChange("platforms", event.selectedItems)}
-
                 />
               </div>
 
@@ -391,12 +428,10 @@ function DashboardContent() {
                   placeholder="Search Phase"
                   selectionFeedback="top"
                   onChange={(event) => handleMultiSelectChange("phases", event.selectedItems)}
-
                 />
               </div>
             </div>
             <div>
-
               <div className="flex items-center justify-center bg-blue-600 text-white rounded-lg px-6 py-2 gap-4">
                 <button
                   onClick={() => {
@@ -441,4 +476,3 @@ function DashboardContent() {
 }
 
 export default DashboardContent;
-

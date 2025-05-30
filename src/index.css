@@ -333,3 +333,7 @@
  .icon-space-right {
     @apply pr-2;
   }
+
+  .highchartlink{
+    color: #0f62fe;
+  }
