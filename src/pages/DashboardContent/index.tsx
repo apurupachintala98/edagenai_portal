@@ -594,81 +594,49 @@ function DashboardContent() {
     fetchDashboardUsersAndCosts();
   }, []);
 
-  // useEffect(() => {
-  //   const fetchProgressReportData = async () => {
-  //     try {
-  //       hasFetchedAllProjectDetails.current = true;
-  //       const apiData = await ApiService.getAllDetailsProjects();
-  //       console.log(apiData);
-
-  //       const coloredData = apiData.map((item: any, index: number) => ({
-  //         name: item.NAME,
-  //         value: item.VALUE,
-  //         color:
-  //           index % 3 === 0
-  //             ? 'hsl(var(--brand-blue))'
-  //             : index % 3 === 1
-  //               ? 'hsl(var(--brand-teal))'
-  //               : 'hsl(var(--muted-foreground))',
-  //       }));
-
-  //       setProgressReportData(coloredData);
-  //       const totalProjects = coloredData.reduce((acc: any, item: any) => acc + (item.value || 0), 0);
-  //       setDashboardTotals((prev) => ({
-  //         ...prev,
-  //         totalProjects,
-  //       }));
-  //       console.log(coloredData);
-  //     } catch (error) {
-  //       console.error("Failed to fetch project details:", error);
-  //     }
-  //   };
-  //   if (hasFetchedAllProjectDetails.current) {
-  //     return;
-  //   } else {
-  //     fetchProgressReportData();
-  //   }
-  // }, []);
-
-  // const handleMultiSelectChange = (field: "managers" | "platforms" | "phases", selectedItems: any[]) => {
-  //   setSelectedFilters((prev) => ({
-  //     ...prev,
-  //     [field]: selectedItems ?? [],
-  //   }));
-  // };
   useEffect(() => {
     const fetchProgressReportData = async () => {
       try {
         hasFetchedAllProjectDetails.current = true;
-
         const apiData = await ApiService.getAllDetailsProjects();
-        console.log("Raw Project Data:", apiData);
+        console.log(apiData);
 
-        // Call the new helper from the hook
-        loadAndFilterProjectData(apiData, selectedFilters);
+        const coloredData = apiData.map((item: any, index: number) => ({
+          name: item.NAME,
+          value: item.VALUE,
+          color:
+            index % 3 === 0
+              ? 'hsl(var(--brand-blue))'
+              : index % 3 === 1
+                ? 'hsl(var(--brand-teal))'
+                : 'hsl(var(--muted-foreground))',
+        }));
 
+        setProgressReportData(coloredData);
+        const totalProjects = coloredData.reduce((acc: any, item: any) => acc + (item.value || 0), 0);
+        setDashboardTotals((prev) => ({
+          ...prev,
+          totalProjects,
+        }));
+        console.log(coloredData);
       } catch (error) {
         console.error("Failed to fetch project details:", error);
       }
     };
-
-    if (!hasFetchedAllProjectDetails.current) {
+    if (hasFetchedAllProjectDetails.current) {
+      return;
+    } else {
       fetchProgressReportData();
     }
   }, []);
 
-
   const handleMultiSelectChange = (field: "managers" | "platforms" | "phases", selectedItems: any[]) => {
-    const updatedFilters = {
-      ...selectedFilters,
+    setSelectedFilters((prev) => ({
+      ...prev,
       [field]: selectedItems ?? [],
-    };
-    setSelectedFilters(updatedFilters);
-    filterAndSetProgressData(rawProjectData, updatedFilters);
+    }));
   };
-
-
-
+ 
   useEffect(() => {
     if (projects.length > 0) {
       const uniqueManagers = Array.from(new Set(projects.map((item) => item.STAFF_VP))).filter(Boolean);
@@ -772,8 +740,8 @@ function DashboardContent() {
 
         {/* 3-Column Layout for Charts */}
         <DashboardCardsWrapper>
-          <DashboardCard title="Projects" subheading={`Total Projects : ${totalProjects}`}>
-            <ProgressDonut data={progressData} />
+          <DashboardCard title="Projects" subheading={`Total Projects : ${dashboardTotals.totalProjects}`}>
+            <ProgressDonut data={progressReportData} />
           </DashboardCard>
 
           <DashboardCard title="Users" subheading={`Total Users: ${dashboardTotals.totalUsers}`}>
