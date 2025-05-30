@@ -44,7 +44,7 @@ function DashboardContent() {
     totalUsers: 0,
     totalCost: 0,
   });
-const [filteredProjectDonut, setFilteredProjectDonut] = useState<any[] | null>(null);
+  const [filteredProjectDonut, setFilteredProjectDonut] = useState<any[] | null>(null);
   const [dropdownOptions, setDropdownOptions] = useState({
     managers: [] as any[],
     platforms: [] as any[],
@@ -167,17 +167,17 @@ const [filteredProjectDonut, setFilteredProjectDonut] = useState<any[] | null>(n
   // }, [selectedFilters.managers]);
 
   useEffect(() => {
-  const isAnyFilterApplied = () =>
-    selectedFilters.managers.length > 0 ||
-    selectedFilters.platforms.length > 0 ||
-    selectedFilters.phases.length > 0;
+    const isAnyFilterApplied = () =>
+      selectedFilters.managers.length > 0 ||
+      selectedFilters.platforms.length > 0 ||
+      selectedFilters.phases.length > 0;
 
-  if (isAnyFilterApplied()) {
-    fetchFilteredProjectsByManager();
-  } else {
-    setFilteredProjectDonut(null);
-  }
-}, [selectedFilters.managers, selectedFilters.platforms, selectedFilters.phases]);
+    if (isAnyFilterApplied()) {
+      fetchFilteredProjectsByManager();
+    } else {
+      setFilteredProjectDonut(null);
+    }
+  }, [selectedFilters.managers, selectedFilters.platforms, selectedFilters.phases]);
 
   const fetchFilteredProjectsByManager = async () => {
     try {
@@ -210,23 +210,26 @@ const [filteredProjectDonut, setFilteredProjectDonut] = useState<any[] | null>(n
         }
       });
 
-      const filteredProjectDonut = [
+      const donutData = [
         {
-          NAME: "Prod",
-          VALUE: prodCount,
+          name: "Prod",
+          value: prodCount,
+          color: 'hsl(var(--brand-blue))',
         },
         {
-          NAME: "Pre-Prod",
-          VALUE: preProdCount,
+          name: "Pre-Prod",
+          value: preProdCount,
+          color: 'hsl(var(--brand-teal))',
         },
         {
-          NAME: "Non-Prod",
-          VALUE: nonProdCount,
+          name: "Non-Prod",
+          value: nonProdCount,
+          color: 'hsl(var(--muted-foreground))',
         },
       ];
 
-      console.log("Donut Data:", filteredProjectDonut);
 
+      setFilteredProjectDonut(donutData);
     } catch (error) {
       console.error("Failed to fetch or filter project data:", error);
     }
@@ -353,9 +356,9 @@ const [filteredProjectDonut, setFilteredProjectDonut] = useState<any[] | null>(n
           </DashboardCard>
 
           <DashboardCard title="Cortex Cost" icon={<SalesOps size={20} />} subheading={`Total Cost for the Projects : $${Math.round(dashboardTotals.totalCost).toLocaleString()}`}>            <DashboardChart
-              data={dashboardData.costs}
-              isCurrency
-            />
+            data={dashboardData.costs}
+            isCurrency
+          />
           </DashboardCard>
         </DashboardCardsWrapper>
 
