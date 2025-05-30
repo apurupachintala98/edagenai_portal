@@ -4,7 +4,6 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
-import { useFilteredProgressData } from "../../hooks/useFilteredProgressData";
 import ProgressDonut from "../../components/ProgressDonut/ProgressDonut";
 import ProjectTimeline from "../../components/ProjectTimeline";
 import {
@@ -45,13 +44,7 @@ function DashboardContent() {
     totalUsers: 0,
     totalCost: 0,
   });
-  const {
-    progressData,
-    totalProjects,
-    rawProjectData,
-    filterAndSetProgressData,
-    loadAndFilterProjectData,
-  } = useFilteredProgressData();
+
 
   const [dropdownOptions, setDropdownOptions] = useState({
     managers: [] as any[],
@@ -169,66 +162,70 @@ function DashboardContent() {
   }, []);
 
   useEffect(() => {
-  if (selectedFilters.managers.length > 0) {
-    fetchFilteredProjectsByManager();
-  }
-}, [selectedFilters.managers]);
-
-const fetchFilteredProjectsByManager = async () => {
-  try {
-    const selectedManagers = selectedFilters.managers.map((m) => m.label);
-
-    if (selectedManagers.length === 0) {
-      console.warn("No manager selected for filtering.");
-      return;
+    if (selectedFilters.managers.length > 0) {
+      fetchFilteredProjectsByManager();
     }
+  }, [selectedFilters.managers]);
 
-    const filteredProjects = projects.filter((project: any) =>
-      selectedManagers.includes(project.STAFF_VP)
-    );
+  const fetchFilteredProjectsByManager = async () => {
+    try {
+      const selectedManagers = selectedFilters.managers.map((m) => m.label);
 
-    console.log("Filtered Projects by Manager:", filteredProjects);
-
-    // Count environments
-    let preProdCount = 0;
-    let prodCount = 0;
-    let nonProdCount = 0;
-
-    filteredProjects.forEach((project: any) => {
-      const env = project.DERIVED_ENV?.toLowerCase();
-      if (env === "pre-prod" || env === "preprod") {
-        preProdCount++;
-      } else if (env === "prod") {
-        prodCount++;
-      } else {
-        nonProdCount++;
+      if (selectedManagers.length === 0) {
+        console.warn("No manager selected for filtering.");
+        return;
       }
-    });
 
-    console.log("Pre-Prod Count:", preProdCount);
-    console.log("Prod Count:", prodCount);
-    console.log("Non-Prod Count:", nonProdCount);
-    console.log("Total Filtered Projects:", filteredProjects.length);
+      const filteredProjects = projects.filter((project: any) =>
+        selectedManagers.includes(project.STAFF_VP)
+      );
 
-  } catch (error) {
-    console.error("Failed to fetch or filter project data:", error);
-  }
-};
+      console.log("Filtered Projects by Manager:", filteredProjects);
 
+      // Count environments
+      let preProdCount = 0;
+      let prodCount = 0;
+      let nonProdCount = 0;
 
+      filteredProjects.forEach((project: any) => {
+        const env = project.DERIVED_ENV?.toLowerCase();
+        if (env === "pre-prod" || env === "preprod") {
+          preProdCount++;
+        } else if (env === "prod") {
+          prodCount++;
+        } else {
+          nonProdCount++;
+        }
+      });
 
-  // const handleMultiSelectChange = (field: "managers" | "platforms" | "phases", selectedItems: any[]) => {
-  //   setSelectedFilters((prev) => ({
-  //     ...prev,
-  //     [field]: selectedItems ?? [],
-  //   }));
-  // };
- const handleMultiSelectChange = (field: "managers" | "platforms" | "phases", selectedItems: any[]) => {
- setSelectedFilters((prev) => ({
-    ...prev,
-    [field]: selectedItems ?? [],
-  }));
-};
+      const filteredProjectDonut = [
+        {
+          NAME: "Prod",
+          VALUE: prodCount,
+        },
+        {
+          NAME: "Pre-Prod",
+          VALUE: preProdCount,
+        },
+        {
+          NAME: "Non-Prod",
+          VALUE: nonProdCount,
+        },
+      ];
+
+      console.log("Donut Data:", filteredProjectDonut);
+
+    } catch (error) {
+      console.error("Failed to fetch or filter project data:", error);
+    }
+  };
+
+  const handleMultiSelectChange = (field: "managers" | "platforms" | "phases", selectedItems: any[]) => {
+    setSelectedFilters((prev) => ({
+      ...prev,
+      [field]: selectedItems ?? [],
+    }));
+  };
 
   useEffect(() => {
     if (projects.length > 0) {
@@ -439,8 +436,6 @@ const fetchFilteredProjectsByManager = async () => {
           isChangedSelectedYears={isChangedSelectedYears}
         />
       </PageContainer>
-
-
     </MainContainer>
   );
 }
