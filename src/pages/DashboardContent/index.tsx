@@ -44,8 +44,7 @@ function DashboardContent() {
     totalUsers: 0,
     totalCost: 0,
   });
-
-
+const [filteredProjectDonut, setFilteredProjectDonut] = useState<any[] | null>(null);
   const [dropdownOptions, setDropdownOptions] = useState({
     managers: [] as any[],
     platforms: [] as any[],
@@ -161,11 +160,24 @@ function DashboardContent() {
     }
   }, []);
 
+  // useEffect(() => {
+  //   if (selectedFilters.managers.length > 0) {
+  //     fetchFilteredProjectsByManager();
+  //   }
+  // }, [selectedFilters.managers]);
+
   useEffect(() => {
-    if (selectedFilters.managers.length > 0) {
-      fetchFilteredProjectsByManager();
-    }
-  }, [selectedFilters.managers]);
+  const isAnyFilterApplied = () =>
+    selectedFilters.managers.length > 0 ||
+    selectedFilters.platforms.length > 0 ||
+    selectedFilters.phases.length > 0;
+
+  if (isAnyFilterApplied()) {
+    fetchFilteredProjectsByManager();
+  } else {
+    setFilteredProjectDonut(null);
+  }
+}, [selectedFilters.managers, selectedFilters.platforms, selectedFilters.phases]);
 
   const fetchFilteredProjectsByManager = async () => {
     try {
@@ -331,7 +343,7 @@ function DashboardContent() {
         {/* 3-Column Layout for Charts */}
         <DashboardCardsWrapper>
           <DashboardCard title="Projects" icon={<IbmCloudProjects size={20} />} subheading={`Total Projects : ${dashboardTotals.totalProjects}`}>
-            <ProgressDonut data={progressReportData} />
+            <ProgressDonut data={filteredProjectDonut ?? progressReportData} />
           </DashboardCard>
 
           <DashboardCard title="Users" icon={<UserMultiple size={20} />} subheading={`Total Users: ${dashboardTotals.totalUsers}`}>
