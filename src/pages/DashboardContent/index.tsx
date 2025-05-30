@@ -176,8 +176,12 @@ function DashboardContent() {
       fetchFilteredProjectsByManager();
     } else {
       setFilteredProjectDonut(null);
+      setDashboardTotals((prev) => ({
+      ...prev,
+      totalProjects: progressReportData.reduce((acc, item) => acc + (item.value || 0), 0),
+    }));
     }
-  }, [selectedFilters.managers, selectedFilters.platforms, selectedFilters.phases]);
+  }, [selectedFilters.managers, selectedFilters.platforms, selectedFilters.phases, progressReportData]);
 
   const fetchFilteredProjectsByManager = async () => {
     try {
@@ -227,9 +231,11 @@ function DashboardContent() {
           color: 'hsl(var(--muted-foreground))',
         },
       ];
-
-
       setFilteredProjectDonut(donutData);
+      setDashboardTotals((prev) => ({
+      ...prev,
+      totalProjects: filteredProjects.length,
+    }));
     } catch (error) {
       console.error("Failed to fetch or filter project data:", error);
     }
