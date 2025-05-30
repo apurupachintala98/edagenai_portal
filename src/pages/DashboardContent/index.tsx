@@ -170,7 +170,6 @@ function DashboardContent() {
 
   const fetchFilteredProjectsByManager = async () => {
   try {
-    const allProjects = await ApiService.getAllProjectDetails();
     const selectedManagers = selectedFilters.managers.map((m) => m.label);
 
     if (selectedManagers.length === 0) {
@@ -178,7 +177,7 @@ function DashboardContent() {
       return;
     }
 
-    const filteredProjects = allProjects.filter((project: any) =>
+    const filteredProjects = projects.filter((project: any) =>
       selectedManagers.includes(project.STAFF_VP)
     );
 
