@@ -160,12 +160,6 @@ function DashboardContent() {
     }
   }, []);
 
-  // useEffect(() => {
-  //   if (selectedFilters.managers.length > 0) {
-  //     fetchFilteredProjectsByManager();
-  //   }
-  // }, [selectedFilters.managers]);
-
   useEffect(() => {
     const isAnyFilterApplied = () =>
       selectedFilters.managers.length > 0 ||
@@ -173,28 +167,41 @@ function DashboardContent() {
       selectedFilters.phases.length > 0;
 
     if (isAnyFilterApplied()) {
-      fetchFilteredProjectsByManager();
+      fetchFilteredProjectsForCharts();
     } else {
       setFilteredProjectDonut(null);
       setDashboardTotals((prev) => ({
-      ...prev,
-      totalProjects: progressReportData.reduce((acc, item) => acc + (item.value || 0), 0),
-    }));
+        ...prev,
+        totalProjects: progressReportData.reduce((acc, item) => acc + (item.value || 0), 0),
+      }));
     }
   }, [selectedFilters.managers, selectedFilters.platforms, selectedFilters.phases, progressReportData]);
 
-  const fetchFilteredProjectsByManager = async () => {
+  const fetchFilteredProjectsForCharts = async () => {
     try {
       const selectedManagers = selectedFilters.managers.map((m) => m.label);
+      const selectedPlatforms = selectedFilters.platforms.map((p) => p.label);
+      const selectedPhases = selectedFilters.phases.map((p) => p.label);
 
       if (selectedManagers.length === 0) {
         console.warn("No manager selected for filtering.");
         return;
       }
 
-      const filteredProjects = projects.filter((project: any) =>
-        selectedManagers.includes(project.STAFF_VP)
-      );
+      // const filteredProjects = projects.filter((project: any) =>
+      //   selectedManagers.includes(project.STAFF_VP)
+      // );
+
+      const filteredProjects = projects.filter((project: any) => {
+        const matchesManager =
+          selectedManagers.length === 0 || selectedManagers.includes(project.STAFF_VP);
+        const matchesPlatform =
+          selectedPlatforms.length === 0 || selectedPlatforms.includes(project.LLM_PLATFORM);
+        const matchesPhase =
+          selectedPhases.length === 0 || selectedPhases.includes(project.CURRENT_PHASE);
+
+        return matchesManager && matchesPlatform && matchesPhase;
+      });
 
       console.log("Filtered Projects by Manager:", filteredProjects);
 
@@ -233,9 +240,9 @@ function DashboardContent() {
       ];
       setFilteredProjectDonut(donutData);
       setDashboardTotals((prev) => ({
-      ...prev,
-      totalProjects: filteredProjects.length,
-    }));
+        ...prev,
+        totalProjects: filteredProjects.length,
+      }));
     } catch (error) {
       console.error("Failed to fetch or filter project data:", error);
     }
