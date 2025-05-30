@@ -168,7 +168,7 @@ function DashboardContent() {
     }
   }, []);
 
-  const fetchFilteredProjectsByManager = async () => {
+const fetchFilteredProjectsByManager = async () => {
   try {
     const selectedManagers = selectedFilters.managers.map((m) => m.label);
 
@@ -183,27 +183,32 @@ function DashboardContent() {
 
     console.log("Filtered Projects by Manager:", filteredProjects);
 
-    // // Example: you can now update a state or pass this to another component
-    // setProgressReportData(filteredProjects.map((item: any, index: number) => ({
-    //   name: item.NAME,
-    //   value: item.VALUE,
-    //   color:
-    //     index % 3 === 0
-    //       ? 'hsl(var(--brand-blue))'
-    //       : index % 3 === 1
-    //         ? 'hsl(var(--brand-teal))'
-    //         : 'hsl(var(--muted-foreground))',
-    // })));
+    // Count environments
+    let preProdCount = 0;
+    let prodCount = 0;
+    let nonProdCount = 0;
 
-    // setDashboardTotals((prev) => ({
-    //   ...prev,
-    //   totalProjects: filteredProjects.length,
-    // }));
+    filteredProjects.forEach((project: any) => {
+      const env = project.DERIVED_ENV?.toLowerCase();
+      if (env === "pre-prod" || env === "preprod") {
+        preProdCount++;
+      } else if (env === "prod") {
+        prodCount++;
+      } else {
+        nonProdCount++;
+      }
+    });
+
+    console.log("Pre-Prod Count:", preProdCount);
+    console.log("Prod Count:", prodCount);
+    console.log("Non-Prod Count:", nonProdCount);
+    console.log("Total Filtered Projects:", filteredProjects.length);
 
   } catch (error) {
     console.error("Failed to fetch or filter project data:", error);
   }
 };
+
 
 
   // const handleMultiSelectChange = (field: "managers" | "platforms" | "phases", selectedItems: any[]) => {
