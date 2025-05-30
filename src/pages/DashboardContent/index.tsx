@@ -170,7 +170,7 @@ function DashboardContent() {
 
   const fetchFilteredProjectsByManager = async () => {
   try {
-    const allProjects = await ApiService.getAllDetailsProjects();
+    const allProjects = await ApiService.getAllProjectDetails();
     const selectedManagers = selectedFilters.managers.map((m) => m.label);
 
     if (selectedManagers.length === 0) {
