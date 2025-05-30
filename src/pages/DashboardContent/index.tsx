@@ -461,7 +461,7 @@
 // export default DashboardContent;
 
 import { Breadcrumb, BreadcrumbItem, Button, Dropdown, FilterableMultiSelect, OverflowMenu, OverflowMenuItem } from "@carbon/react";
-import { Dashboard, DocumentAdd } from "@carbon/react/icons";
+import { Dashboard, DocumentAdd, IbmCloudProjects, UserMultiple, SalesOps, /*CurrencyDollar*/ } from "@carbon/react/icons";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -734,17 +734,17 @@ useEffect(() => {
 
         {/* 3-Column Layout for Charts */}
         <DashboardCardsWrapper>
-          <DashboardCard title="Projects" subheading={`Total Projects : ${dashboardTotals.totalProjects}`}>
+          <DashboardCard title="Projects" icon={<IbmCloudProjects size={20} />} subheading={`Total Projects : ${dashboardTotals.totalProjects}`}>
             <ProgressDonut data={progressReportData} />
           </DashboardCard>
 
-          <DashboardCard title="Users" subheading={`Total Users: ${dashboardTotals.totalUsers}`}>
+          <DashboardCard title="Users" icon={<UserMultiple size={20} />} subheading={`Total Users: ${dashboardTotals.totalUsers}`}>
             <DashboardChart
               data={dashboardData.users}
             />
           </DashboardCard>
 
-          <DashboardCard title="Cortex Cost" subheading={`Total Cost for the Projects : $${Math.round(dashboardTotals.totalCost).toLocaleString()}`}>            <DashboardChart
+          <DashboardCard title="Cortex Cost" icon={<SalesOps size={20} />} subheading={`Total Cost for the Projects : $${Math.round(dashboardTotals.totalCost).toLocaleString()}`}>            <DashboardChart
               data={dashboardData.costs}
               isCurrency
             />

@@ -257,7 +257,7 @@
   }
 
   .dashboard-card-title {
-    @apply text-sm font-medium;
+    @apply flex text-sm font-medium;
   }
 
   .dashboard-card-content {
@@ -329,3 +329,7 @@
   transform: translateY(8px);
   transition: opacity 300ms, transform 300ms;
 }
+
+ .icon-space-right {
+    @apply pr-2;
+  }
