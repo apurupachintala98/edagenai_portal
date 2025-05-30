@@ -53,7 +53,7 @@ function DashboardContent() {
     totalUsers: 0,
     totalCost: 0,
   });
-
+  const [filteredProjectDonut, setFilteredProjectDonut] = useState<any[] | null>(null);
   const [dropdownOptions, setDropdownOptions] = useState({
     managers: [] as any[],
     platforms: [] as any[],
@@ -173,14 +173,27 @@ function DashboardContent() {
   }, []);
 
   useEffect(() => {
-    if (selectedFilters.managers.length > 0) {
-      fetchFilteredProjectsByManager();
-    }
-  }, [selectedFilters.managers]);
+    const isAnyFilterApplied = () =>
+      selectedFilters.managers.length > 0 ||
+      selectedFilters.platforms.length > 0 ||
+      selectedFilters.phases.length > 0;
 
-  const fetchFilteredProjectsByManager = async () => {
+    if (isAnyFilterApplied()) {
+      fetchFilteredProjectsForCharts();
+    } else {
+      setFilteredProjectDonut(null);
+      setDashboardTotals((prev) => ({
+        ...prev,
+        totalProjects: progressReportData.reduce((acc, item) => acc + (item.value || 0), 0),
+      }));
+    }
+  }, [selectedFilters.managers, selectedFilters.platforms, selectedFilters.phases, progressReportData]);
+
+  const fetchFilteredProjectsForCharts = async () => {
     try {
       const selectedManagers = selectedFilters.managers.map((m) => m.label);
+      // const selectedPlatforms = selectedFilters.platforms.map((p) => p.label);
+      // const selectedPhases = selectedFilters.phases.map((p) => p.label);
 
       if (selectedManagers.length === 0) {
         console.warn("No manager selected for filtering.");
@@ -190,6 +203,17 @@ function DashboardContent() {
       const filteredProjects = projects.filter((project: any) =>
         selectedManagers.includes(project.STAFF_VP),
       );
+
+      // const filteredProjects = projects.filter((project: any) => {
+      //   const matchesManager =
+      //     selectedManagers.length === 0 || selectedManagers.includes(project.STAFF_VP);
+      //   const matchesPlatform =
+      //     selectedPlatforms.length === 0 || selectedPlatforms.includes(project.LLM_PLATFORM);
+      //   const matchesPhase =
+      //     selectedPhases.length === 0 || selectedPhases.includes(project.CURRENT_PHASE);
+
+      //   return matchesManager && matchesPlatform && matchesPhase;
+      // });
 
       console.log("Filtered Projects by Manager:", filteredProjects);
 
@@ -209,22 +233,28 @@ function DashboardContent() {
         }
       });
 
-      const filteredProjectDonut = [
+      const donutData = [
         {
-          NAME: "Prod",
-          VALUE: prodCount,
+          name: "Prod",
+          value: prodCount,
+          color: 'hsl(var(--brand-blue))',
         },
         {
-          NAME: "Pre-Prod",
-          VALUE: preProdCount,
+          name: "Pre-Prod",
+          value: preProdCount,
+          color: 'hsl(var(--brand-teal))',
         },
         {
-          NAME: "Non-Prod",
-          VALUE: nonProdCount,
+          name: "Non-Prod",
+          value: nonProdCount,
+          color: 'hsl(var(--muted-foreground))',
         },
       ];
-
-      console.log("Donut Data:", filteredProjectDonut);
+      setFilteredProjectDonut(donutData);
+      setDashboardTotals((prev) => ({
+        ...prev,
+        totalProjects: filteredProjects.length,
+      }));
     } catch (error) {
       console.error("Failed to fetch or filter project data:", error);
     }
@@ -359,12 +389,8 @@ function DashboardContent() {
 
         {/* 3-Column Layout for Charts */}
         <DashboardCardsWrapper>
-          <DashboardCard
-            title="Projects"
-            icon={<IbmCloudProjects size={20} />}
-            subheading={`Total Projects : ${dashboardTotals.totalProjects}`}
-          >
-            <ProgressDonut data={progressReportData} />
+          <DashboardCard title="Projects" icon={<IbmCloudProjects size={20} />} subheading={`Total Projects : ${dashboardTotals.totalProjects}`}>
+            <ProgressDonut data={filteredProjectDonut ?? progressReportData} />
           </DashboardCard>
 
           <DashboardCard
@@ -375,15 +401,10 @@ function DashboardContent() {
             <DashboardChart data={dashboardData.users} />
           </DashboardCard>
 
-          <DashboardCard
-            title="Cortex Cost"
-            icon={<SalesOps size={20} />}
-            subheading={`Total Cost for the Projects : $${Math.round(
-              dashboardTotals.totalCost,
-            ).toLocaleString()}`}
-          >
-            {" "}
-            <DashboardChart data={dashboardData.costs} isCurrency />
+          <DashboardCard title="Cortex Cost" icon={<SalesOps size={20} />} subheading={`Total Cost for the Projects : $${Math.round(dashboardTotals.totalCost).toLocaleString()}`}>            <DashboardChart
+            data={dashboardData.costs}
+            isCurrency
+          />
           </DashboardCard>
         </DashboardCardsWrapper>
 
