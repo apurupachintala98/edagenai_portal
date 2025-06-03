@@ -46,37 +46,8 @@ export function useProjectDetailsData() {
     setProjectDetailLoading(true);
     try {
       hasFetchedProjectDetails.current = true;
-      // const data = await ApiService.getAllProjectDetails();
-      const data = [
-        {
-          PROGRAM_NAME: "Smart Help",
-          PROJECT_NAME: "CII Smart Help 1",
-          BU: "EDA",
-          OWNER_VP: "Anil",
-          MANAGER_DIRECTOR: "Krishnan",
-          LEAD_ARCHITECT: "Ian",
-          PLATFORM_NAME: "Cortex",
-          MODEL: "Llama 3.3 70b",
-          SERVICES: "Cortex Search",
-          FUNCTIONALITY: "Assist in CII Measures",
-          DATA: "Member, Claim, Employer",
-          CAPABILITY: "RAG",
-          BUSINESS_VALUE_ADD: "CII Users can get help with Chatbot on CII Metrics",
-          STATUS: "Production ",
-          ETA: "Q1 2024",
-          ARCHITECTURE: "TRUE",
-          PLATFORM: "TRUE",
-          FRAMEWORK: "TRUE",
-          UI: "FALSE",
-          DEVOPS: "TRUE",
-          MCP: "FALSE",
-          USAGE_METRICS: "Released to core team ",
-          EFFORT_SAVED: "20%",
-          SAVED: "",
-        },
-      ];
-      console.log("Fetched Projects:", data); // ← Add this for debugging
-      setProjectDetails(data); // Ensure this is an array of `project`
+      const data = await ApiService.getAllProjectData();
+      setProjectDetails(data); 
     } catch (error) {
       console.error("Failed to fetch projects:", error);
     } finally {
