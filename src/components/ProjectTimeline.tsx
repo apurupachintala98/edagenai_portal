@@ -226,40 +226,20 @@ const ProjectTimeline = ({
           ],
         },
       },
-      // xAxis: {
-      //   min: Date.UTC(selectedYear, 0, 1),
-      //   max: Date.UTC(selectedYear, 11, 31),
-      //   tickInterval: 30 * 24 * 3600 * 1000,
-      //   labels: {
-      //     format: "{value:%b}",
-      //     style: {
-      //       fontWeight: "bold",
-      //       fontSize: "0.8em",
-      //     },
-      //   },
-      //   lineColor: "#bbb",
-      //   lineWidth: 1,
-      //   plotBackgroundColor: "#f5f5f5",
-      // },
       xAxis: {
         min: Date.UTC(selectedYear, 0, 1),
         max: Date.UTC(selectedYear, 11, 31),
-        tickInterval: 30 * 24 * 3600 * 1000, // 30 days in ms
-        type: "datetime",
+        tickInterval: 30 * 24 * 3600 * 1000,
         labels: {
-          format: "{value:%b}", // shows Jan, Feb, etc.
-          rotation: 0,
+          format: "{value:%b}",
           style: {
             fontWeight: "bold",
-            fontSize: "12px",
+            fontSize: "0.8em",
           },
         },
-        tickmarkPlacement: "on",
-        gridLineWidth: 1,
-        gridLineColor: "#e0e0e0",
         lineColor: "#bbb",
         lineWidth: 1,
-        plotBands: [],
+        plotBackgroundColor: "#f5f5f5",
       },
       tooltip: {
         useHTML: true,
