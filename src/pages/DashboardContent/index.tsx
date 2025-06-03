@@ -544,6 +544,7 @@ function DashboardContent() {
         open={isModalOpen && modalReady}
         modalHeading={`${modalProjectName} Details`}
         onRequestClose={() => setIsModalOpen(false)}
+        passiveModal
         size="lg"
       >
         <ProjectModel projectDetails={projectDetails} />
