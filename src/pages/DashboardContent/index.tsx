@@ -156,8 +156,8 @@ function DashboardContent() {
             index % 3 === 0
               ? "hsl(var(--brand-blue))"
               : index % 3 === 1
-              ? "hsl(var(--brand-teal))"
-              : "hsl(var(--muted-foreground))",
+                ? "hsl(var(--brand-teal))"
+                : "hsl(var(--muted-foreground))",
         }));
 
         setProgressReportData(coloredData);
@@ -543,13 +543,12 @@ function DashboardContent() {
       <Modal
         open={isModalOpen && modalReady}
         modalHeading={`${modalProjectName} Details`}
-        primaryButtonText="OK"
         onRequestClose={() => setIsModalOpen(false)}
-        onRequestSubmit={() => setIsModalOpen(false)}
         size="lg"
       >
         <ProjectModel projectDetails={projectDetails} />
       </Modal>
+
     </MainContainer>
   );
 }

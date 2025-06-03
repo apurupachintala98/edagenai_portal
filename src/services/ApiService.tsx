@@ -56,6 +56,12 @@ const ApiService = {
     return response.status === 200 ? response.data : [];
   },
 
+  getAllProjectData: async () => {
+  const response = await axios.get(`${Dashboard_BASE_URL}/get_full_project_details/`);
+  console.log(response.data);
+  return response.status === 200 ? response.data : [];
+},
+
   getAllDetailsGanttChart: async () => {
     const response = await axios.get(`${Dashboard_BASE_URL}/get_all_details_gantt_chart/`);
     return response.status === 200 ? response.data : [];
