@@ -4,20 +4,24 @@ import ApiService from "../services/ApiService";
 
 export interface projectDetails {
   PROGRAM_NAME: string;
+  PROGRAM_TYPE: string;
   PROJECT_NAME: string;
+  PROJECT_DESCRIPTION: string;
   BU: string;
-  OWNER_VP: string;
-  MANAGER_DIRECTOR: string;
-  LEAD_ARCHITECT: string;
-  PLATFORM_NAME: string;
-  MODEL: string;
-  SERVICES: string;
+  OWNER_VP: string;          
+  MANAGER_DIRECTOR: string;  
+  LEAD_ARCHITECT: string;    
+  LEAD_NM?: string;          
+  TGOV_NO: string;
+  PLATFORM_NAME: string;     
+  MODEL: string;             
+  SERVICES: string;          
   FUNCTIONALITY: string;
   DATA: string;
   CAPABILITY: string;
   BUSINESS_VALUE_ADD: string;
   STATUS: string;
-  ETA: string;
+  ETA: string;               
   ARCHITECTURE: string;
   PLATFORM: string;
   FRAMEWORK: string;
@@ -26,8 +30,16 @@ export interface projectDetails {
   MCP: string;
   USAGE_METRICS: string;
   EFFORT_SAVED: string;
-  SAVED: string;  
+  SAVED: string;             
+  BUSINESS_USER: string;
+  START_DATE: string;
+  DEPLOYMENT_DATE: string;
+  CURRENT_PHASE: string;
+  LINK_TO_SLIDE: string;
+  NOTES: string;
+  COST_SAVED: string;
 }
+
 
 export function useProjectDetailsData() {
   const [projectDetails, setProjectDetails] = useState<projectDetails[]>([]);
