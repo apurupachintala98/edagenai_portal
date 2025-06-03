@@ -17,7 +17,7 @@ const checkmarkFields = [
 
 function ProjectModel({ projectDetails }: ProjectModelProps) {
   if (!projectDetails || !projectDetails[0]) return null;
-
+  console.log("projectDetails", projectDetails);
   const detail = projectDetails[0];
 
   return (
