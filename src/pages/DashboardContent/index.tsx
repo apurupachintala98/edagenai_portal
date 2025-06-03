@@ -2,8 +2,11 @@ import {
   Breadcrumb,
   BreadcrumbItem,
   Button,
+  Column,
   Dropdown,
   FilterableMultiSelect,
+  Grid,
+  Modal,
   OverflowMenu,
   OverflowMenuItem,
 } from "@carbon/react";
@@ -14,7 +17,7 @@ import {
   UserMultiple,
   SalesOps /*CurrencyDollar*/,
 } from "@carbon/react/icons";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, DollarSign } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
@@ -33,6 +36,8 @@ import { useProjectData } from "../../hooks/useProjectData";
 
 import DashboardCard from "pages/DashboardCard";
 import { Label } from "recharts";
+import { type projectDetails, useProjectDetailsData } from "../../hooks/useProjectDetailsData";
+import ProjectModel from "./ProjectModel";
 
 function DashboardContent() {
   const { t } = useTranslation();
@@ -64,6 +69,10 @@ function DashboardContent() {
   const [availableYears, setAvailableYears] = useState<number[]>([]);
   const [selectedYear, setSelectedYear] = useState<number>(new Date().getFullYear());
   const [isChangedSelectedYears, setIsChangedSelectedYears] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalReady, setModalReady] = useState(false);
+  const [modalProjectName, setModalProjectName] = useState("");
+  const { projectDetailLoading, projectDetails, fetchProjectDetails } = useProjectDetailsData();
 
   const inputRef = useRef<HTMLInputElement>(null);
   const handleOpen = () => {
@@ -187,7 +196,12 @@ function DashboardContent() {
         totalProjects: progressReportData.reduce((acc, item) => acc + (item.value || 0), 0),
       }));
     }
-  }, [selectedFilters.managers, selectedFilters.platforms, selectedFilters.phases, progressReportData]);
+  }, [
+    selectedFilters.managers,
+    selectedFilters.platforms,
+    selectedFilters.phases,
+    progressReportData,
+  ]);
 
   const fetchFilteredProjectsForCharts = async () => {
     try {
@@ -237,17 +251,17 @@ function DashboardContent() {
         {
           name: "Prod",
           value: prodCount,
-          color: 'hsl(var(--brand-blue))',
+          color: "hsl(var(--brand-blue))",
         },
         {
           name: "Pre-Prod",
           value: preProdCount,
-          color: 'hsl(var(--brand-teal))',
+          color: "hsl(var(--brand-teal))",
         },
         {
           name: "Non-Prod",
           value: nonProdCount,
-          color: 'hsl(var(--muted-foreground))',
+          color: "hsl(var(--muted-foreground))",
         },
       ];
       setFilteredProjectDonut(donutData);
@@ -334,6 +348,30 @@ function DashboardContent() {
     }
   }, []);
 
+  useEffect(() => {
+    const handleClick = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (target.classList.contains("project-link")) {
+        const projectName = target.id;
+        setModalProjectName(projectName);
+        if (projectName) {
+          setModalReady(true);
+          setIsModalOpen(true);
+
+          //          handleProjectDetails(projectName);
+
+          // Perform navigation or logic here
+          // navigate(`/dashboard?projectId=${projectID}`);
+        }
+      }
+    };
+
+    document.addEventListener("click", handleClick);
+    return () => document.removeEventListener("click", handleClick);
+  }, []);
+
+  console.log("projectDetails::", projectDetails[0]);
+
   return (
     <MainContainer>
       <PageContainer>
@@ -389,7 +427,11 @@ function DashboardContent() {
 
         {/* 3-Column Layout for Charts */}
         <DashboardCardsWrapper>
-          <DashboardCard title="Projects" icon={<IbmCloudProjects size={20} />} subheading={`Total Projects : ${dashboardTotals.totalProjects}`}>
+          <DashboardCard
+            title="Projects"
+            icon={<IbmCloudProjects size={20} />}
+            subheading={`Total Projects : ${dashboardTotals.totalProjects}`}
+          >
             <ProgressDonut data={filteredProjectDonut ?? progressReportData} />
           </DashboardCard>
 
@@ -401,10 +443,15 @@ function DashboardContent() {
             <DashboardChart data={dashboardData.users} />
           </DashboardCard>
 
-          <DashboardCard title="Cortex Cost" icon={<SalesOps size={20} />} subheading={`Total Cost for the Projects : $${Math.round(dashboardTotals.totalCost).toLocaleString()}`}>            <DashboardChart
-            data={dashboardData.costs}
-            isCurrency
-          />
+          <DashboardCard
+            title="Cortex Cost"
+            icon={<DollarSign size={20} />}
+            subheading={`Total Cost for the Projects : $${Math.round(
+              dashboardTotals.totalCost,
+            ).toLocaleString()}`}
+          >
+            {" "}
+            <DashboardChart data={dashboardData.costs} isCurrency />
           </DashboardCard>
         </DashboardCardsWrapper>
 
@@ -492,6 +539,17 @@ function DashboardContent() {
           isChangedSelectedYears={isChangedSelectedYears}
         />
       </PageContainer>
+
+      <Modal
+        open={isModalOpen && modalReady}
+        modalHeading={`${modalProjectName} Details`}
+        primaryButtonText="OK"
+        onRequestClose={() => setIsModalOpen(false)}
+        onRequestSubmit={() => setIsModalOpen(false)}
+        size="lg"
+      >
+        <ProjectModel projectDetails={projectDetails} />
+      </Modal>
     </MainContainer>
   );
 }

@@ -337,3 +337,14 @@
   .highchartlink{
     color: #0f62fe;
   }
+  .mp-0{
+    margin: 0 !important;
+    padding: 0 !important;
+    padding-bottom: 10px !important;
+  }
+  .HeadingLabel{
+    font-weight: 600;
+  }
+  .p-r-10{
+    padding-right:10px !important;
+  }
