@@ -59,7 +59,7 @@
 
 import React from "react";
 import { Column, Grid } from "@carbon/react";
-import { Checkmark } from "@carbon/react/icons";
+import { Checkmark, Close } from "@carbon/react/icons";
 
 interface ProjectModelProps {
   projectDetails: any;
@@ -104,10 +104,10 @@ function ProjectModel({ projectDetails }: ProjectModelProps) {
           {checkmarkFields.map((field) => (
             <Column sm={12} md={2} lg={2} key={field} className="mp-0 p-r-10">
               <span className="HeadingLabel">{field}</span>
-              {(detail[field] === "TRUE" || detail[field] === "true") ? (
+              {(detail[field] === "True" || detail[field] === "true") ? (
                 <Checkmark fill="green" />
               ) : (
-                <span style={{ color: "#999" }}>N/A</span>
+                <Close fill="red" />
               )}
             </Column>
           ))}
