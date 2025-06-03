@@ -127,10 +127,9 @@ const ProjectTimeline = ({
     return `
       <b>${this.series.name}</b><br/>
       <span style="font-weight: 500">${name}</span><br/>
-      ${
-        !point.milestone
-          ? `<span>Start: ${startDate}</span><br/><span>End: ${endDate}</span>`
-          : `<span>Date: ${startDate}</span>`
+      ${!point.milestone
+        ? `<span>Start: ${startDate}</span><br/><span>End: ${endDate}</span>`
+        : `<span>Date: ${startDate}</span>`
       }
     `;
   }
@@ -227,20 +226,40 @@ const ProjectTimeline = ({
           ],
         },
       },
+      // xAxis: {
+      //   min: Date.UTC(selectedYear, 0, 1),
+      //   max: Date.UTC(selectedYear, 11, 31),
+      //   tickInterval: 30 * 24 * 3600 * 1000,
+      //   labels: {
+      //     format: "{value:%b}",
+      //     style: {
+      //       fontWeight: "bold",
+      //       fontSize: "0.8em",
+      //     },
+      //   },
+      //   lineColor: "#bbb",
+      //   lineWidth: 1,
+      //   plotBackgroundColor: "#f5f5f5",
+      // },
       xAxis: {
         min: Date.UTC(selectedYear, 0, 1),
         max: Date.UTC(selectedYear, 11, 31),
-        tickInterval: 30 * 24 * 3600 * 1000,
+        tickInterval: 30 * 24 * 3600 * 1000, // 30 days in ms
+        type: "datetime",
         labels: {
-          format: "{value:%b}",
+          format: "{value:%b}", // shows Jan, Feb, etc.
+          rotation: 0,
           style: {
             fontWeight: "bold",
-            fontSize: "0.8em",
+            fontSize: "12px",
           },
         },
+        tickmarkPlacement: "on",
+        gridLineWidth: 1,
+        gridLineColor: "#e0e0e0",
         lineColor: "#bbb",
         lineWidth: 1,
-        plotBackgroundColor: "#f5f5f5",
+        plotBands: [],
       },
       tooltip: {
         useHTML: true,
