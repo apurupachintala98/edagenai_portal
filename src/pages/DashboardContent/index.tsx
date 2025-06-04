@@ -72,7 +72,7 @@ function DashboardContent() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalReady, setModalReady] = useState(false);
   const [modalProjectName, setModalProjectName] = useState("");
-  const { projectDetailLoading, projectDetails, fetchProjectDetails } = useProjectDetailsData();
+  const { projectDetails } = useProjectDetailsData();
 
   const inputRef = useRef<HTMLInputElement>(null);
   const handleOpen = () => {
@@ -370,7 +370,9 @@ function DashboardContent() {
     return () => document.removeEventListener("click", handleClick);
   }, []);
 
-  console.log("projectDetails::", projectDetails[0]);
+  const filterProjectDetail = projectDetails.filter(v => v.PROJECT_NAME === modalProjectName);
+
+  console.log("filterProjectDetail::", filterProjectDetail);
 
   return (
     <MainContainer>
@@ -547,7 +549,7 @@ function DashboardContent() {
         passiveModal
         size="lg"
       >
-        <ProjectModel projectDetails={projectDetails} />
+        <ProjectModel projectDetails={filterProjectDetail} />
       </Modal>
 
     </MainContainer>
