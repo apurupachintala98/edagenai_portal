@@ -372,8 +372,6 @@ function DashboardContent() {
 
   const filterProjectDetail = projectDetails.filter(v => v.PROJECT_NAME === modalProjectName);
 
-  console.log("filterProjectDetail::", filterProjectDetail);
-
   return (
     <MainContainer>
       <PageContainer>

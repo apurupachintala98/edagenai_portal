@@ -6,6 +6,8 @@ import PrivateRoute from "components/PrivateRoute";
 import Spinner from "components/Spinner";
 
 import LlmGateway from "../pages/LlmGateway";
+import useIdleTimer from "../hooks/useIdleTimer";
+import { useAuth } from "../contexts/AuthContext";
 
 const Login = lazy(() => import("pages/Login"));
 const Dashboard = lazy(() => import("pages/Dashboard"));
@@ -15,8 +17,14 @@ const ProjectDetails = lazy(() => import("pages/ProjectDetails"));
 
 
 function ReactRoute() {
+    const { logout } = useAuth();
   const [sidebarType, setSidebarType] = useState<string>("default");
   const theme = {};
+
+   useIdleTimer(() => {
+    //If user screen is ideal for 5 min then it will be auto logout
+    logout();
+  });
 
   return (
     <BrowserRouter>
