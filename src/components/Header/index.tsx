@@ -26,13 +26,14 @@ function Header({
   isSearchEnabled = false,
   sidebarType = "full",
   currentTab = "",
+  dynamicWidth
 }: HeaderProps) {
   const { t } = useTranslation();
   const { isAuthenticated, userInfo } = useAuth();
   const { handleLogout } = useLogout();
 
   return (
-    <Container zIndex={zIndex} type={type}>
+    <Container zIndex={zIndex} type={type} ref={dynamicWidth}>
       <div>
         {sidebarType === "mini" && (
           <LogoContainer>

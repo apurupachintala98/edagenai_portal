@@ -257,7 +257,8 @@
   }
 
   .dashboard-card-title {
-    @apply flex text-sm font-medium;
+    @apply flex text-sm font-semibold;
+    text-align: left;
   }
 
   .dashboard-card-content {

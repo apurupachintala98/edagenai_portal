@@ -9,7 +9,7 @@ import {
   View,
   ViewOff,
 } from "@carbon/react/icons";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
@@ -36,6 +36,7 @@ import DashboardContent from "pages/DashboardContent";
 import Metrics from "pages/Metrics";
 import Project from "pages/Project/index";
 import ProjectDetails from "pages/ProjectDetails";
+import { useResizeObserver } from "hooks/useResizeObserver";
 
 type MenuItem = {
   text: string;
@@ -65,6 +66,9 @@ function Dashboard() {
   const [showPassword, setShowPassword] = useState(false);
   const [searchParams] = useSearchParams();
   const projectName = searchParams.get("project");
+
+  const containerRef = useRef<HTMLDivElement>(null);
+  const { width: containerWidth } = useResizeObserver(containerRef);
 
   useEffect(() => {
     const checkLocalVal = localStorage.getItem("edp_checkAdmin");
@@ -99,10 +103,10 @@ function Dashboard() {
 
   useEffect(() => {
     if (projectName) {
-      if(projectName === "all"){
+      if (projectName === "all") {
         setCurrentTab("dashboard");
-      }else{
-       setCurrentTab("projectDetails");
+      } else {
+        setCurrentTab("projectDetails");
       }
     }
   }, [projectName]);
@@ -229,6 +233,7 @@ function Dashboard() {
           isSearchEnabled={false}
           sidebarType={sidebarType}
           currentTab={currentTab}
+          dynamicWidth={containerRef}
         />
       </AppBar>
       <Box
@@ -240,7 +245,7 @@ function Dashboard() {
           transition: "margin 0.3s ease",
         }}
       >
-        {currentTab === "dashboard" && <DashboardContent />}
+        {currentTab === "dashboard" && <DashboardContent containerWidth={containerWidth} />}
         {currentTab === "admin" && <Admin />}
         {currentTab === "project" && <Project />}
         {currentTab === "metrics" && <Metrics />}

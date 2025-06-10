@@ -2,6 +2,10 @@ import { Button, ClickableTile } from "@carbon/react";
 import { useNavigate } from "react-router-dom";
 
 import { useDropdown } from "../hooks/useDropdown";
+import {
+  ChevronDown,
+  ChevronUp,
+} from "@carbon/react/icons";
 
 interface DropdownItem {
   label: string;
@@ -9,7 +13,7 @@ interface DropdownItem {
 }
 
 interface DropdownButtonProps {
-  icon: React.ComponentType<any>;
+  icon: React.ReactNode;
   label: string;
   items: DropdownItem[];
 }
@@ -28,7 +32,8 @@ export const DropdownButton = ({ icon, label, items }: DropdownButtonProps) => {
     };
     return (
       <div style={{ position: "relative" }} ref={ref}>
-        <Button kind="primary" size="lg" renderIcon={icon} onClick={() => setOpen(!open)}>
+        <Button style={{borderRadius: "6px"}} kind="primary" size="lg" renderIcon={open ? ChevronUp : ChevronDown} onClick={() => setOpen(!open)}>
+          <span style={{paddingRight: "5px"}}>{icon}</span>
           {label}
         </Button>
   
@@ -37,7 +42,6 @@ export const DropdownButton = ({ icon, label, items }: DropdownButtonProps) => {
             style={{
               position: "absolute",
               top: "100%",
-              marginTop: "4px",
               background: "#fff",
               border: "1px solid #e0e0e0",
               borderRadius: "4px",
@@ -46,7 +50,7 @@ export const DropdownButton = ({ icon, label, items }: DropdownButtonProps) => {
               minWidth: "160px",
               listStyle: "none",
               padding: 0,
-              margin: 0
+              margin: "4px 0 0 0"
             }}
           >
             {items.map((item, idx) => (
@@ -54,7 +58,7 @@ export const DropdownButton = ({ icon, label, items }: DropdownButtonProps) => {
                 key={idx}
                 onClick={() => handleItemClick(item.url)}
                 style={{
-                  padding: "4px 10px",
+                  padding: "6px 10px",
                   fontSize: "13px",
                   fontWeight: "bold",
                   cursor: "pointer",

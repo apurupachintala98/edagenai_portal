@@ -1,0 +1,68 @@
+.carousel-container {
+  position: relative;
+  width: 100%; /* Adjust as needed */
+  margin: 0px auto;
+  overflow: hidden; /* Hide overflowing items */
+  /* border: 1px solid #ddd; */
+  /* border-radius: 8px; */
+}
+
+.carousel-track {
+  display: flex;
+  transition: transform 0.5s ease-in-out;
+  /* This will ensure that the track itself is wide enough to contain all pages */
+  width: 100%; /* Temporarily setting to 100%, actual width handled by page flex basis */
+}
+
+.carousel-page {
+  flex: 0 0 100%; /* Each page takes 100% of the carousel-container's width */
+  display: flex; /* To lay out the 3 divs horizontally within the page */
+  justify-content: space-around; /* Distribute divs evenly */
+  align-items: center;
+  padding: 10px 0;
+  box-sizing: border-box; /* Include padding in the width calculation */
+}
+
+/* Styling for the individual items within the carousel page */
+.carousel-page > div {
+  flex: 1; /* Each div takes equal space within its page */
+  min-width: 30%; /* Adjust based on desired spacing and number of items */
+  margin: 0 5px; /* Small margin between items */
+  text-align: center;
+  /* padding: 20px; */
+  border: 1px solid #fff;
+  background-color: #fff;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-sizing: border-box;
+}
+
+.carousel-indicators {
+  display: flex;
+  justify-content: center;
+  margin-top: 15px;
+  padding-bottom: 10px;
+}
+
+.indicator {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #ccc;
+  margin: 0 5px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.indicator.active {
+  background-color: #007bff;
+}
+
+/* For large screens (e.g., large desktops) */
+@media (max-width: 1200px) {
+  .carousel-container {
+    width: 100%; /* Even narrower percentage-wise */
+    max-width: 100%; /* Your ultimate max-width */
+  }
+}

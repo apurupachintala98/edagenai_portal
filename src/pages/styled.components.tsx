@@ -63,6 +63,7 @@ export const TagLine = styled.span`
   align-items: end;
   border-left: 1px solid #d2d2d2;
   width: 180px;
+  font-weight: ${(props) => props.theme.fontWeight.semibold};
 `;
 
 export const ToggleContainer = styled.div`

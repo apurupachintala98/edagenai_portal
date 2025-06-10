@@ -25,6 +25,7 @@ export interface HeaderProps {
   isSearchEnabled?: boolean;
   sidebarType?: string;
   currentTab?: string;
+  dynamicWidth?: React.RefObject<any>;
 }
 
 export interface DataTableProps {

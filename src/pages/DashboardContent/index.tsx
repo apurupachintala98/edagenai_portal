@@ -38,8 +38,13 @@ import DashboardCard from "pages/DashboardCard";
 import { Label } from "recharts";
 import { type projectDetails, useProjectDetailsData } from "../../hooks/useProjectDetailsData";
 import ProjectModel from "./ProjectModel";
+import Carousel from "components/Carousel";
 
-function DashboardContent() {
+interface DashboardContentProps {
+  containerWidth: number;
+}
+
+function DashboardContent({ containerWidth }: DashboardContentProps) {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { height } = useWindowDimensions();
@@ -156,8 +161,8 @@ function DashboardContent() {
             index % 3 === 0
               ? "hsl(var(--brand-blue))"
               : index % 3 === 1
-                ? "hsl(var(--brand-teal))"
-                : "hsl(var(--muted-foreground))",
+              ? "hsl(var(--brand-teal))"
+              : "hsl(var(--muted-foreground))",
         }));
 
         setProgressReportData(coloredData);
@@ -370,7 +375,7 @@ function DashboardContent() {
     return () => document.removeEventListener("click", handleClick);
   }, []);
 
-  const filterProjectDetail = projectDetails.filter(v => v.PROJECT_NAME === modalProjectName);
+  const filterProjectDetail = projectDetails.filter((v) => v.PROJECT_NAME === modalProjectName);
 
   return (
     <MainContainer>
@@ -379,7 +384,7 @@ function DashboardContent() {
           <PageTitle>{t("dashboard.title")}</PageTitle>
           <ButtonContainer style={{ display: "flex", gap: "1rem" }}>
             <DropdownButton
-              icon={DocumentAdd}
+              icon={<DocumentAdd/>}
               label={t("home.createButtonText")}
               items={[
                 { label: "CII SmartHelp", url: "https://sit1.evolve.antheminc.com" },
@@ -392,7 +397,7 @@ function DashboardContent() {
               ]}
             />
             <DropdownButton
-              icon={Dashboard}
+              icon={<Dashboard />}
               label={t("home.frameworkButtonText")}
               items={[
                 { label: "LLM Gateway", url: "/llm-gateway" },
@@ -425,8 +430,8 @@ function DashboardContent() {
           <BreadcrumbItem isCurrentPage>{t("dashboard.BreadcrumbHomeText")}</BreadcrumbItem>
         </Breadcrumb>
 
-        {/* 3-Column Layout for Charts */}
         <DashboardCardsWrapper>
+        <Carousel width={containerWidth}>
           <DashboardCard
             title="Projects"
             icon={<IbmCloudProjects size={20} />}
@@ -453,10 +458,65 @@ function DashboardContent() {
             {" "}
             <DashboardChart data={dashboardData.costs} isCurrency />
           </DashboardCard>
+
+          <DashboardCard
+            title="Graph I"
+            icon={<IbmCloudProjects size={20} />}
+            subheading={`Total Projects : ${dashboardTotals.totalProjects}`}
+          >
+            <></>
+          </DashboardCard>
+
+          <DashboardCard
+            title="Graph II"
+            icon={<IbmCloudProjects size={20} />}
+            subheading={`Total Projects : ${dashboardTotals.totalProjects}`}
+          >
+            <></>
+          </DashboardCard>
+
+          <DashboardCard
+            title="Graph III"
+            icon={<IbmCloudProjects size={20} />}
+            subheading={`Total Projects : ${dashboardTotals.totalProjects}`}
+          >
+            <></>
+          </DashboardCard>
+        </Carousel>
         </DashboardCardsWrapper>
 
+        {/* 3-Column Layout for Charts */}
+        {/* <DashboardCardsWrapper>
+          <DashboardCard
+            title="Projects"
+            icon={<IbmCloudProjects size={20} />}
+            subheading={`Total Projects : ${dashboardTotals.totalProjects}`}
+          >
+            <ProgressDonut data={filteredProjectDonut ?? progressReportData} />
+          </DashboardCard>
+
+          <DashboardCard
+            title="Users"
+            icon={<UserMultiple size={20} />}
+            subheading={`Total Users: ${dashboardTotals.totalUsers}`}
+          >
+            <DashboardChart data={dashboardData.users} />
+          </DashboardCard>
+
+          <DashboardCard
+            title="Cortex Cost"
+            icon={<DollarSign size={20} />}
+            subheading={`Total Cost for the Projects : $${Math.round(
+              dashboardTotals.totalCost,
+            ).toLocaleString()}`}
+          >
+            {" "}
+            <DashboardChart data={dashboardData.costs} isCurrency />
+          </DashboardCard>
+        </DashboardCardsWrapper> */}
+
         {/* Projects Status Section */}
-        <div className="mt-6 p-6 rounded-lg">
+        <div className="mt-0 p-6 rounded-lg">
           <h3 className="text-lg font-semibold mb-4">Projects Status</h3>
           <div className="flex flex-wrap gap-4 items-end justify-between">
             <div className="flex flex-wrap gap-4">
@@ -549,7 +609,6 @@ function DashboardContent() {
       >
         <ProjectModel projectDetails={filterProjectDetail} />
       </Modal>
-
     </MainContainer>
   );
 }
