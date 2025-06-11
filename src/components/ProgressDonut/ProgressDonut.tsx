@@ -86,7 +86,7 @@ const ProgressDonut = ({ data, subheading }: ProgressDonutProps) => {
             onMouseEnter={onPieEnter}
           >
             {data.map((entry, index) => (
-              <Cell key={`cell-${index}`} fill={COLORS[index]} stroke="transparent" />
+              <Cell key={`cell-${index}`} fill={COLORS[index]} stroke="transparent" style={{outline: 'none'}} />
             ))}
             <LabelList dataKey="value" position="inside" fill="#fff" fontSize={12} />
           </Pie>

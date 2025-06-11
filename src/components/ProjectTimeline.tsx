@@ -6,6 +6,9 @@ import ApiService from "../services/ApiService";
 
 import Highcharts from "highcharts";
 import HighchartsGantt from "highcharts/modules/gantt";
+import { Modal } from "@carbon/react";
+import ProjectModel from "pages/DashboardContent/ProjectModel";
+import { type projectDetails, useProjectDetailsData } from "../hooks/useProjectDetailsData";
 
 if (typeof HighchartsGantt === "function") {
   HighchartsGantt(Highcharts);
@@ -20,6 +23,10 @@ interface ProjectTimelineProps {
   showAllYears: boolean;
   selectedYear: number;
   isChangedSelectedYears: boolean;
+  isModalOpen: boolean;
+  modalReady: boolean;
+  modalProjectName: string;
+  setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const ProjectTimeline = ({
@@ -27,11 +34,28 @@ const ProjectTimeline = ({
   showAllYears,
   selectedYear,
   isChangedSelectedYears,
+  isModalOpen,
+  modalReady,
+  modalProjectName,
+  setIsModalOpen,
 }: ProjectTimelineProps) => {
   const [seriesData, setSeriesData] = useState<any[]>([]);
   const [originalSeriesData, setOriginalSeriesData] = useState<any[]>([]);
   const hasFetchedFirstTimeGanttChartData = useRef<boolean>(false);
   const [isFilterApplied, setIsFilterApplied] = useState<boolean>(false);
+  const [filterProjectDetails, setFilterProjectDetails] = useState<projectDetails[]>([]);
+  const { projectDetails } = useProjectDetailsData();
+
+  useEffect(() => {
+    const filterSeriesData = seriesData.length > 0 ? seriesData.map((i) => i.name) : [];
+    if (filterSeriesData.length > 0) {
+      const filteredData = projectDetails.filter((item) =>
+        filterSeriesData.includes(item.PROJECT_NAME),
+      );
+      setFilterProjectDetails(filteredData);
+      console.log("filteredData::", filteredData);
+    }
+  }, [seriesData, projectDetails]);
 
   useEffect(() => {
     if (
@@ -127,9 +151,10 @@ const ProjectTimeline = ({
     return `
       <b>${this.series.name}</b><br/>
       <span style="font-weight: 500">${name}</span><br/>
-      ${!point.milestone
-        ? `<span>Start: ${startDate}</span><br/><span>End: ${endDate}</span>`
-        : `<span>Date: ${startDate}</span>`
+      ${
+        !point.milestone
+          ? `<span>Start: ${startDate}</span><br/><span>End: ${endDate}</span>`
+          : `<span>Date: ${startDate}</span>`
       }
     `;
   }
@@ -263,6 +288,8 @@ const ProjectTimeline = ({
     [seriesData],
   );
 
+  console.log("seriesData::", seriesData);
+
   return (
     <div className="mt-6 grid" style={{ margin: "0 20px 30px 20px" }}>
       <div className="bg-white rounded-md shadow-sm overflow-x-auto" style={{ width: "100%" }}>
@@ -280,6 +307,19 @@ const ProjectTimeline = ({
           </div>
         )}
       </div>
+      <Modal
+        open={isModalOpen && modalReady}
+        onRequestClose={() => setIsModalOpen(false)}
+        passiveModal
+        size="lg"
+        className={'projectModel'}
+      >
+        <ProjectModel
+          projectDetails={filterProjectDetails}
+          modalProjectName={modalProjectName}
+          setIsModalOpen={setIsModalOpen}
+        />
+      </Modal>
     </div>
   );
 };

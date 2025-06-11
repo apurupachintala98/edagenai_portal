@@ -1,1 +1,5 @@
 @use '@carbon/react';
+
+*:focus{
+    outline: none !important;
+}

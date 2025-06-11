@@ -152,9 +152,8 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
       try {
         hasFetchedAllProjectDetails.current = true;
         const apiData = await ApiService.getAllDetailsProjects();
-        console.log(apiData);
 
-        const coloredData = apiData.map((item: any, index: number) => ({
+        const coloredData = apiData.filter((item: { VALUE: number; }) => item.VALUE !== 0).map((item: any, index: number) => ({
           name: item.NAME,
           value: item.VALUE,
           color:
@@ -269,7 +268,11 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
           color: "hsl(var(--muted-foreground))",
         },
       ];
-      setFilteredProjectDonut(donutData);
+
+      //filter donatData and pass non zero value only
+      const filterDonatData =  donutData.length > 0 ? donutData.filter(item => item.value !== 0) : [];
+
+      setFilteredProjectDonut(filterDonatData);
       setDashboardTotals((prev) => ({
         ...prev,
         totalProjects: filteredProjects.length,
@@ -375,7 +378,7 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
     return () => document.removeEventListener("click", handleClick);
   }, []);
 
-  const filterProjectDetail = projectDetails.filter((v) => v.PROJECT_NAME === modalProjectName);
+  //const filterProjectDetail = projectDetails.filter((v) => v.PROJECT_NAME === modalProjectName);
 
   return (
     <MainContainer>
@@ -384,7 +387,7 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
           <PageTitle>{t("dashboard.title")}</PageTitle>
           <ButtonContainer style={{ display: "flex", gap: "1rem" }}>
             <DropdownButton
-              icon={<DocumentAdd/>}
+              icon={<DocumentAdd />}
               label={t("home.createButtonText")}
               items={[
                 { label: "CII SmartHelp", url: "https://sit1.evolve.antheminc.com" },
@@ -431,58 +434,58 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
         </Breadcrumb>
 
         <DashboardCardsWrapper>
-        <Carousel width={containerWidth}>
-          <DashboardCard
-            title="Projects"
-            icon={<IbmCloudProjects size={20} />}
-            subheading={`Total Projects : ${dashboardTotals.totalProjects}`}
-          >
-            <ProgressDonut data={filteredProjectDonut ?? progressReportData} />
-          </DashboardCard>
+          <Carousel width={containerWidth}>
+            <DashboardCard
+              title="Projects"
+              icon={<IbmCloudProjects size={20} />}
+              subheading={`Total Projects : ${dashboardTotals.totalProjects}`}
+            >
+              <ProgressDonut data={filteredProjectDonut ?? progressReportData} />
+            </DashboardCard>
 
-          <DashboardCard
-            title="Users"
-            icon={<UserMultiple size={20} />}
-            subheading={`Total Users: ${dashboardTotals.totalUsers}`}
-          >
-            <DashboardChart data={dashboardData.users} />
-          </DashboardCard>
+            <DashboardCard
+              title="Users"
+              icon={<UserMultiple size={20} />}
+              subheading={`Total Users: ${dashboardTotals.totalUsers}`}
+            >
+              <DashboardChart data={dashboardData.users} />
+            </DashboardCard>
 
-          <DashboardCard
-            title="Cortex Cost"
-            icon={<DollarSign size={20} />}
-            subheading={`Total Cost for the Projects : $${Math.round(
-              dashboardTotals.totalCost,
-            ).toLocaleString()}`}
-          >
-            {" "}
-            <DashboardChart data={dashboardData.costs} isCurrency />
-          </DashboardCard>
+            <DashboardCard
+              title="Cortex Cost"
+              icon={<DollarSign size={20} />}
+              subheading={`Total Cost for the Projects : $${Math.round(
+                dashboardTotals.totalCost,
+              ).toLocaleString()}`}
+            >
+              {" "}
+              <DashboardChart data={dashboardData.costs} isCurrency />
+            </DashboardCard>
 
-          <DashboardCard
-            title="Graph I"
-            icon={<IbmCloudProjects size={20} />}
-            subheading={`Total Projects : ${dashboardTotals.totalProjects}`}
-          >
-            <></>
-          </DashboardCard>
+            <DashboardCard
+              title="Graph I"
+              icon={<IbmCloudProjects size={20} />}
+              subheading={`Total Projects : ${dashboardTotals.totalProjects}`}
+            >
+              <></>
+            </DashboardCard>
 
-          <DashboardCard
-            title="Graph II"
-            icon={<IbmCloudProjects size={20} />}
-            subheading={`Total Projects : ${dashboardTotals.totalProjects}`}
-          >
-            <></>
-          </DashboardCard>
+            <DashboardCard
+              title="Graph II"
+              icon={<IbmCloudProjects size={20} />}
+              subheading={`Total Projects : ${dashboardTotals.totalProjects}`}
+            >
+              <></>
+            </DashboardCard>
 
-          <DashboardCard
-            title="Graph III"
-            icon={<IbmCloudProjects size={20} />}
-            subheading={`Total Projects : ${dashboardTotals.totalProjects}`}
-          >
-            <></>
-          </DashboardCard>
-        </Carousel>
+            <DashboardCard
+              title="Graph III"
+              icon={<IbmCloudProjects size={20} />}
+              subheading={`Total Projects : ${dashboardTotals.totalProjects}`}
+            >
+              <></>
+            </DashboardCard>
+          </Carousel>
         </DashboardCardsWrapper>
 
         {/* 3-Column Layout for Charts */}
@@ -597,18 +600,12 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
           showAllYears={showAllYears}
           selectedYear={selectedYear}
           isChangedSelectedYears={isChangedSelectedYears}
+          isModalOpen={isModalOpen}
+          modalReady={modalReady}
+          setIsModalOpen={() => setIsModalOpen(false)}
+          modalProjectName={modalProjectName}
         />
       </PageContainer>
-
-      <Modal
-        open={isModalOpen && modalReady}
-        modalHeading={`${modalProjectName} Details`}
-        onRequestClose={() => setIsModalOpen(false)}
-        passiveModal
-        size="lg"
-      >
-        <ProjectModel projectDetails={filterProjectDetail} />
-      </Modal>
     </MainContainer>
   );
 }

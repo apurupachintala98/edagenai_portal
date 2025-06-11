@@ -138,7 +138,9 @@
   }
 
   /* Form elements refinements */
-  input, select, textarea {
+  input,
+  select,
+  textarea {
     @apply focus-visible:ring-1 focus-visible:ring-brand-blue focus-visible:ring-offset-0;
   }
 }
@@ -174,18 +176,15 @@
 
   /* Premium button styles */
   .btn-primary {
-    @apply bg-brand-blue text-white hover:bg-brand-blue-dark shadow-sm hover:shadow 
-           transition-all duration-200 rounded-md px-4 py-2 font-medium;
+    @apply bg-brand-blue text-white hover:bg-brand-blue-dark shadow-sm hover:shadow transition-all duration-200 rounded-md px-4 py-2 font-medium;
   }
 
   .btn-secondary {
-    @apply bg-secondary text-secondary-foreground hover:bg-secondary/80 shadow-sm hover:shadow
-           transition-all duration-200 rounded-md px-4 py-2 font-medium;
+    @apply bg-secondary text-secondary-foreground hover:bg-secondary/80 shadow-sm hover:shadow transition-all duration-200 rounded-md px-4 py-2 font-medium;
   }
 
   .btn-outline {
-    @apply border border-input bg-background hover:bg-accent hover:text-accent-foreground
-           shadow-sm transition-all duration-200 rounded-md px-4 py-2 font-medium;
+    @apply border border-input bg-background hover:bg-accent hover:text-accent-foreground shadow-sm transition-all duration-200 rounded-md px-4 py-2 font-medium;
   }
 
   .btn-ghost {
@@ -275,22 +274,16 @@
   }
 
   .form-input {
-    @apply flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm 
-           ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium 
-           placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 
-           focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50;
+    @apply flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50;
   }
 
   .form-select {
-    @apply flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm 
-           ring-offset-background focus-visible:outline-none focus-visible:ring-1 
-           focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50;
+    @apply flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50;
   }
 
   /* Chat bubble */
   .chat-bubble {
-    @apply fixed bottom-8 right-8 p-4 rounded-full bg-brand-blue text-white shadow-xl 
-           hover:bg-brand-blue-dark transition-all duration-200 z-50;
+    @apply fixed bottom-8 right-8 p-4 rounded-full bg-brand-blue text-white shadow-xl hover:bg-brand-blue-dark transition-all duration-200 z-50;
   }
 
   /* Hover effect for card links */
@@ -302,7 +295,7 @@
   .shimmer {
     @apply bg-shimmer bg-[length:200%_100%] animate-shimmer;
   }
-  
+
   /* Progress indicator animation */
   .progress-indicator {
     @apply w-5 h-5 rounded-full border-2 border-muted border-t-brand-blue animate-rotate-loader;
@@ -331,21 +324,84 @@
   transition: opacity 300ms, transform 300ms;
 }
 
- .icon-space-right {
-    @apply pr-2;
-  }
+.icon-space-right {
+  @apply pr-2;
+}
 
-  .highchartlink{
-    color: #0f62fe;
-  }
-  .mp-0{
-    margin: 0 !important;
-    padding: 0 !important;
-    padding-bottom: 10px !important;
-  }
-  .HeadingLabel{
-    font-weight: 600;
-  }
-  .p-r-10{
-    padding-right:10px !important;
-  }
+.highchartlink {
+  color: #0f62fe;
+}
+
+.mp-0 {
+  margin: 0 !important;
+  padding: 0 !important;
+  padding-bottom: 10px !important;
+}
+
+.HeadingLabel {
+  font-weight: 600;
+}
+
+.p-r-10 {
+  padding-right: 10px !important;
+}
+
+.mt-auto {
+  margin-top: 35px !important;
+}
+
+.tableWidth {
+  width: 100%;
+  margin: 10px 0 40px 0;
+}
+
+.tdCls {
+  border: 1px solid gray;
+  padding: 5px;
+  vertical-align: middle;
+}
+
+.projectModel .cds--modal-content {
+  padding: 10px !important;
+}
+
+.mp-bottom {
+  padding-bottom: 0 !important;
+}
+
+.footerTable {
+  width: 97%;
+  bottom: 0;
+  position: fixed;
+  margin: auto;
+  background-color: #fff;
+}
+
+.projectHeading {
+  display: flex;
+  gap: 5px;
+  position: fixed;
+  width: 96%;
+  background-color: #fff;
+  z-index: 1;
+  margin-top: -10px;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid gray;
+}
+
+.btn-blue {
+  border-color: #1e5ae6;
+  color: #1e5ae6;
+  font-weight: 500;
+  display: flex;
+  gap: 5px;
+  justify-content: center;
+  align-items: center;
+}
+
+.btn-blue:hover {
+  border-color: #0f3898;
+  color: #0f3898;
+  background-color: transparent !important;
+}
