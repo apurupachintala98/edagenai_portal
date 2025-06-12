@@ -59,6 +59,20 @@ const mapProjectToCamelCase = (project: project) => ({
   status: project.STATUS,
   Link_to_Slide: project.LINK_TO_SLIDE,
   Notes: project.NOTES,
+  BU: project.BU,
+  Functionality: project.FUNCTIONALITY,
+  Capability: project.CAPABILITY,
+  Business_Value_Add: project.BUSINESS_VALUE_ADD,
+  Architecture: project.ARCHITECTURE,
+  Plateform: project.PLATFORM,
+  Framework: project.FRAMEWORK,
+  UI: project.UI,
+  DevOps: project.DEVOPS,
+  MCP: project.MCP,
+  Usage_Metrics: project.USAGE_METRICS,
+  Effort_Saved: project.EFFORT_SAVED,
+  Cost_Saved: project.COST_SAVED,
+  Derived_Env: project.DERIVED_ENV,
 });
 
 export function useProjectData() {
