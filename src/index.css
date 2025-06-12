@@ -456,6 +456,7 @@
 
 .projectDetailCol {
   padding: 0;
+  padding-inline: initial !important;
 }
 
 .prodDetailPopup {
