@@ -291,7 +291,7 @@ const ProjectTimeline = ({
   console.log("seriesData::", seriesData);
 
   return (
-    <div className="mt-6 grid" style={{ margin: "0 20px 30px 20px" }}>
+    <div className="mt-0 mb-0 ml-1 mr-1 grid">
       <div className="bg-white rounded-md shadow-sm overflow-x-auto" style={{ width: "100%" }}>
         {seriesData.length === 0 ? (
           <div className="flex items-center justify-center py-20 text-lg font-bold">

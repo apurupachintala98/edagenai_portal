@@ -356,7 +356,7 @@ function Project() {
             <>
               <DataTable rows={paginatedRows} headers={headers}>
                 {({ rows, headers: tableHeaders, getTableProps, getHeaderProps, getRowProps }) => (
-                  <Table {...getTableProps()}>
+                  <Table {...getTableProps()}  className="bgTable">
                     <TableHead>
                       <TableRow>
                         {tableHeaders.map((header) => (

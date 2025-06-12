@@ -519,7 +519,7 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
         </DashboardCardsWrapper> */}
 
         {/* Projects Status Section */}
-        <div className="mt-0 p-6 rounded-lg">
+        <div className="mt-0 pt-6 pb-6 pl-1 pr-1 rounded-lg">
           <h3 className="text-lg font-semibold mb-4">Projects Status</h3>
           <div className="flex flex-wrap gap-4 items-end justify-between">
             <div className="flex flex-wrap gap-4">
