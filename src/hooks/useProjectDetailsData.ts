@@ -36,6 +36,7 @@ export interface projectDetails {
   USAGE_METRICS: string;
   EFFORT_SAVED: string;
   COST_SAVED: string;
+  DERIVED_ENV: string;
 }
 
 export function useProjectDetailsData() {
