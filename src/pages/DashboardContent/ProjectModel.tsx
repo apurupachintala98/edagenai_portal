@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Column, Grid } from "@carbon/react";
 import { CheckmarkFilled, Misuse, Catalog, ChevronRight, ChevronLeft } from "@carbon/react/icons";
+import { capitalizeFirstLetterOfEachWord } from "utils/common";
 
 interface ProjectModelProps {
   projectDetails: any;
@@ -32,27 +33,114 @@ function ProjectModel({ projectDetails, modalProjectName, setIsModalOpen }: Proj
 
   return detail.length > 0 ? (
     <>
-      <h5 className="projectHeading"><Catalog size={"20"} />{`${detail[0].PROJECT_NAME}: Project Details`}</h5>
+      <h5 className="projectHeading">
+        <Catalog size={"20"} />
+        {`${detail[0].PROJECT_NAME}: Project Details`}
+      </h5>
       <Grid className="mp-0 mt-auto" style={{ marginTop: "20px" }}>
-        {Object.entries(detail[0]).map(([key, value]) => {
-          if (!checkmarkFields.includes(key)) {
-            return (
-              <>
-                <Column sm={4} md={4} lg={4} className="mp-0">
-                  <span className="HeadingLabel">{key.replace(/_/g, " ")}:</span>
-                </Column>
-                <Column sm={4} md={4} lg={4} className="mp-0">
-                  {value && (typeof value === "string" || typeof value === "number")
-                    ? value
-                    : "N/A"}
-                </Column>
-              </>
-            );
-          }
-          return null;
-        })}
+        <Column sm={12} md={6} lg={6} className="mp-0">
+          <table className="prodDetailPopup">
+            {Object.entries(detail[0]).map(([key, value], index) => {
+              if (!checkmarkFields.includes(key) && index < 15) {
+                return (
+                  <tr key={key}>
+                    <td className="pb-2 pr-2 heading">
+                      <span className="HeadingLabel">
+                        {capitalizeFirstLetterOfEachWord(
+                          key.toLocaleLowerCase().replace(/_/g, " "),
+                        )}
+                        :
+                      </span>
+                    </td>
+                    <td className="pb-2 pr-2 detail">
+                      {value && (typeof value === "string" || typeof value === "number")
+                        ? value
+                        : "N/A"}
+                    </td>
+                  </tr>
+                );
+              }
+              return null;
+            })}
+          </table>
+        </Column>
+        <Column sm={12} md={6} lg={6} className="mp-0">
+          <table className="prodDetailPopup ">
+            {Object.entries(detail[0]).map(([key, value], index) => {
+              if (!checkmarkFields.includes(key) && index >= 15) {
+                return (
+                  <tr key={key}>
+                    <td className="pb-2 pr-2 heading">
+                      <span className="HeadingLabel">
+                        {capitalizeFirstLetterOfEachWord(
+                          key.toLocaleLowerCase().replace(/_/g, " "),
+                        )}
+                        :
+                      </span>
+                    </td>
+                    <td className="pb-2 pr-2 detail">
+                      {value && (typeof value === "string" || typeof value === "number")
+                        ? value
+                        : "N/A"}
+                    </td>
+                  </tr>
+                );
+              }
+              return null;
+            })}
+          </table>
+        </Column>
 
         <Column sm={12} md={12} lg={12} fullWidth>
+          <Grid fullWidth>
+            <Column sm={12} md={4} lg={5} className="mp-0 p-r-10">
+              <table className="tableWidth">
+                {checkmarkFields.map((field, index) => {
+                  if (index < 3) {
+                    return (
+                      <tr key={field}>
+                        <td className="tdCls" width={"80%"}>
+                          <span className="HeadingLabel">{field}</span>
+                        </td>
+                        <td className="tdCls" width={"20%"}>
+                          {detail[0][field] === "True" || detail[0][field] === "true" ? (
+                            <CheckmarkFilled fill="green" size={"20"} />
+                          ) : (
+                            <Misuse fill="red" size={"20"} />
+                          )}
+                        </td>
+                      </tr>
+                    );
+                  }
+                })}
+              </table>
+            </Column>
+            <Column sm={12} md={4} lg={5} className="mp-0 p-r-10">
+              <table className="tableWidth">
+                {checkmarkFields.map((field, index) => {
+                  if (index >= 3) {
+                    return (
+                      <tr key={field}>
+                        <td className="tdCls" width={"80%"}>
+                          <span className="HeadingLabel">{field}</span>
+                        </td>
+                        <td className="tdCls" width={"20%"}>
+                          {detail[0][field] === "True" || detail[0][field] === "true" ? (
+                            <CheckmarkFilled fill="green" size={"20"} />
+                          ) : (
+                            <Misuse fill="red" size={"20"} />
+                          )}
+                        </td>
+                      </tr>
+                    );
+                  }
+                })}
+              </table>
+            </Column>
+          </Grid>
+        </Column>
+
+        {/* <Column sm={12} md={12} lg={12} fullWidth>
           <Grid fullWidth Fluid>
             <Column sm={12} md={4} lg={5} className="mp-0 p-r-10">
               <table className="tableWidth">
@@ -141,7 +229,7 @@ function ProjectModel({ projectDetails, modalProjectName, setIsModalOpen }: Proj
               </table>
             </Column>
           </Grid>
-        </Column>
+        </Column> */}
 
         {/* <Column sm={12} md={12} lg={12} fullWidth>
           <Grid fullWidth>
@@ -161,7 +249,7 @@ function ProjectModel({ projectDetails, modalProjectName, setIsModalOpen }: Proj
       <table className="footerTable">
         <tr>
           <td>
-            <div className="flex items-left align-middle justify-between items-center m-2">
+            <div className="flex items-left align-middle justify-between items-center mb-4">
               <div className="flex gap-2">
                 <button
                   className={

@@ -347,7 +347,7 @@
 }
 
 .mt-auto {
-  margin-top: 35px !important;
+  margin-top: 45px !important;
 }
 
 .tableWidth {
@@ -370,7 +370,7 @@
 }
 
 .footerTable {
-  width: 97%;
+  width: 97.5%;
   bottom: 0;
   position: fixed;
   margin: auto;
@@ -381,7 +381,7 @@
   display: flex;
   gap: 5px;
   position: fixed;
-  width: 96%;
+  width: 97.5%;
   background-color: #fff;
   z-index: 1;
   margin-top: -10px;
@@ -439,13 +439,32 @@
 
 
 .cds--data-table.bgTable tr:nth-child(odd) {
-  background-color: #fff; 
+  background-color: #fff;
 }
 
 .cds--data-table.bgTable tr:nth-child(even) {
-  background-color: #F9F9F9; 
+  background-color: #F9F9F9;
 }
 
 .cds--data-table.bgTable tr:hover {
-  background-color: #F2F2F2; 
+  background-color: #F2F2F2;
+}
+
+.projectDetailModal .cds--modal-content {
+  padding-left: 0;
+}
+
+.projectDetailCol {
+  padding: 0;
+}
+
+.prodDetailPopup {
+  width: 100%;
+}
+
+.prodDetailPopup .heading{
+  width: 40%;
+}
+.prodDetailPopup .detail{
+  width: 60%;
 }

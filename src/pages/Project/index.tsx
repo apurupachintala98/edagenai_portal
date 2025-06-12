@@ -72,6 +72,20 @@ const projectFieldMap: Record<string, keyof project> = {
   status: "STATUS",
   Link_to_Slide: "LINK_TO_SLIDE",
   Notes: "NOTES",
+  BU: "BU",
+  FUNCTIONALITY: "FUNCTIONALITY",
+  CAPABILITY: "CAPABILITY",
+  BUSINESS_VALUE_ADD: "BUSINESS_VALUE_ADD",
+  ARCHITECTURE: "ARCHITECTURE",
+  PLATFORM: "PLATFORM",
+  FRAMEWORK: "FRAMEWORK",
+  UI: "UI",
+  DEVOPS: "DEVOPS",
+  MCP: "MCP",
+  USAGE_METRICS: "USAGE_METRICS",
+  EFFORT_SAVED: "EFFORT_SAVED",
+  COST_SAVED: "COST_SAVED",
+  DERIVED_ENV: "DERIVED_ENV",
 };
 
 const CustomFilterIcon = ({ isFiltered }: { isFiltered: boolean }) => {
@@ -177,6 +191,20 @@ function Project() {
       STATUS: "",
       LINK_TO_SLIDE: "",
       NOTES: "",
+      BU: "",
+      FUNCTIONALITY: "",
+      CAPABILITY: "",
+      BUSINESS_VALUE_ADD: "",
+      ARCHITECTURE: "",
+      PLATFORM: "",
+      FRAMEWORK: "",
+      UI: "",
+      DEVOPS: "",
+      MCP: "",
+      USAGE_METRICS: "",
+      EFFORT_SAVED: "",
+      COST_SAVED: "",
+      DERIVED_ENV: "",
     };
     setFormData(initialFormData);
     setModalReady(true);
@@ -206,7 +234,21 @@ function Project() {
       CURRENT_PHASE: project.CURRENT_PHASE || "",
       STATUS: project.STATUS || "",
       LINK_TO_SLIDE: project.LINK_TO_SLIDE || "",
-      NOTES: project.NOTES || ""
+      NOTES: project.NOTES || "",
+      BU: project.NOTES || "",
+      FUNCTIONALITY: project.FUNCTIONALITY || "",
+      CAPABILITY: project.CAPABILITY || "",
+      BUSINESS_VALUE_ADD: project.BUSINESS_VALUE_ADD || "",
+      ARCHITECTURE: project.ARCHITECTURE || "",
+      PLATFORM: project.PLATFORM || "",
+      FRAMEWORK: project.FRAMEWORK || "",
+      UI: project.UI || "",
+      DEVOPS: project.DEVOPS || "",
+      MCP: project.MCP || "",
+      USAGE_METRICS: project.USAGE_METRICS || "",
+      EFFORT_SAVED: project.EFFORT_SAVED || "",
+      COST_SAVED: project.COST_SAVED || "",
+      DERIVED_ENV: project.DERIVED_ENV || "",
     });
     setModalReady(true);
     setIsModalOpen(true);
@@ -356,7 +398,7 @@ function Project() {
             <>
               <DataTable rows={paginatedRows} headers={headers}>
                 {({ rows, headers: tableHeaders, getTableProps, getHeaderProps, getRowProps }) => (
-                  <Table {...getTableProps()}  className="bgTable">
+                  <Table {...getTableProps()} className="bgTable">
                     <TableHead>
                       <TableRow>
                         {tableHeaders.map((header) => (
@@ -533,9 +575,10 @@ function Project() {
           secondaryButtonText="Cancel"
           onRequestClose={() => setIsModalOpen(false)}
           onRequestSubmit={handleSubmit}
+          className="projectDetailModal"
         >
-          <Grid fullWidth>
-            <Column sm={4} md={8} lg={16}>
+          <Grid fullWidth className="m-0 p-0 projectDetailCol">
+            <Column sm={4} md={8} lg={16} className="m-0 p-0" >
               <div style={{ display: "flex", flexWrap: "wrap", gap: "1rem" }}>
                 {Object.entries(projectFieldMap).map(([label, key]) => (
                   <TextInput
