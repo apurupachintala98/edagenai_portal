@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from "react";
 
-import ApiService from '../services/ApiService';
+import ApiService from "../services/ApiService";
 
 export interface project {
   SL_NO: string;
@@ -62,12 +62,12 @@ const mapProjectToCamelCase = (project: project) => ({
   BU: project.BU,
   Functionality: project.FUNCTIONALITY,
   Capability: project.CAPABILITY,
-  Business_Value_Add: project.BUSINESS_VALUE_ADD,
+  Business_Value_add: project.BUSINESS_VALUE_ADD,
   Architecture: project.ARCHITECTURE,
   Platform: project.PLATFORM,
   Framework: project.FRAMEWORK,
   UI: project.UI,
-  DevOps: project.DEVOPS,
+  Devops: project.DEVOPS,
   MCP: project.MCP,
   Usage_Metrics: project.USAGE_METRICS,
   Effort_Saved: project.EFFORT_SAVED,
@@ -79,7 +79,6 @@ export function useProjectData() {
   const [projects, setProjects] = useState<project[]>([]);
   const [loading, setLoading] = useState(true);
   const hasFetchedAllProjectDetails = useRef<boolean>(false);
-
 
   useEffect(() => {
     if (hasFetchedAllProjectDetails.current) {
@@ -102,7 +101,6 @@ export function useProjectData() {
     }
   };
 
-
   const addProject = async (newProject: project) => {
     try {
       const payload = mapProjectToCamelCase(newProject);
@@ -117,11 +115,8 @@ export function useProjectData() {
   const editProject = async (sl_no: string, updatedProject: project) => {
     try {
       const payload = mapProjectToCamelCase(updatedProject);
-      console.log('PAYLOAD::', payload);
       const updated = await ApiService.updateProjectDetails(sl_no, payload);
-      setProjects((prev: project[]) =>
-        prev.map((p) => (p.SL_NO === sl_no ? updated : p))
-      );
+      setProjects((prev: project[]) => prev.map((p) => (p.SL_NO === sl_no ? updated : p)));
       await fetchProjects();
     } catch (error) {
       console.error("Failed to update project:", error);
@@ -131,7 +126,7 @@ export function useProjectData() {
   const removeProject = async (sl_no: string) => {
     try {
       await ApiService.deleteProjectDetails(sl_no);
-      setProjects((prev: project[]) => prev.filter(p => p.SL_NO !== sl_no));
+      setProjects((prev: project[]) => prev.filter((p) => p.SL_NO !== sl_no));
     } catch (error) {
       console.error("Failed to delete project:", error);
     }
