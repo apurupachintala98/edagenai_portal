@@ -75,12 +75,12 @@ const projectFieldMap: Record<string, keyof project> = {
   BU: "BU",
   Functionality: "FUNCTIONALITY",
   Capability: "CAPABILITY",
-  Business_Value_Add: "BUSINESS_VALUE_ADD",
+  Business_value_add: "BUSINESS_VALUE_ADD",
   Architecture: "ARCHITECTURE",
   Platform: "PLATFORM",
   Framework: "FRAMEWORK",
   UI: "UI",
-  DevOps: "DEVOPS",
+  Devops: "DEVOPS",
   MCP: "MCP",
   Usage_Metrics: "USAGE_METRICS",
   Effort_Saved: "EFFORT_SAVED",
@@ -297,7 +297,6 @@ function Project() {
   };
 
   const handleDelete = async (sl_no: string) => {
-    console.log("PROJECTID::", sl_no);
     await removeProject(sl_no);
   };
 

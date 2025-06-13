@@ -90,16 +90,10 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
   useEffect(() => {
     const fetchDashboardUsersAndCosts = async () => {
       try {
-        console.log("Fetching dashboard users and cost details...");
-
         const [usersRes, costRes] = await Promise.all([
           ApiService.getAllUsersDetails(),
           ApiService.getAllCostsDetails(),
         ]);
-
-        console.log("Raw Users Response:", usersRes);
-        console.log("Raw Costs Response:", costRes);
-
         const colorPalette = [
           "hsl(var(--brand-blue))",
           "hsl(var(--brand-teal))",
@@ -119,10 +113,6 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
           value: Number(item.VALUE) || 0,
           color: colorPalette[index % colorPalette.length],
         }));
-
-        console.log("Formatted Users Data:", usersWithColor);
-        console.log("Formatted Costs Data:", costsWithColor);
-
         setDashboardData({
           users: usersWithColor,
           costs: costsWithColor,
@@ -130,10 +120,6 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
 
         const totalUsers = usersWithColor.reduce((acc: number, item: any) => acc + item.value, 0);
         const totalCost = costsWithColor.reduce((acc: number, item: any) => acc + item.value, 0);
-
-        console.log("Calculated Total Users:", totalUsers);
-        console.log("Calculated Total Cost:", totalCost);
-
         setDashboardTotals((prev) => ({
           ...prev,
           totalUsers,
@@ -173,7 +159,6 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
           ...prev,
           totalProjects,
         }));
-        console.log(coloredData);
       } catch (error) {
         console.error("Failed to fetch project details:", error);
       }
@@ -222,20 +207,6 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
         selectedManagers.includes(project.STAFF_VP),
       );
 
-      // const filteredProjects = projects.filter((project: any) => {
-      //   const matchesManager =
-      //     selectedManagers.length === 0 || selectedManagers.includes(project.STAFF_VP);
-      //   const matchesPlatform =
-      //     selectedPlatforms.length === 0 || selectedPlatforms.includes(project.LLM_PLATFORM);
-      //   const matchesPhase =
-      //     selectedPhases.length === 0 || selectedPhases.includes(project.CURRENT_PHASE);
-
-      //   return matchesManager && matchesPlatform && matchesPhase;
-      // });
-
-      console.log("Filtered Projects by Manager:", filteredProjects);
-
-      // Count environments
       let preProdCount = 0;
       let prodCount = 0;
       let nonProdCount = 0;

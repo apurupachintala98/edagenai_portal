@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from 'react';
 
-import ApiService from "../services/ApiService";
+import ApiService from '../services/ApiService';
 
 export interface project {
   SL_NO: string;
@@ -80,6 +80,7 @@ export function useProjectData() {
   const [loading, setLoading] = useState(true);
   const hasFetchedAllProjectDetails = useRef<boolean>(false);
 
+
   useEffect(() => {
     if (hasFetchedAllProjectDetails.current) {
       return;
@@ -93,7 +94,6 @@ export function useProjectData() {
     try {
       hasFetchedAllProjectDetails.current = true;
       const data = await ApiService.getAllProjectDetails();
-      console.log("Fetched Projects:", data); // ← Add this for debugging
       setProjects(data); // Ensure this is an array of `project`
     } catch (error) {
       console.error("Failed to fetch projects:", error);
@@ -101,6 +101,7 @@ export function useProjectData() {
       setLoading(false);
     }
   };
+
 
   const addProject = async (newProject: project) => {
     try {
@@ -118,7 +119,9 @@ export function useProjectData() {
       const payload = mapProjectToCamelCase(updatedProject);
       console.log('PAYLOAD::', payload);
       const updated = await ApiService.updateProjectDetails(sl_no, payload);
-      setProjects((prev: project[]) => prev.map((p) => (p.SL_NO === sl_no ? updated : p)));
+      setProjects((prev: project[]) =>
+        prev.map((p) => (p.SL_NO === sl_no ? updated : p))
+      );
       await fetchProjects();
     } catch (error) {
       console.error("Failed to update project:", error);
@@ -128,7 +131,7 @@ export function useProjectData() {
   const removeProject = async (sl_no: string) => {
     try {
       await ApiService.deleteProjectDetails(sl_no);
-      setProjects((prev: project[]) => prev.filter((p) => p.SL_NO !== sl_no));
+      setProjects((prev: project[]) => prev.filter(p => p.SL_NO !== sl_no));
     } catch (error) {
       console.error("Failed to delete project:", error);
     }
@@ -141,6 +144,6 @@ export function useProjectData() {
     fetchProjects,
     addProject,
     editProject,
-    removeProject,
+    removeProject
   };
 }
