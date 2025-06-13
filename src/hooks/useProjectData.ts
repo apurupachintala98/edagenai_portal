@@ -64,7 +64,7 @@ const mapProjectToCamelCase = (project: project) => ({
   Capability: project.CAPABILITY,
   Business_Value_Add: project.BUSINESS_VALUE_ADD,
   Architecture: project.ARCHITECTURE,
-  Plateform: project.PLATFORM,
+  Platform: project.PLATFORM,
   Framework: project.FRAMEWORK,
   UI: project.UI,
   DevOps: project.DEVOPS,
@@ -116,6 +116,7 @@ export function useProjectData() {
   const editProject = async (sl_no: string, updatedProject: project) => {
     try {
       const payload = mapProjectToCamelCase(updatedProject);
+      console.log('PAYLOAD::', payload);
       const updated = await ApiService.updateProjectDetails(sl_no, payload);
       setProjects((prev: project[]) => prev.map((p) => (p.SL_NO === sl_no ? updated : p)));
       await fetchProjects();

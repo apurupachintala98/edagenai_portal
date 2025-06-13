@@ -77,7 +77,7 @@ const projectFieldMap: Record<string, keyof project> = {
   Capability: "CAPABILITY",
   Business_Value_Add: "BUSINESS_VALUE_ADD",
   Architecture: "ARCHITECTURE",
-  Plateform: "PLATFORM",
+  Platform: "PLATFORM",
   Framework: "FRAMEWORK",
   UI: "UI",
   DevOps: "DEVOPS",

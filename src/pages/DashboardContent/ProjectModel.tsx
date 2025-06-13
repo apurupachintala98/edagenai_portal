@@ -103,7 +103,10 @@ function ProjectModel({ projectDetails, modalProjectName, setIsModalOpen }: Proj
                           <span className="HeadingLabel">{field}</span>
                         </td>
                         <td className="tdCls" width={"20%"}>
-                          {detail[0][field] === "True" || detail[0][field] === "true" ? (
+                          {detail[0][field] === "True" ||
+                          detail[0][field] === "true" ||
+                          detail[0][field] === "Yes" ||
+                          detail[0][field] === "yes" ? (
                             <CheckmarkFilled fill="green" size={"20"} />
                           ) : (
                             <Misuse fill="red" size={"20"} />
@@ -125,7 +128,10 @@ function ProjectModel({ projectDetails, modalProjectName, setIsModalOpen }: Proj
                           <span className="HeadingLabel">{field}</span>
                         </td>
                         <td className="tdCls" width={"20%"}>
-                          {detail[0][field] === "True" || detail[0][field] === "true" ? (
+                          {detail[0][field] === "True" ||
+                          detail[0][field] === "true" ||
+                          detail[0][field] === "Yes" ||
+                          detail[0][field] === "yes" ? (
                             <CheckmarkFilled fill="green" size={"20"} />
                           ) : (
                             <Misuse fill="red" size={"20"} />
