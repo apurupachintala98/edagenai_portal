@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from 'react';
 
-import ApiService from "../services/ApiService";
+import ApiService from '../services/ApiService';
 
 export interface project {
   SL_NO: string;
@@ -59,26 +59,13 @@ const mapProjectToCamelCase = (project: project) => ({
   status: project.STATUS,
   Link_to_Slide: project.LINK_TO_SLIDE,
   Notes: project.NOTES,
-  BU: project.BU,
-  Functionality: project.FUNCTIONALITY,
-  Capability: project.CAPABILITY,
-  Business_Value_Add: project.BUSINESS_VALUE_ADD,
-  Architecture: project.ARCHITECTURE,
-  Plateform: project.PLATFORM,
-  Framework: project.FRAMEWORK,
-  UI: project.UI,
-  DevOps: project.DEVOPS,
-  MCP: project.MCP,
-  Usage_Metrics: project.USAGE_METRICS,
-  Effort_Saved: project.EFFORT_SAVED,
-  Cost_Saved: project.COST_SAVED,
-  Derived_Env: project.DERIVED_ENV,
 });
 
 export function useProjectData() {
   const [projects, setProjects] = useState<project[]>([]);
   const [loading, setLoading] = useState(true);
   const hasFetchedAllProjectDetails = useRef<boolean>(false);
+
 
   useEffect(() => {
     if (hasFetchedAllProjectDetails.current) {
@@ -93,7 +80,6 @@ export function useProjectData() {
     try {
       hasFetchedAllProjectDetails.current = true;
       const data = await ApiService.getAllProjectDetails();
-      console.log("Fetched Projects:", data); // ← Add this for debugging
       setProjects(data); // Ensure this is an array of `project`
     } catch (error) {
       console.error("Failed to fetch projects:", error);
@@ -101,6 +87,7 @@ export function useProjectData() {
       setLoading(false);
     }
   };
+
 
   const addProject = async (newProject: project) => {
     try {
@@ -117,7 +104,9 @@ export function useProjectData() {
     try {
       const payload = mapProjectToCamelCase(updatedProject);
       const updated = await ApiService.updateProjectDetails(sl_no, payload);
-      setProjects((prev: project[]) => prev.map((p) => (p.SL_NO === sl_no ? updated : p)));
+      setProjects((prev: project[]) =>
+        prev.map((p) => (p.SL_NO === sl_no ? updated : p))
+      );
       await fetchProjects();
     } catch (error) {
       console.error("Failed to update project:", error);
@@ -127,7 +116,7 @@ export function useProjectData() {
   const removeProject = async (sl_no: string) => {
     try {
       await ApiService.deleteProjectDetails(sl_no);
-      setProjects((prev: project[]) => prev.filter((p) => p.SL_NO !== sl_no));
+      setProjects((prev: project[]) => prev.filter(p => p.SL_NO !== sl_no));
     } catch (error) {
       console.error("Failed to delete project:", error);
     }
@@ -140,6 +129,6 @@ export function useProjectData() {
     fetchProjects,
     addProject,
     editProject,
-    removeProject,
+    removeProject
   };
 }

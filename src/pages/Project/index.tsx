@@ -297,7 +297,6 @@ function Project() {
   };
 
   const handleDelete = async (sl_no: string) => {
-    console.log("PROJECTID::", sl_no);
     await removeProject(sl_no);
   };
 
