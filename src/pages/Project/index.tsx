@@ -138,11 +138,13 @@ function Project() {
   const { projects, loading, fetchProjects, addProject, editProject, removeProject } =
     useProjectData();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [formData, setFormData] = useState<project>({} as project);
   const [filters, setFilters] = useState<Record<string, string[]>>({});
   const [modalReady, setModalReady] = useState(false);
   const [errors, setErrors] = useState<{ startDate?: string; deploymentDate?: string }>({});
+  const [projectID, setProjectID] = useState("");
   const [modalKey, setModalKey] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 12;
@@ -295,6 +297,7 @@ function Project() {
   };
 
   const handleDelete = async (sl_no: string) => {
+    console.log("PROJECTID::", sl_no);
     await removeProject(sl_no);
   };
 
@@ -518,7 +521,11 @@ function Project() {
                                         size={16}
                                         style={{ cursor: "pointer" }}
                                         title="Delete"
-                                        onClick={() => handleDelete(row.id)}
+                                        onClick={() => {
+                                          setIsDeleteModalOpen(true);
+                                          setProjectID(row.id);
+                                          //handleDelete(row.id)
+                                        }}
                                       />
                                     </div>
                                   ) : cell.value !== null && cell.value !== undefined ? (
@@ -569,6 +576,21 @@ function Project() {
           )}
         </TableContainer>
         <Modal
+          open={isDeleteModalOpen}
+          modalHeading={"Delete Project"}
+          primaryButtonText="Delete"
+          secondaryButtonText="Cancel"
+          onRequestClose={() => {
+            setIsDeleteModalOpen(false);
+            setProjectID("");
+          }}
+          onRequestSubmit={() => handleDelete(projectID)}
+          className="projectDeleteModal"
+          size="sm"
+        >
+          <div className="mb-1 p-0">Are you sure you want to delete?</div>
+        </Modal>
+        <Modal
           open={isModalOpen && modalReady}
           modalHeading={editMode ? "Edit Project" : "Add Project"}
           primaryButtonText="Submit"
@@ -578,7 +600,7 @@ function Project() {
           className="projectDetailModal"
         >
           <Grid fullWidth className="m-0 p-0 projectDetailCol">
-            <Column sm={4} md={8} lg={16} className="m-0 p-0" >
+            <Column sm={4} md={8} lg={16} className="m-0 p-0">
               <div style={{ display: "flex", flexWrap: "wrap", gap: "1rem" }}>
                 {Object.entries(projectFieldMap).map(([label, key]) => (
                   <TextInput
