@@ -22,7 +22,6 @@ export interface projectDetails {
   STATUS: string;
   LINK_TO_SLIDE: string;
   NOTES: string;
-  PROGRAM_NAME: string;
   BU: string;
   FUNCTIONALITY: string;
   CAPABILITY: string;
