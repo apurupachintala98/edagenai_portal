@@ -62,7 +62,7 @@ const mapProjectToCamelCase = (project: project) => ({
   BU: project.BU,
   Functionality: project.FUNCTIONALITY,
   Capability: project.CAPABILITY,
-  Business_Value_add: project.BUSINESS_VALUE_ADD,
+  Business_value_add: project.BUSINESS_VALUE_ADD,
   Architecture: project.ARCHITECTURE,
   Platform: project.PLATFORM,
   Framework: project.FRAMEWORK,
