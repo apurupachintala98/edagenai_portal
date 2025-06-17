@@ -298,6 +298,7 @@ function Project() {
 
   const handleDelete = async (sl_no: string) => {
     await removeProject(sl_no);
+    setIsDeleteModalOpen(false);
   };
 
   const getUniqueValues = (key: string) => {
