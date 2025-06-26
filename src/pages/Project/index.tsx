@@ -102,7 +102,7 @@ const CustomFilterIcon = ({ isFiltered }: { isFiltered: boolean }) => {
   );
 };
 
-// Utility function to parse a YYYY-MM-DD string to a Date object
+// Utility function to parse a MM/DD/YYYY string to a Date object
 const parseDateString = (dateString: string | undefined) => {
   if (!dateString) return undefined;
 //  const date = new Date(dateString);
@@ -605,7 +605,7 @@ function Project() {
                         Start Date <span style={{ color: "red" }}>*</span>
                       </span>
                     }
-                    placeholder="yyyy-mm-dd"
+                    placeholder="MM/DD/YYYY"
                     invalid={!!errors.startDate}
                     invalidText={errors.startDate}
                   />
@@ -626,7 +626,7 @@ function Project() {
                         Deployment Date <span style={{ color: "red" }}>*</span>
                       </span>
                     }
-                    placeholder="yyyy-mm-dd"
+                    placeholder="MM/DD/YYYY"
                     invalid={!!errors.deploymentDate}
                     invalidText={errors.deploymentDate}
                   />
