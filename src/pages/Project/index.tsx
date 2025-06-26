@@ -36,6 +36,7 @@ import { useWindowDimensions } from "utils/hooks";
 
 import { type project, useProjectData } from "../../hooks/useProjectData";
 import { convertDateFormate } from "utils/common";
+import dayjs from "dayjs";
 
 // Extend the DataTableHeader type to include filterable
 interface CustomDataTableHeader {
@@ -101,36 +102,12 @@ const CustomFilterIcon = ({ isFiltered }: { isFiltered: boolean }) => {
   );
 };
 
-// Utility function to format a Date object to YYYY-MM-DD
-const formatDateToStringOld = (date: Date | string | undefined): string => {
-  if (!date) return "";
-  if (typeof date === "string") return date;
-  const d = new Date(date);
-  if (isNaN(d.getTime())) return "";
-  return d.toISOString().split("T")[0];
-};
-
-export function formatDateToString(dateTime: Date): string {
-  if (!dateTime) {
-    return "";
-  }
-  const date = new Date(dateTime);
-
-  // Extract local date parts
-  const yyyy = date.getFullYear();
-  const mm = String(date.getMonth() + 1).padStart(2, "0");
-  const dd = String(date.getDate()).padStart(2, "0");
-
-  const finalDateTime = `${yyyy}-${mm}-${dd}`;
-
-  return finalDateTime;
-}
-
 // Utility function to parse a YYYY-MM-DD string to a Date object
-const parseDateString = (dateString: string | undefined): Date | undefined => {
+const parseDateString = (dateString: string | undefined) => {
   if (!dateString) return undefined;
-  const date = new Date(dateString);
-  return isNaN(date.getTime()) ? undefined : date;
+//  const date = new Date(dateString);
+  return dayjs(dateString).format("MM/DD/YYYY");
+  //return isNaN(date.getTime()) ? undefined : date;
 };
 
 function Project() {
@@ -616,7 +593,7 @@ function Project() {
                   datePickerType="single"
                   value={parseDateString(formData.START_DATE)}
                   onChange={(dates: Date[]) => {
-                    const formattedDate = dates[0] ? formatDateToString(dates[0]) : "";
+                    const formattedDate = dates[0] ? convertDateFormate(dates[0]) : "";
                     handleChange("START_DATE", formattedDate);
                   }}
                   key={`start-date-${modalKey}`}
@@ -637,7 +614,7 @@ function Project() {
                   datePickerType="single"
                   value={parseDateString(formData.DEPLOYMENT_DATE)}
                   onChange={(dates: Date[]) => {
-                    const formattedDate = dates[0] ? formatDateToString(dates[0]) : "";
+                    const formattedDate = dates[0] ? convertDateFormate(dates[0]) : "";
                     handleChange("DEPLOYMENT_DATE", formattedDate);
                   }}
                   key={`deployment-date-${modalKey}`}

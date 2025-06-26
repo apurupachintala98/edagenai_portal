@@ -1,3 +1,4 @@
+import dayjs from "dayjs";
 import { UserInfo } from "interface";
 
 export const capitalizeFirstLetter = (str: string) => str.charAt(0).toUpperCase() + str.slice(1);
@@ -22,7 +23,7 @@ export const size = {
 export function capitalizeFirstLetterOfEachWord(str: string) {
   if (typeof str !== "string" || str.length === 0) {
     return "";
-  }else if (str === "staff vp" || str === "lead nm" || str === "llm platform" || str === "llm model" || str === "bu"){
+  }else if (str === "staff vp" || str === "lead nm" || str === "llm platform" || str === "llm model" || str === "bu" || str === "tgov no"){
     if(str === "staff vp"){
       return "Staff VP";
     }
@@ -38,6 +39,9 @@ export function capitalizeFirstLetterOfEachWord(str: string) {
     if(str === "bu"){
       return "BU";
     }
+    if(str === "tgov no"){
+      return "TGOV No"
+    }
   }
 
   return str.split(" ").map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
@@ -48,14 +52,6 @@ export function convertDateFormate(dateTime: Date): string {
   if (!dateTime) {
     return "";
   }
-  const date = new Date(dateTime);
-
-  // Extract local date parts
-  const yyyy = date.getFullYear();
-  const mm = String(date.getMonth() + 1).padStart(2, "0");
-  const dd = String(date.getDate()).padStart(2, "0");
-
-  const finalDateTime = `${mm}/${dd}/${yyyy}`;
-
+  const finalDateTime = dayjs(dateTime).format("MM/DD/YYYY")
   return finalDateTime;
 }

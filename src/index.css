@@ -387,7 +387,7 @@
   margin-top: -10px;
   padding-bottom: 10px;
   margin-bottom: 10px;
-  border-bottom: 1px solid gray;
+  border-bottom: 1px solid #a1abc0;
 }
 
 .btn-blue {
@@ -460,12 +460,27 @@
 }
 
 .prodDetailPopup {
-  width: 100%;
+  width: 95%;
 }
 
-.prodDetailPopup .heading{
-  width: 40%;
+.prodDetailPopup .heading {
+  width: 35%;
 }
-.prodDetailPopup .detail{
+
+.prodDetailPopup .detail {
   width: 60%;
+}
+
+.sapratorCon {
+  background-image: url("assests/images/separator.svg");
+  background-position: right top;
+  background-repeat: no-repeat;
+}
+
+.m-0 {
+  margin: 0 !important;
+}
+
+.p-0 {
+  padding: 0 !important;
 }

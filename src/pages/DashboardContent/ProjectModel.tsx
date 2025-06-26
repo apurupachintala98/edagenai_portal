@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Column, Grid } from "@carbon/react";
 import { CheckmarkFilled, Misuse, Catalog, ChevronRight, ChevronLeft } from "@carbon/react/icons";
 import { capitalizeFirstLetterOfEachWord, convertDateFormate } from "utils/common";
+import dayjs from "dayjs";
 
 interface ProjectModelProps {
   projectDetails: any;
@@ -38,10 +39,9 @@ function ProjectModel({ projectDetails, modalProjectName, setIsModalOpen }: Proj
         {`${detail[0].PROJECT_NAME}: Project Details`}
       </h5>
       <Grid className="mp-0 mt-auto" style={{ marginTop: "20px" }}>
-        <Column sm={12} md={6} lg={6} className="mp-0">
-          <table className="prodDetailPopup">
+        <Column sm={12} md={8} lg={8} className="mp-0">
+          <table className="prodDetailPopup sapratorCon">
             {Object.entries(detail[0]).map(([key, value], index) => {
-              console.log('key::', key, value);
               if (!checkmarkFields.includes(key) && index < 15) {
                 return (
                   <tr key={key}>
@@ -54,7 +54,7 @@ function ProjectModel({ projectDetails, modalProjectName, setIsModalOpen }: Proj
                       </span>
                     </td>
                     <td className="pb-2 pr-2 detail">
-                      {((key === "START_DATE" || key === "DEPLOYMENT_DATE") && value) ? convertDateFormate(new Date(value.toString())) : value && (typeof value === "string" || typeof value === "number")
+                      {((key === "START_DATE" || key === "DEPLOYMENT_DATE") && value) ? dayjs(value.toString()).format("MM/DD/YYYY") : value && (typeof value === "string" || typeof value === "number")
                         ? value
                         : "N/A"}
                     </td>
@@ -80,7 +80,7 @@ function ProjectModel({ projectDetails, modalProjectName, setIsModalOpen }: Proj
                       </span>
                     </td>
                     <td className="pb-2 pr-2 detail">
-                      {((key === "START_DATE" || key === "DEPLOYMENT_DATE") && value) ? convertDateFormate(new Date(value.toString())) : value && (typeof value === "string" || typeof value === "number")
+                      {((key === "START_DATE" || key === "DEPLOYMENT_DATE") && value) ? dayjs(value.toString()).format("MM/DD/YYYY") : value && (typeof value === "string" || typeof value === "number")
                         ? value
                         : "N/A"}
                     </td>
@@ -94,6 +94,9 @@ function ProjectModel({ projectDetails, modalProjectName, setIsModalOpen }: Proj
 
         <Column sm={12} md={12} lg={12} fullWidth>
           <Grid fullWidth>
+            <Column sm={12} md={12} lg={12} className="m-0 p-0">
+              <span className="HeadingLabel">Plateform Services Usage:</span>
+            </Column>
             <Column sm={12} md={4} lg={5} className="mp-0 p-r-10">
               <table className="tableWidth">
                 {checkmarkFields.map((field, index) => {

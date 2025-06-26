@@ -53,7 +53,6 @@ const ProjectTimeline = ({
         filterSeriesData.includes(item.PROJECT_NAME),
       );
       setFilterProjectDetails(filteredData);
-      console.log("filteredData::", filteredData);
     }
   }, [seriesData, projectDetails]);
 
@@ -287,8 +286,6 @@ const ProjectTimeline = ({
     }),
     [seriesData],
   );
-
-  console.log("seriesData::", seriesData);
 
   return (
     <div className="mt-0 mb-0 ml-1 mr-1 grid">
