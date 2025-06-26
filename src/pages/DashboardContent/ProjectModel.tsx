@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Column, Grid } from "@carbon/react";
 import { CheckmarkFilled, Misuse, Catalog, ChevronRight, ChevronLeft } from "@carbon/react/icons";
-import { capitalizeFirstLetterOfEachWord } from "utils/common";
+import { capitalizeFirstLetterOfEachWord, convertDateFormate } from "utils/common";
 
 interface ProjectModelProps {
   projectDetails: any;
@@ -41,6 +41,7 @@ function ProjectModel({ projectDetails, modalProjectName, setIsModalOpen }: Proj
         <Column sm={12} md={6} lg={6} className="mp-0">
           <table className="prodDetailPopup">
             {Object.entries(detail[0]).map(([key, value], index) => {
+              console.log('key::', key, value);
               if (!checkmarkFields.includes(key) && index < 15) {
                 return (
                   <tr key={key}>
@@ -53,7 +54,7 @@ function ProjectModel({ projectDetails, modalProjectName, setIsModalOpen }: Proj
                       </span>
                     </td>
                     <td className="pb-2 pr-2 detail">
-                      {value && (typeof value === "string" || typeof value === "number")
+                      {((key === "START_DATE" || key === "DEPLOYMENT_DATE") && value) ? convertDateFormate(new Date(value.toString())) : value && (typeof value === "string" || typeof value === "number")
                         ? value
                         : "N/A"}
                     </td>
@@ -79,7 +80,7 @@ function ProjectModel({ projectDetails, modalProjectName, setIsModalOpen }: Proj
                       </span>
                     </td>
                     <td className="pb-2 pr-2 detail">
-                      {value && (typeof value === "string" || typeof value === "number")
+                      {((key === "START_DATE" || key === "DEPLOYMENT_DATE") && value) ? convertDateFormate(new Date(value.toString())) : value && (typeof value === "string" || typeof value === "number")
                         ? value
                         : "N/A"}
                     </td>
@@ -102,11 +103,11 @@ function ProjectModel({ projectDetails, modalProjectName, setIsModalOpen }: Proj
                         <td className="tdCls" width={"80%"}>
                           <span className="HeadingLabel">{field}</span>
                         </td>
-                        <td className="tdCls" width={"20%"}>
+                        <td className="tdCls" width={"20%"} align="center">
                           {detail[0][field] === "True" ||
-                          detail[0][field] === "true" ||
-                          detail[0][field] === "Yes" ||
-                          detail[0][field] === "yes" ? (
+                            detail[0][field] === "true" ||
+                            detail[0][field] === "Yes" ||
+                            detail[0][field] === "yes" ? (
                             <CheckmarkFilled fill="green" size={"20"} />
                           ) : (
                             <Misuse fill="red" size={"20"} />
@@ -127,11 +128,11 @@ function ProjectModel({ projectDetails, modalProjectName, setIsModalOpen }: Proj
                         <td className="tdCls" width={"80%"}>
                           <span className="HeadingLabel">{field}</span>
                         </td>
-                        <td className="tdCls" width={"20%"}>
+                        <td className="tdCls" width={"20%"} align="center">
                           {detail[0][field] === "True" ||
-                          detail[0][field] === "true" ||
-                          detail[0][field] === "Yes" ||
-                          detail[0][field] === "yes" ? (
+                            detail[0][field] === "true" ||
+                            detail[0][field] === "Yes" ||
+                            detail[0][field] === "yes" ? (
                             <CheckmarkFilled fill="green" size={"20"} />
                           ) : (
                             <Misuse fill="red" size={"20"} />

@@ -35,6 +35,7 @@ import {
 import { useWindowDimensions } from "utils/hooks";
 
 import { type project, useProjectData } from "../../hooks/useProjectData";
+import { convertDateFormate } from "utils/common";
 
 // Extend the DataTableHeader type to include filterable
 interface CustomDataTableHeader {
@@ -528,7 +529,7 @@ function Project() {
                                         }}
                                       />
                                     </div>
-                                  ) : cell.value !== null && cell.value !== undefined ? (
+                                  ) : cell.info.header === "DEPLOYMENT_DATE" ? convertDateFormate(cell.value) : cell.value !== null && cell.value !== undefined ? (
                                     cell.value
                                   ) : (
                                     "-"
