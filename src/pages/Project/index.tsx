@@ -35,7 +35,7 @@ import {
 import { useWindowDimensions } from "utils/hooks";
 
 import { type project, useProjectData } from "../../hooks/useProjectData";
-import { convertDateFormate } from "utils/common";
+import { capitalizeFirstLetterOfEachWord, convertDateFormate } from "utils/common";
 import dayjs from "dayjs";
 
 // Extend the DataTableHeader type to include filterable
@@ -105,14 +105,22 @@ const CustomFilterIcon = ({ isFiltered }: { isFiltered: boolean }) => {
 // Utility function to parse a MM/DD/YYYY string to a Date object
 const parseDateString = (dateString: string | undefined) => {
   if (!dateString) return undefined;
-//  const date = new Date(dateString);
+  //  const date = new Date(dateString);
   return dayjs(dateString).format("MM/DD/YYYY");
   //return isNaN(date.getTime()) ? undefined : date;
 };
 
+
+type CheckmarkField = "ARCHITECTURE" | "PLATFORM" | "FRAMEWORK" | "UI" | "DEVOPS" | "MCP";
+
+const checkmarkFields = ["ARCHITECTURE", "PLATFORM", "FRAMEWORK", "UI", "DEVOPS", "MCP"];
+
 function Project() {
   const navigate = useNavigate();
   const { height } = useWindowDimensions();
+
+
+
   const { projects, loading, fetchProjects, addProject, editProject, removeProject } =
     useProjectData();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -126,6 +134,8 @@ function Project() {
   const [modalKey, setModalKey] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 12;
+
+
 
   useEffect(() => {
     // Update filters when projects change (e.g., after delete or edit)
@@ -192,6 +202,7 @@ function Project() {
   };
 
   const openEditModal = (project: project) => {
+
     setEditMode(true);
     setModalReady(false);
     setErrors({});
@@ -215,7 +226,7 @@ function Project() {
       STATUS: project.STATUS || "",
       LINK_TO_SLIDE: project.LINK_TO_SLIDE || "",
       NOTES: project.NOTES || "",
-      BU: project.NOTES || "",
+      BU: project.BU || "",
       FUNCTIONALITY: project.FUNCTIONALITY || "",
       CAPABILITY: project.CAPABILITY || "",
       BUSINESS_VALUE_ADD: project.BUSINESS_VALUE_ADD || "",
@@ -229,6 +240,8 @@ function Project() {
       EFFORT_SAVED: project.EFFORT_SAVED || "",
       COST_SAVED: project.COST_SAVED || "",
       DERIVED_ENV: project.DERIVED_ENV || "",
+
+
     });
     setModalReady(true);
     setIsModalOpen(true);
@@ -351,6 +364,20 @@ function Project() {
     const endIndex = startIndex + pageSize;
     return projectRows.slice(startIndex, endIndex);
   }, [projectRows, currentPage]);
+
+  const handleCheckboxChange = (
+    _event: React.ChangeEvent<HTMLInputElement>,
+    data: { checked: boolean; id: string },
+  ) => {
+    const { id, checked } = data;
+
+    if (checkmarkFields.includes(id as CheckmarkField)) {
+      setFormData((prev) => ({
+        ...prev,
+        [id]: checked ? "on" : "off",
+      }));
+    }
+  };
 
   return (
     <MainContainer>
@@ -576,9 +603,10 @@ function Project() {
           onRequestClose={() => setIsModalOpen(false)}
           onRequestSubmit={handleSubmit}
           className="projectDetailModal"
+          size="lg"
         >
           <Grid fullWidth className="m-0 p-0 projectDetailCol">
-            <Column sm={4} md={8} lg={16} className="m-0 p-0">
+            {/* <Column sm={4} md={8} lg={16} className="m-0 p-0">
               <div style={{ display: "flex", flexWrap: "wrap", gap: "1rem" }}>
                 {Object.entries(projectFieldMap).map(([label, key]) => (
                   <TextInput
@@ -632,7 +660,176 @@ function Project() {
                   />
                 </DatePicker>
               </div>
+            </Column> */}
+            <Column sm={12} md={8} lg={8} className="mp-0">
+              <table className="prodDetailPopup">
+                {Object.entries(projectFieldMap).map(([label, key], index) => {
+                  if (!checkmarkFields.includes(key) && index < 12) {
+                    return (
+                      <tr key={key}>
+                        <td className="pb-2 pr-2 heading textAlighCenter">
+                          <span className="HeadingLabel">
+                            {capitalizeFirstLetterOfEachWord(
+                              key.toLocaleLowerCase().replace(/_/g, " "),
+                            )}
+                            :
+                          </span>
+                        </td>
+                        <td className="pb-2 detail detailPad">
+                          <TextInput
+                            key={key}
+                            id={key}
+                            labelText={""}
+                            value={formData[key] || ""}
+                            onChange={(e) => handleChange(key, e.target.value)}
+                          />
+                        </td>
+                      </tr>
+                    );
+                  }
+                  return null;
+                })}
+                <tr>
+                  <td className="pb-2 pr-2 heading textAlighCenter">
+                    <span className="HeadingLabel">
+                      Start Date <span style={{ color: "red" }}>*</span>
+                    </span>
+                  </td>
+                  <td className="pb-2 pr-2 detail">
+                    <DatePicker
+                      datePickerType="single"
+                      value={parseDateString(formData.START_DATE)}
+                      onChange={(dates: Date[]) => {
+                        const formattedDate = dates[0] ? convertDateFormate(dates[0]) : "";
+                        handleChange("START_DATE", formattedDate);
+                      }}
+                      key={`start-date-${modalKey}`}
+                    >
+                      <DatePickerInput
+                        id="START_DATE"
+                        labelText={""}
+                        placeholder="MM/DD/YYYY"
+                        invalid={!!errors.startDate}
+                        invalidText={errors.startDate}
+                      />
+                    </DatePicker>
+                  </td>
+                </tr>
+              </table>
             </Column>
+            <Column sm={12} md={8} lg={8} className="mp-0">
+              <table className="prodDetailPopup ">
+                {Object.entries(projectFieldMap).map(([label, key], index) => {
+                  if (!checkmarkFields.includes(key) && index >= 12) {
+                    return (
+                      <tr key={key}>
+                        <td className="pb-2 pr-2 heading textAlighCenter">
+                          <span className="HeadingLabel">
+                            {capitalizeFirstLetterOfEachWord(
+                              key.toLocaleLowerCase().replace(/_/g, " "),
+                            )}
+                            :
+                          </span>
+                        </td>
+                        <td className="pb-2 detail detailPad">
+                          <TextInput
+                            key={key}
+                            id={key}
+                            labelText={""}
+                            value={formData[key] || ""}
+                            onChange={(e) => handleChange(key, e.target.value)}
+                          />
+                        </td>
+                      </tr>
+                    );
+                  }
+                  return null;
+                })}
+                <tr>
+                  <td className="pb-2 pr-2 heading textAlighCenter">
+                    <span className="HeadingLabel">
+                      Deployment Date <span style={{ color: "red" }}>*</span>
+                    </span>
+                  </td>
+                  <td className="pb-2 pr-2 detail">
+                    <DatePicker
+                      datePickerType="single"
+                      value={parseDateString(formData.DEPLOYMENT_DATE)}
+                      onChange={(dates: Date[]) => {
+                        const formattedDate = dates[0] ? convertDateFormate(dates[0]) : "";
+                        handleChange("DEPLOYMENT_DATE", formattedDate);
+                      }}
+                      key={`deployment-date-${modalKey}`}
+                    >
+                      <DatePickerInput
+                        id="DEPLOYMENT_DATE"
+                        labelText={""}
+                        placeholder="MM/DD/YYYY"
+                        invalid={!!errors.deploymentDate}
+                        invalidText={errors.deploymentDate}
+                      />
+                    </DatePicker>
+                  </td>
+                </tr>
+              </table>
+            </Column>
+
+            <Column sm={12} md={12} lg={12} fullWidth>
+              <Grid fullWidth>
+                <Column sm={12} md={12} lg={12} className="m-0 p-0">
+                  <span className="HeadingLabel">Platform Services Usage:</span>
+                </Column>
+                <Column sm={12} md={4} lg={5} className="mp-0 p-r-10">
+                  <table className="tableWidth">
+                    {checkmarkFields.map((field, index) => {
+                      if (index < 3) {
+                        return (
+                          <tr key={field}>
+                            <td className="tdCls" width={"80%"}>
+                              <span className="HeadingLabel">{field}</span>
+                            </td>
+                            <td className="tdCls" width={"20%"} align="center">
+                              <Checkbox
+                                key={field}
+                                id={field}
+                                labelText={field}
+                                checked={formData[field as keyof project] === "on"}
+                                onChange={handleCheckboxChange}
+                              />
+                            </td>
+                          </tr>
+                        );
+                      }
+                    })}
+                  </table>
+                </Column>
+                <Column sm={12} md={4} lg={5} className="mp-0 p-r-10">
+                  <table className="tableWidth">
+                    {checkmarkFields.map((field: any, index) => {
+                      if (index >= 3) {
+                        return (
+                          <tr key={field}>
+                            <td className="tdCls" width={"80%"}>
+                              <span className="HeadingLabel">{field}</span>
+                            </td>
+                            <td className="tdCls" width={"20%"} align="center">
+                              <Checkbox
+                                key={field}
+                                id={field}
+                                labelText={field}
+                                checked={formData[field as keyof project] === "on"}
+                                onChange={handleCheckboxChange}
+                              />
+                            </td>
+                          </tr>
+                        );
+                      }
+                    })}
+                  </table>
+                </Column>
+              </Grid>
+            </Column>
+
           </Grid>
         </Modal>
       </PageContainer>

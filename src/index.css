@@ -450,6 +450,11 @@
   background-color: #F2F2F2;
 }
 
+.projectDetailModal .cds--modal-header {
+  border-bottom: 1px solid #a1abc0;
+  padding-bottom: 0.8rem;
+}
+
 .projectDetailModal .cds--modal-content {
   /* padding-left: 0; */
 }
@@ -483,4 +488,13 @@
 
 .p-0 {
   padding: 0 !important;
+}
+
+.textAlighCenter{
+  vertical-align: middle;
+}
+
+.detailPad
+  {
+    padding-right: 0.8rem !important;
 }
