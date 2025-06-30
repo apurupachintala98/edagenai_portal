@@ -792,7 +792,7 @@ function Project() {
                               <Checkbox
                                 key={field}
                                 id={field}
-                                labelText={field}
+                                labelText={""}
                                 checked={formData[field as keyof project] === "on"}
                                 onChange={handleCheckboxChange}
                               />
@@ -816,7 +816,7 @@ function Project() {
                               <Checkbox
                                 key={field}
                                 id={field}
-                                labelText={field}
+                                labelText={""}
                                 checked={formData[field as keyof project] === "on"}
                                 onChange={handleCheckboxChange}
                               />
