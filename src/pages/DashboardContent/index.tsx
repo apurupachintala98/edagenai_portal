@@ -15,6 +15,8 @@ import {
   DocumentAdd,
   IbmCloudProjects,
   UserMultiple,
+  BusinessProcesses,
+  DataCategorical,
   SalesOps /*CurrencyDollar*/,
 } from "@carbon/react/icons";
 import { ChevronLeft, ChevronRight, DollarSign } from "lucide-react";
@@ -450,7 +452,7 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
 
             <DashboardCard
               title="Program Type Distribution"
-              icon={<IbmCloudProjects size={20} />}
+              icon={<DataCategorical size={20} />}
               subheading={`Total Programs: ${dashboardTotals.totalProgramTypes}`}
             >
               <ProgressDonut data={dashboardData.programTypes} />
@@ -458,7 +460,7 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
 
             <DashboardCard
               title="Business Units"
-              icon={<IbmCloudProjects size={20} />}
+              icon={<BusinessProcesses size={20} />}
               subheading={`Total BU Projects: ${dashboardTotals.totalBUProjects}`}
             >
               <DashboardChart data={dashboardData.bus} />
