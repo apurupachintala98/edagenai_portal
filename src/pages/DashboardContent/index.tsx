@@ -44,6 +44,15 @@ interface DashboardContentProps {
   containerWidth: number;
 }
 
+interface DashboardTotals {
+  totalProjects: number;
+  totalUsers: number;
+  totalCost: number;
+  totalProgramTypes: number;
+  totalBUProjects: number;
+}
+
+
 function DashboardContent({ containerWidth }: DashboardContentProps) {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -56,13 +65,18 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
   const [dashboardData, setDashboardData] = useState({
     users: [] as any[],
     costs: [] as any[],
+    programTypes: [] as any[],
+    bus: [] as any[],
   });
   const [progressReportData, setProgressReportData] = useState<any[]>([]);
-  const [dashboardTotals, setDashboardTotals] = useState({
+  const [dashboardTotals, setDashboardTotals] = useState<DashboardTotals>({
     totalProjects: 0,
     totalUsers: 0,
     totalCost: 0,
+    totalProgramTypes: 0,
+    totalBUProjects: 0,
   });
+
   const [filteredProjectDonut, setFilteredProjectDonut] = useState<any[] | null>(null);
   const [dropdownOptions, setDropdownOptions] = useState({
     managers: [] as any[],
@@ -90,9 +104,11 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
   useEffect(() => {
     const fetchDashboardUsersAndCosts = async () => {
       try {
-        const [usersRes, costRes] = await Promise.all([
+        const [usersRes, costRes, programTypeRes, buRes] = await Promise.all([
           ApiService.getAllUsersDetails(),
           ApiService.getAllCostsDetails(),
+          ApiService.getAllProgramTypeDetails(),
+          ApiService.getAllBUDetails(),
         ]);
         const colorPalette = [
           "hsl(var(--brand-blue))",
@@ -113,17 +129,35 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
           value: Number(item.VALUE) || 0,
           color: colorPalette[index % colorPalette.length],
         }));
+        const programTypeWithColor = programTypeRes
+          .filter((item: any) => item.VALUE !== 0)
+          .map((item: any, index: number) => ({
+            name: item.NAME,
+            value: item.VALUE,
+            color: colorPalette[index % colorPalette.length],
+          }));
+
+        const buWithColor = buRes
+          .filter((item: any) => item.VALUE !== 0)
+          .map((item: any, index: number) => ({
+            name: item.NAME,
+            value: item.VALUE,
+            color: colorPalette[index % colorPalette.length],
+          }));
+
         setDashboardData({
           users: usersWithColor,
           costs: costsWithColor,
+          programTypes: programTypeWithColor,
+          bus: buWithColor,
         });
 
-        const totalUsers = usersWithColor.reduce((acc: number, item: any) => acc + item.value, 0);
-        const totalCost = costsWithColor.reduce((acc: number, item: any) => acc + item.value, 0);
         setDashboardTotals((prev) => ({
           ...prev,
-          totalUsers,
-          totalCost,
+          totalUsers: usersWithColor.reduce((acc: any, item: { value: any; }) => acc + item.value, 0),
+          totalCost: costsWithColor.reduce((acc: any, item: { value: any; }) => acc + item.value, 0),
+          totalProgramTypes: programTypeWithColor.reduce((acc: any, item: { value: any; }) => acc + item.value, 0),
+          totalBUProjects: buWithColor.reduce((acc: any, item: { value: any; }) => acc + item.value, 0),
         }));
       } catch (error) {
         console.error("Failed to fetch dashboard users or costs:", error);
@@ -146,8 +180,8 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
             index % 3 === 0
               ? "hsl(var(--brand-blue))"
               : index % 3 === 1
-              ? "hsl(var(--brand-teal))"
-              : "hsl(var(--muted-foreground))",
+                ? "hsl(var(--brand-teal))"
+                : "hsl(var(--muted-foreground))",
         }));
 
         setProgressReportData(coloredData);
@@ -241,7 +275,7 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
       ];
 
       //filter donatData and pass non zero value only
-      const filterDonatData =  donutData.length > 0 ? donutData.filter(item => item.value !== 0) : [];
+      const filterDonatData = donutData.length > 0 ? donutData.filter(item => item.value !== 0) : [];
 
       setFilteredProjectDonut(filterDonatData);
       setDashboardTotals((prev) => ({
@@ -415,6 +449,23 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
             </DashboardCard>
 
             <DashboardCard
+              title="Program Type Distribution"
+              icon={<IbmCloudProjects size={20} />}
+              subheading={`Total Programs: ${dashboardTotals.totalProgramTypes}`}
+            >
+              <DashboardChart data={dashboardData.programTypes} />
+            </DashboardCard>
+
+            <DashboardCard
+              title="Business Units"
+              icon={<IbmCloudProjects size={20} />}
+              subheading={`Total BU Projects: ${dashboardTotals.totalBUProjects}`}
+            >
+              <DashboardChart data={dashboardData.bus} />
+            </DashboardCard>
+
+
+            <DashboardCard
               title="Users"
               icon={<UserMultiple size={20} />}
               subheading={`Total Users: ${dashboardTotals.totalUsers}`}
@@ -434,22 +485,6 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
             </DashboardCard>
 
             <DashboardCard
-              title="Graph I"
-              icon={<IbmCloudProjects size={20} />}
-              subheading={`Total Projects : ${dashboardTotals.totalProjects}`}
-            >
-              <></>
-            </DashboardCard>
-
-            <DashboardCard
-              title="Graph II"
-              icon={<IbmCloudProjects size={20} />}
-              subheading={`Total Projects : ${dashboardTotals.totalProjects}`}
-            >
-              <></>
-            </DashboardCard>
-
-            <DashboardCard
               title="Graph III"
               icon={<IbmCloudProjects size={20} />}
               subheading={`Total Projects : ${dashboardTotals.totalProjects}`}
@@ -458,36 +493,6 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
             </DashboardCard>
           </Carousel>
         </DashboardCardsWrapper>
-
-        {/* 3-Column Layout for Charts */}
-        {/* <DashboardCardsWrapper>
-          <DashboardCard
-            title="Projects"
-            icon={<IbmCloudProjects size={20} />}
-            subheading={`Total Projects : ${dashboardTotals.totalProjects}`}
-          >
-            <ProgressDonut data={filteredProjectDonut ?? progressReportData} />
-          </DashboardCard>
-
-          <DashboardCard
-            title="Users"
-            icon={<UserMultiple size={20} />}
-            subheading={`Total Users: ${dashboardTotals.totalUsers}`}
-          >
-            <DashboardChart data={dashboardData.users} />
-          </DashboardCard>
-
-          <DashboardCard
-            title="Cortex Cost"
-            icon={<DollarSign size={20} />}
-            subheading={`Total Cost for the Projects : $${Math.round(
-              dashboardTotals.totalCost,
-            ).toLocaleString()}`}
-          >
-            {" "}
-            <DashboardChart data={dashboardData.costs} isCurrency />
-          </DashboardCard>
-        </DashboardCardsWrapper> */}
 
         {/* Projects Status Section */}
         <div className="mt-0 pt-6 pb-6 pl-1 pr-1 rounded-lg">

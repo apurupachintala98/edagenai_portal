@@ -57,9 +57,9 @@ const ApiService = {
   },
 
   getAllProjectData: async () => {
-  const response = await axios.get(`${Dashboard_BASE_URL}/get_full_project_details/`);
-  return response.status === 200 ? response.data : [];
-},
+    const response = await axios.get(`${Dashboard_BASE_URL}/get_full_project_details/`);
+    return response.status === 200 ? response.data : [];
+  },
 
   getAllDetailsGanttChart: async () => {
     const response = await axios.get(`${Dashboard_BASE_URL}/get_all_details_gantt_chart/`);
@@ -73,6 +73,16 @@ const ApiService = {
 
   getAllUsersDetails: async () => {
     const response = await axios.get(`${Dashboard_BASE_URL}/get_all_users_details/`);
+    return response.status === 200 ? response.data : [];
+  },
+
+  getAllProgramTypeDetails: async () => {
+    const response = await axios.get(`${Dashboard_BASE_URL}/get_all_details_projects_by_program_type/`);
+    return response.status === 200 ? response.data : [];
+  },
+
+  getAllBUDetails: async () => {
+    const response = await axios.get(`${Dashboard_BASE_URL}/get_all_details_projects_by_BU/`);
     return response.status === 200 ? response.data : [];
   },
 
