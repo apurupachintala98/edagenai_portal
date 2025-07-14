@@ -18,15 +18,10 @@ interface DashboardChartProps {
     GLD: number;
     PLAT: number;
   }>;
-  isCurrency?: boolean;
 }
 
-const MultipleBarChart = ({ data, isCurrency = false }: DashboardChartProps) => {
-  const formatValue = (value: number) => {
-    const rounded = Math.round(value);
-    return isCurrency ? `$${rounded.toLocaleString()}` : rounded.toLocaleString();
-  };
-
+const MultipleBarChart = ({ data }: DashboardChartProps) => {
+ 
   // Convert field names for better readability
   const formattedData = data.map((item) => ({
     name: item.NAME,
@@ -58,10 +53,8 @@ const MultipleBarChart = ({ data, isCurrency = false }: DashboardChartProps) => 
               tickLine={false}
               axisLine={false}
               fontSize={12}
-              tickFormatter={(value) => formatValue(value)}
             />
             <Tooltip
-              formatter={(value: number) => formatValue(value)}
               contentStyle={{
                 backgroundColor: 'hsl(var(--background))',
                 borderColor: 'hsl(var(--border))',
@@ -81,7 +74,6 @@ const MultipleBarChart = ({ data, isCurrency = false }: DashboardChartProps) => 
                 <LabelList
                   dataKey={key}
                   position="top"
-                  formatter={(value: any) => formatValue(value as number)}
                   fontSize={12}
                 />
               </Bar>
