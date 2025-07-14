@@ -147,13 +147,13 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
             value: item.VALUE,
             color: colorPalette[index % colorPalette.length],
           }));
-          const platformWithColor = platformRes
-        .filter((item: any) => item.VALUE !== 0)
-        .map((item: any, index: number) => ({
-          name: item.NAME,
-          value: item.VALUE,
-          color: colorPalette[index % colorPalette.length],
-        }));
+        const platformWithColor = platformRes
+          .filter((item: any) => item.VALUE !== 0)
+          .map((item: any, index: number) => ({
+            name: item.NAME,
+            value: item.VALUE,
+            color: colorPalette[index % colorPalette.length],
+          }));
 
         setDashboardData({
           users: usersRes,
@@ -165,7 +165,11 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
 
         setDashboardTotals((prev) => ({
           ...prev,
-          totalUsers: usersRes.reduce((acc: any, item: { value: any; }) => acc + item.value, 0),
+          totalUsers: usersRes.reduce(
+            (acc: number, item: { slvr: number; gld: number; plat: number }) =>
+              acc + (item.slvr || 0) + (item.gld || 0) + (item.plat || 0),
+            0
+          ),
           totalCost: costsWithColor.reduce((acc: any, item: { value: any; }) => acc + item.value, 0),
           totalProgramTypes: programTypeWithColor.reduce((acc: any, item: { value: any; }) => acc + item.value, 0),
           totalBUProjects: buWithColor.reduce((acc: any, item: { value: any; }) => acc + item.value, 0),
@@ -460,7 +464,7 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
               <ProgressDonut data={filteredProjectDonut ?? progressReportData} />
             </DashboardCard>
 
-             <DashboardCard
+            <DashboardCard
               title="Projects by Platform"
               icon={<IbmCloudProjects size={20} />}
               subheading={`Total Platforms : ${dashboardTotals.totalPlatforms}`}
@@ -504,7 +508,7 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
               <DashboardChart data={dashboardData.costs} isCurrency />
             </DashboardCard>
 
-           
+
           </Carousel>
         </DashboardCardsWrapper>
 
