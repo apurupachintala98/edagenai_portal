@@ -17,6 +17,7 @@ import {
   UserMultiple,
   BusinessProcesses,
   DataCategorical,
+  Platforms,
   SalesOps /*CurrencyDollar*/,
 } from "@carbon/react/icons";
 import { ChevronLeft, ChevronRight, DollarSign } from "lucide-react";
@@ -466,7 +467,7 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
 
             <DashboardCard
               title="Projects by Platform"
-              icon={<IbmCloudProjects size={20} />}
+              icon={<Platforms size={20} />}
               subheading={`Total Platforms : ${dashboardTotals.totalPlatforms}`}
             >
               <PieDonutChart data={dashboardData.platforms} />
