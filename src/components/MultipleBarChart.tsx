@@ -22,9 +22,9 @@ function MultipleBarChart({ data }: MultipleBarChartProps) {
   // Transform keys to lowercase or more readable labels if needed
   const formattedData = data.map((item) => ({
     name: item.NAME,
-    Silver: item.SLVR,
-    Gold: item.GLD,
-    Platinum: item.PLAT,
+    uv: item.SLVR,
+    pv: item.GLD,
+    amt: item.PLAT,
   }));
 
   return (
