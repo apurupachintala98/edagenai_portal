@@ -487,7 +487,7 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
             <DashboardCard
               title="Projects by Fund Type"
               icon={<DataCategorical size={20} />}
-              subheading={`Total Programs: ${dashboardTotals.totalProgramTypes}`}
+              subheading={`Total Funds: ${dashboardTotals.totalProgramTypes}`}
             >
               <ProgressDonut data={dashboardData.programTypes} />
             </DashboardCard>
@@ -523,7 +523,7 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
             <DashboardCard
               title="Projects by Platform"
               icon={<IbmCloudProjects size={20} />}
-              subheading={`Total Projects : ${dashboardTotals.totalPlatforms}`}
+              subheading={`Total Platforms : ${dashboardTotals.totalPlatforms}`}
             >
               <PieDonutChart data={dashboardData.platforms} />
             </DashboardCard>
