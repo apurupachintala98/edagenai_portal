@@ -107,20 +107,7 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
   };
   const hasFetchedAllProjectDetails = useRef<boolean>(false);
   const hasFetchedGanttChart = useRef<boolean>(false);
-  const dataExample = [
-    {
-        "name": "Service IDs",
-        "slvr": 33,
-        "gld": 19,
-        "plat": 7
-    },
-    {
-        "name": "User IDs",
-        "slvr": 171,
-        "gld": 56,
-        "plat": 0
-    }
-];
+
 
   useEffect(() => {
     const fetchDashboardUsersAndCosts = async () => {
@@ -139,12 +126,6 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
           "hsl(var(--warning))",
           "hsl(var(--brand-blue-light))",
         ];
-
-        const usersWithColor = usersRes.map((item: any, index: number) => ({
-          name: item.NAME || `User ${index + 1}`,
-          value: Number(item.VALUE) || 0,
-          color: colorPalette[index % colorPalette.length],
-        }));
 
         const costsWithColor = costRes.map((item: any, index: number) => ({
           name: item.NAME || `Month ${index + 1}`,
@@ -175,7 +156,7 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
         }));
 
         setDashboardData({
-          users: usersWithColor,
+          users: usersRes,
           costs: costsWithColor,
           programTypes: programTypeWithColor,
           bus: buWithColor,
@@ -184,7 +165,7 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
 
         setDashboardTotals((prev) => ({
           ...prev,
-          totalUsers: usersWithColor.reduce((acc: any, item: { value: any; }) => acc + item.value, 0),
+          totalUsers: usersRes.reduce((acc: any, item: { value: any; }) => acc + item.value, 0),
           totalCost: costsWithColor.reduce((acc: any, item: { value: any; }) => acc + item.value, 0),
           totalProgramTypes: programTypeWithColor.reduce((acc: any, item: { value: any; }) => acc + item.value, 0),
           totalBUProjects: buWithColor.reduce((acc: any, item: { value: any; }) => acc + item.value, 0),
@@ -509,7 +490,7 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
               icon={<UserMultiple size={20} />}
               subheading={`Total Users: ${dashboardTotals.totalUsers}`}
             >
-              <MultipleBarChart data={dataExample} />
+              <MultipleBarChart data={dashboardData.users} />
             </DashboardCard>
 
             <DashboardCard
