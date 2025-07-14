@@ -24,6 +24,7 @@ import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import ProgressDonut from "../../components/ProgressDonut/ProgressDonut";
+import PieDonutChart from "../../components/ProgressDonut/PieDonutChart";
 import ProjectTimeline from "../../components/ProjectTimeline";
 import { HeaderContainer, MainContainer, PageContainer, PageTitle } from "../styled.components";
 import { ButtonContainer, DashboardCardsWrapper } from "./styled.components";
@@ -524,7 +525,7 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
               icon={<IbmCloudProjects size={20} />}
               subheading={`Total Projects : ${dashboardTotals.totalPlatforms}`}
             >
-              <ProgressDonut data={dashboardData.platforms} />
+              <PieDonutChart data={dashboardData.platforms} />
             </DashboardCard>
           </Carousel>
         </DashboardCardsWrapper>
