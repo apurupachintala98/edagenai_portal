@@ -29,6 +29,7 @@ import ProjectTimeline from "../../components/ProjectTimeline";
 import { HeaderContainer, MainContainer, PageContainer, PageTitle } from "../styled.components";
 import { ButtonContainer, DashboardCardsWrapper } from "./styled.components";
 import DashboardChart from "components/DashboardChart"; // Bar chart
+import MultipleBarChart from "components/MultipleBarChart";
 import { DropdownButton } from "components/DropdownButton";
 
 import ApiService from "../../services/ApiService";
@@ -506,7 +507,7 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
               icon={<UserMultiple size={20} />}
               subheading={`Total Users: ${dashboardTotals.totalUsers}`}
             >
-              <DashboardChart data={dashboardData.users} />
+              <MultipleBarChart data={dashboardData.users} />
             </DashboardCard>
 
             <DashboardCard
