@@ -478,19 +478,19 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
         <DashboardCardsWrapper>
           <Carousel width={containerWidth}>
             <DashboardCard
-              title="Project Status"
+              title="Projects by Status"
               icon={<IbmCloudProjects size={20} />}
               subheading={`Total Projects : ${dashboardTotals.totalProjects}`}
             >
               <ProgressDonut data={filteredProjectDonut ?? progressReportData} />
             </DashboardCard>
 
-            <DashboardCard
-              title="Projects by Fund Type"
-              icon={<DataCategorical size={20} />}
-              subheading={`Total Funds: ${dashboardTotals.totalProgramTypes}`}
+             <DashboardCard
+              title="Projects by Platform"
+              icon={<IbmCloudProjects size={20} />}
+              subheading={`Total Platforms : ${dashboardTotals.totalPlatforms}`}
             >
-              <ProgressDonut data={dashboardData.programTypes} />
+              <PieDonutChart data={dashboardData.platforms} />
             </DashboardCard>
 
             <DashboardCard
@@ -499,6 +499,14 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
               subheading={`Total BU Projects: ${dashboardTotals.totalBUProjects}`}
             >
               <DashboardChart data={dashboardData.bus} />
+            </DashboardCard>
+
+            <DashboardCard
+              title="Projects by Fund Type"
+              icon={<DataCategorical size={20} />}
+              subheading={`Total Funds: ${dashboardTotals.totalProgramTypes}`}
+            >
+              <ProgressDonut data={dashboardData.programTypes} />
             </DashboardCard>
 
 
@@ -521,13 +529,7 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
               <DashboardChart data={dashboardData.costs} isCurrency />
             </DashboardCard>
 
-            <DashboardCard
-              title="Projects by Platform"
-              icon={<IbmCloudProjects size={20} />}
-              subheading={`Total Platforms : ${dashboardTotals.totalPlatforms}`}
-            >
-              <PieDonutChart data={dashboardData.platforms} />
-            </DashboardCard>
+           
           </Carousel>
         </DashboardCardsWrapper>
 
