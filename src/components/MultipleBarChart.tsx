@@ -36,9 +36,9 @@ const MultipleBarChart: React.FC<MultipleBarChartProps> = ({ data }) => {
           data={formattedData}
           margin={{ top: 10, right: 30, left: 20, bottom: 5 }}
         >
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="name" axisLine={false} />
-          <YAxis axisLine={false} />
+          <CartesianGrid horizontal={false} vertical={false} />
+          <XAxis dataKey="name" axisLine={false} tickLine={false} />
+          <YAxis axisLine={false} tickLine={false} />
           <Tooltip />
           <Legend />
           <Bar dataKey="Silver" fill="#8884d8" />
