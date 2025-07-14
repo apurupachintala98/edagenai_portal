@@ -86,6 +86,11 @@ const ApiService = {
     return response.status === 200 ? response.data : [];
   },
 
+  getAllLlmPfDetails: async () => {
+    const response = await axios.get(`${Dashboard_BASE_URL}/get_all_details_projects_by_llm_platform/`);
+    return response.status === 200 ? response.data : [];
+  },
+
   getPlatforms: async () => {
     const response = await axios.get(`${BASE_URL}/llm_platform`);
     return response.data;

@@ -52,6 +52,7 @@ interface DashboardTotals {
   totalCost: number;
   totalProgramTypes: number;
   totalBUProjects: number;
+  totalPlatforms: number;
 }
 
 
@@ -69,6 +70,7 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
     costs: [] as any[],
     programTypes: [] as any[],
     bus: [] as any[],
+    platforms: [] as any[],
   });
   const [progressReportData, setProgressReportData] = useState<any[]>([]);
   const [dashboardTotals, setDashboardTotals] = useState<DashboardTotals>({
@@ -77,6 +79,7 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
     totalCost: 0,
     totalProgramTypes: 0,
     totalBUProjects: 0,
+    totalPlatforms: 0,
   });
 
   const [filteredProjectDonut, setFilteredProjectDonut] = useState<any[] | null>(null);
@@ -102,15 +105,36 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
   };
   const hasFetchedAllProjectDetails = useRef<boolean>(false);
   const hasFetchedGanttChart = useRef<boolean>(false);
+//   const dataExample = [
+//   {
+//     name: 'SRC',
+//     NonProd: 33,
+//     Preprod: 19,
+//     Prod: 1,
+//     color1: '#8884d8',
+//     color2: '#82ca9d',
+//     color3: '#ffc658',
+//   },
+//   {
+//     name: 'Non-SRC',
+//     NonProd: 171,
+//     Preprod: 56,
+//     Prod: 10,
+//     color1: '#8884d8',
+//     color2: '#82ca9d',
+//     color3: '#ffc658',
+//   },
+// ];
 
   useEffect(() => {
     const fetchDashboardUsersAndCosts = async () => {
       try {
-        const [usersRes, costRes, programTypeRes, buRes] = await Promise.all([
+        const [usersRes, costRes, programTypeRes, buRes, platformRes] = await Promise.all([
           ApiService.getAllUsersDetails(),
           ApiService.getAllCostsDetails(),
           ApiService.getAllProgramTypeDetails(),
           ApiService.getAllBUDetails(),
+          ApiService.getAllLlmPfDetails(),
         ]);
         const colorPalette = [
           "hsl(var(--brand-blue))",
@@ -146,12 +170,20 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
             value: item.VALUE,
             color: colorPalette[index % colorPalette.length],
           }));
+          const platformWithColor = platformRes
+        .filter((item: any) => item.VALUE !== 0)
+        .map((item: any, index: number) => ({
+          name: item.NAME,
+          value: item.VALUE,
+          color: colorPalette[index % colorPalette.length],
+        }));
 
         setDashboardData({
           users: usersWithColor,
           costs: costsWithColor,
           programTypes: programTypeWithColor,
           bus: buWithColor,
+          platforms: platformWithColor,
         });
 
         setDashboardTotals((prev) => ({
@@ -160,6 +192,7 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
           totalCost: costsWithColor.reduce((acc: any, item: { value: any; }) => acc + item.value, 0),
           totalProgramTypes: programTypeWithColor.reduce((acc: any, item: { value: any; }) => acc + item.value, 0),
           totalBUProjects: buWithColor.reduce((acc: any, item: { value: any; }) => acc + item.value, 0),
+          totalPlatforms: platformWithColor.reduce((acc: any, item: { value: any; }) => acc + item.value, 0),
         }));
       } catch (error) {
         console.error("Failed to fetch dashboard users or costs:", error);
@@ -443,7 +476,7 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
         <DashboardCardsWrapper>
           <Carousel width={containerWidth}>
             <DashboardCard
-              title="Projects"
+              title="Project Status"
               icon={<IbmCloudProjects size={20} />}
               subheading={`Total Projects : ${dashboardTotals.totalProjects}`}
             >
@@ -451,7 +484,7 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
             </DashboardCard>
 
             <DashboardCard
-              title="Program Type Distribution"
+              title="Projects by Fund Type"
               icon={<DataCategorical size={20} />}
               subheading={`Total Programs: ${dashboardTotals.totalProgramTypes}`}
             >
@@ -459,7 +492,7 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
             </DashboardCard>
 
             <DashboardCard
-              title="Business Units"
+              title="Projects by BU"
               icon={<BusinessProcesses size={20} />}
               subheading={`Total BU Projects: ${dashboardTotals.totalBUProjects}`}
             >
@@ -468,7 +501,7 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
 
 
             <DashboardCard
-              title="Users"
+              title="Projects by Users"
               icon={<UserMultiple size={20} />}
               subheading={`Total Users: ${dashboardTotals.totalUsers}`}
             >
@@ -476,7 +509,7 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
             </DashboardCard>
 
             <DashboardCard
-              title="Cortex Cost"
+              title="Projects by Cortex Cost"
               icon={<DollarSign size={20} />}
               subheading={`Total Cost for the Projects : $${Math.round(
                 dashboardTotals.totalCost,
@@ -487,11 +520,11 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
             </DashboardCard>
 
             <DashboardCard
-              title="Graph III"
+              title="Projects by Platform"
               icon={<IbmCloudProjects size={20} />}
-              subheading={`Total Projects : ${dashboardTotals.totalProjects}`}
+              subheading={`Total Projects : ${dashboardTotals.totalPlatforms}`}
             >
-              <></>
+              <DashboardChart data={dashboardData.platforms} />
             </DashboardCard>
           </Carousel>
         </DashboardCardsWrapper>
