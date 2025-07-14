@@ -460,7 +460,7 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
             <DashboardCard
               title="Projects by Status"
               icon={<IbmCloudProjects size={20} />}
-              subheading={`Total Projects : ${dashboardTotals.totalProjects}`}
+              subheading={`Total Projects: ${dashboardTotals.totalProjects}`}
             >
               <ProgressDonut data={filteredProjectDonut ?? progressReportData} />
             </DashboardCard>
@@ -468,7 +468,7 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
             <DashboardCard
               title="Projects by Platform"
               icon={<Platforms size={20} />}
-              subheading={`Total Platforms : ${dashboardTotals.totalPlatforms}`}
+              subheading={`Total Platforms: ${dashboardTotals.totalPlatforms}`}
             >
               <PieDonutChart data={dashboardData.platforms} />
             </DashboardCard>
@@ -501,7 +501,7 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
             <DashboardCard
               title="Projects by Cortex Cost"
               icon={<DollarSign size={20} />}
-              subheading={`Total Cost for the Projects : $${Math.round(
+              subheading={`Total Cost for the Projects: $${Math.round(
                 dashboardTotals.totalCost,
               ).toLocaleString()}`}
             >
