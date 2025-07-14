@@ -109,16 +109,16 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
   const hasFetchedGanttChart = useRef<boolean>(false);
   const dataExample = [
     {
-        "NAME": "Service IDs",
-        "SLVR": 33,
-        "GLD": 19,
-        "PLAT": 7
+        "name": "Service IDs",
+        "slvr": 33,
+        "gld": 19,
+        "plat": 7
     },
     {
-        "NAME": "User IDs",
-        "SLVR": 171,
-        "GLD": 56,
-        "PLAT": 0
+        "name": "User IDs",
+        "slvr": 171,
+        "gld": 56,
+        "plat": 0
     }
 ];
 

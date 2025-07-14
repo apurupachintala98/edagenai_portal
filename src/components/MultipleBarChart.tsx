@@ -11,10 +11,10 @@ import {
 } from 'recharts';
 
 interface DataItem {
-  NAME: string;
-  SLVR: number;
-  GLD: number;
-  PLAT: number;
+  name: string;
+  slvr: number;
+  gld: number;
+  plat: number;
 }
 
 interface MultipleBarChartProps {
@@ -22,14 +22,12 @@ interface MultipleBarChartProps {
 }
 
 const MultipleBarChart: React.FC<MultipleBarChartProps> = ({ data }) => {
-  const formattedData = data.map((item: DataItem) => ({
-    name: item.NAME,
-    Silver: item.SLVR,
-    Gold: item.GLD,
-    Platinum: item.PLAT,
+  const formattedData = data.map((item) => ({
+    name: item.name,
+    Silver: item.slvr,
+    Gold: item.gld,
+    Platinum: item.plat,
   }));
-
-  console.log(formattedData);
 
   return (
     <div style={{ height: 300 }}>
