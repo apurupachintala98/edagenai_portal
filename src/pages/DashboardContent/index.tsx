@@ -107,26 +107,20 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
   };
   const hasFetchedAllProjectDetails = useRef<boolean>(false);
   const hasFetchedGanttChart = useRef<boolean>(false);
-//   const dataExample = [
-//   {
-//     name: 'SRC',
-//     NonProd: 33,
-//     Preprod: 19,
-//     Prod: 1,
-//     color1: '#8884d8',
-//     color2: '#82ca9d',
-//     color3: '#ffc658',
-//   },
-//   {
-//     name: 'Non-SRC',
-//     NonProd: 171,
-//     Preprod: 56,
-//     Prod: 10,
-//     color1: '#8884d8',
-//     color2: '#82ca9d',
-//     color3: '#ffc658',
-//   },
-// ];
+  const dataExample = [
+    {
+        "NAME": "Service IDs",
+        "SLVR": 33,
+        "GLD": 19,
+        "PLAT": 7
+    },
+    {
+        "NAME": "User IDs",
+        "SLVR": 171,
+        "GLD": 56,
+        "PLAT": 0
+    }
+];
 
   useEffect(() => {
     const fetchDashboardUsersAndCosts = async () => {
@@ -515,7 +509,7 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
               icon={<UserMultiple size={20} />}
               subheading={`Total Users: ${dashboardTotals.totalUsers}`}
             >
-              <MultipleBarChart data={dashboardData.users} />
+              <MultipleBarChart data={dataExample} />
             </DashboardCard>
 
             <DashboardCard
