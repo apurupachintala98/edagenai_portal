@@ -41,7 +41,7 @@ const MultipleBarChart = ({ data }: DashboardChartProps) => {
     <div className="dashboard-card h-full animate-scale-in">
       <div className="dashboard-card-header" />
       <div className="dashboard-card-content h-[235px]">
-        <ResponsiveContainer width="100%" height="100%">
+        {/* <ResponsiveContainer width="100%" height="100%">
           <BarChart
             data={formattedData}
             margin={{ top: 10, right: 30, left: 20, bottom: 5 }}
@@ -79,7 +79,25 @@ const MultipleBarChart = ({ data }: DashboardChartProps) => {
               </Bar>
             ))}
           </BarChart>
-        </ResponsiveContainer>
+        </ResponsiveContainer> */}
+        <div style={{ height: 300, backgroundColor: '#f9f9f9' }}>
+  <ResponsiveContainer width="100%" height="100%">
+    <BarChart
+      data={formattedData}
+      margin={{ top: 10, right: 30, left: 20, bottom: 5 }}
+    >
+      <CartesianGrid strokeDasharray="3 3" />
+      <XAxis dataKey="name" />
+      <YAxis />
+      <Tooltip />
+      <Legend />
+      <Bar dataKey="Silver" fill="#8884d8" />
+      <Bar dataKey="Gold" fill="#82ca9d" />
+      <Bar dataKey="Platinum" fill="#ffc658" />
+    </BarChart>
+  </ResponsiveContainer>
+</div>
+
       </div>
     </div>
   );
