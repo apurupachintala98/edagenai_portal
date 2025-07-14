@@ -38,9 +38,9 @@ function MultipleBarChart({ data }: MultipleBarChartProps) {
         <YAxis fontSize={12} />
         <Tooltip />
         <Legend />
-        <Bar dataKey="Silver" fill="#8884d8" />
-        <Bar dataKey="Gold" fill="#82ca9d" />
-        <Bar dataKey="Platinum" fill="#ffc658" />
+        <Bar dataKey="uv" fill="#8884d8" />
+        <Bar dataKey="pv" fill="#82ca9d" />
+        <Bar dataKey="amt" fill="#ffc658" />
       </BarChart>
     </ResponsiveContainer>
   );
