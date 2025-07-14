@@ -524,7 +524,7 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
               icon={<IbmCloudProjects size={20} />}
               subheading={`Total Projects : ${dashboardTotals.totalPlatforms}`}
             >
-              <DashboardChart data={dashboardData.platforms} />
+              <ProgressDonut data={dashboardData.platforms} />
             </DashboardCard>
           </Carousel>
         </DashboardCardsWrapper>
