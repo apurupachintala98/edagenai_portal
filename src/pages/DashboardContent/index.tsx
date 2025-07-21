@@ -9,6 +9,7 @@ import {
   Modal,
   OverflowMenu,
   OverflowMenuItem,
+  Tooltip,
 } from "@carbon/react";
 import {
   Dashboard,
@@ -18,6 +19,7 @@ import {
   BusinessProcesses,
   DataCategorical,
   Platforms,
+  PresentationFile,
   SalesOps /*CurrencyDollar*/,
 } from "@carbon/react/icons";
 import { ChevronLeft, ChevronRight, DollarSign } from "lucide-react";
@@ -408,6 +410,18 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
         <HeaderContainer>
           <PageTitle>{t("dashboard.title")}</PageTitle>
           <ButtonContainer style={{ display: "flex", gap: "1rem" }}>
+            <Tooltip label="View Presentation" align="bottom">
+              <Button
+                kind="ghost"
+                size="sm"
+                renderIcon={PresentationFile}
+                iconDescription="Frameworks Presentation"
+                hasIconOnly
+                onClick={() => {
+                  window.open("https://link-to-frameworks-presentation.com", "_blank");
+                }}
+              />
+            </Tooltip>
             <DropdownButton
               icon={<DocumentAdd />}
               label={t("home.createButtonText")}
