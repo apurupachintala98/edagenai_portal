@@ -45,13 +45,13 @@ const downloadDashboardPPT = (charts: ChartImages[]) => {
   const pptx = new PptxGenJS();
   const slide = pptx.addSlide();
 
-  slide.addText("Project Dashboard Charts", {
-    x: 0.2,
-    y: 0.2,
-    fontSize: 18,
-    bold: true,
-    color: "363636",
-  });
+//   slide.addText("Project Dashboard Charts", {
+//     x: 0.2,
+//     y: 0.2,
+//     fontSize: 18,
+//     bold: true,
+//     color: "363636",
+//   });
 
   const width = 3.0;
   const height = 2.0;
