@@ -371,7 +371,6 @@ const captureGanttSlides = async () => {
 
     const tempEl = document.createElement("div");
     tempEl.style.position = "fixed";
-    tempEl.style.left = "-9999px";
     tempEl.style.top = "0";
     tempEl.style.width = "1200px";
     tempEl.style.height = "600px";
