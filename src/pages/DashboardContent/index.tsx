@@ -34,13 +34,12 @@ import { ButtonContainer, DashboardCardsWrapper } from "./styled.components";
 import DashboardChart from "components/DashboardChart"; // Bar chart
 import MultipleBarChart from "components/MultipleBarChart";
 import { DropdownButton } from "components/DropdownButton";
-
+import { toPng } from 'html-to-image';
+import DownloadDashboardPPT from '../../hooks/DownloadDashboardPPT';
 import ApiService from "../../services/ApiService";
-
+import { createRoot } from 'react-dom/client';
 import { useWindowDimensions } from "utils/hooks";
-
 import { useProjectData } from "../../hooks/useProjectData";
-
 import DashboardCard from "pages/DashboardCard";
 import { Label } from "recharts";
 import { type projectDetails, useProjectDetailsData } from "../../hooks/useProjectDetailsData";
@@ -59,7 +58,6 @@ interface DashboardTotals {
   totalBUProjects: number;
   totalPlatforms: number;
 }
-
 
 function DashboardContent({ containerWidth }: DashboardContentProps) {
   const { t } = useTranslation();
@@ -111,6 +109,14 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
   const hasFetchedAllProjectDetails = useRef<boolean>(false);
   const hasFetchedGanttChart = useRef<boolean>(false);
 
+  const chartRefs = {
+    status: useRef(null),
+    platform: useRef(null),
+    bu: useRef(null),
+    fundType: useRef(null),
+    users: useRef(null),
+    cost: useRef(null),
+  };
 
   useEffect(() => {
     const fetchDashboardUsersAndCosts = async () => {
@@ -316,6 +322,42 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
     }));
   };
 
+  const captureAllCharts = async () => {
+    const chartImages = await Promise.all([
+      { title: 'Projects by Status', ref: chartRefs.status },
+      { title: 'Projects by Platform', ref: chartRefs.platform },
+      { title: 'Projects by BU', ref: chartRefs.bu },
+      { title: 'Projects by Fund Type', ref: chartRefs.fundType },
+      { title: 'Projects by Users', ref: chartRefs.users },
+      { title: 'Projects by Cost', ref: chartRefs.cost },
+    ].map(async ({ title, ref }) => {
+      const dataUrl = await toPng(ref.current!);
+      return { title, dataUrl };
+    }));
+
+    return chartImages;
+  };
+
+  const handleDownloadPresentation = async () => {
+    const chartImages = await captureAllCharts();
+    const event = new CustomEvent('triggerPPTDownload', { detail: chartImages });
+    window.dispatchEvent(event);
+  };
+
+  useEffect(() => {
+    const handler = (e: any) => {
+      const charts = e.detail;
+      const temp = document.createElement('div');
+      document.body.appendChild(temp);
+      const root = createRoot(temp);
+      root.render(<DownloadDashboardPPT charts={charts} />);
+
+      setTimeout(() => document.body.removeChild(temp), 1000);
+    };
+    window.addEventListener('triggerPPTDownload', handler);
+    return () => window.removeEventListener('triggerPPTDownload', handler);
+  }, []);
+
   useEffect(() => {
     if (projects.length > 0) {
       const uniqueManagers = Array.from(new Set(projects.map((item) => item.STAFF_VP))).filter(
@@ -389,15 +431,9 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
         if (projectName) {
           setModalReady(true);
           setIsModalOpen(true);
-
-          //          handleProjectDetails(projectName);
-
-          // Perform navigation or logic here
-          // navigate(`/dashboard?projectId=${projectID}`);
         }
       }
     };
-
     document.addEventListener("click", handleClick);
     return () => document.removeEventListener("click", handleClick);
   }, []);
@@ -408,16 +444,14 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
         <HeaderContainer>
           <PageTitle>{t("dashboard.title")}</PageTitle>
           <ButtonContainer style={{ display: "flex", gap: "1rem" }}>
-              <Button
-                size="lg"
-                renderIcon={PresentationFile}
-                hasIconOnly
-                style={{ borderRadius: "6px" }}
-                title=""
-                onClick={() => {
-                  window.open("https://link-to-frameworks-presentation.com", "_blank");
-                }}
-              />
+            <Button
+              size="lg"
+              renderIcon={PresentationFile}
+              hasIconOnly
+              style={{ borderRadius: "6px" }}
+              title=""
+              onClick={handleDownloadPresentation}
+            />
             <DropdownButton
               icon={<DocumentAdd />}
               label={t("home.createButtonText")}
@@ -472,7 +506,9 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
               icon={<IbmCloudProjects size={20} />}
               subheading={`Total Projects: ${dashboardTotals.totalProjects}`}
             >
-              <ProgressDonut data={filteredProjectDonut ?? progressReportData} />
+              <div ref={chartRefs.status}>
+                <ProgressDonut data={filteredProjectDonut ?? progressReportData} />
+              </div>
             </DashboardCard>
 
             <DashboardCard
@@ -480,7 +516,9 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
               icon={<Platforms size={20} />}
               subheading={`Total Platforms: ${dashboardTotals.totalPlatforms}`}
             >
-              <PieDonutChart data={dashboardData.platforms} />
+              <div ref={chartRefs.platform}>
+                <PieDonutChart data={dashboardData.platforms} />
+              </div>
             </DashboardCard>
 
             <DashboardCard
@@ -488,7 +526,9 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
               icon={<BusinessProcesses size={20} />}
               subheading={`Total BU Projects: ${dashboardTotals.totalBUProjects}`}
             >
-              <DashboardChart data={dashboardData.bus} />
+              <div ref={chartRefs.bu}>
+                <DashboardChart data={dashboardData.bus} />
+              </div>
             </DashboardCard>
 
             <DashboardCard
@@ -496,7 +536,10 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
               icon={<DataCategorical size={20} />}
               subheading={`Total Funds: ${dashboardTotals.totalProgramTypes}`}
             >
-              <ProgressDonut data={dashboardData.programTypes} />
+              <div ref={chartRefs.fundType}>
+
+                <ProgressDonut data={dashboardData.programTypes} />
+              </div>
             </DashboardCard>
 
 
@@ -505,7 +548,9 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
               icon={<UserMultiple size={20} />}
               subheading={`Total Users: ${dashboardTotals.totalUsers}`}
             >
-              <MultipleBarChart data={dashboardData.users} />
+              <div ref={chartRefs.users}>
+                <MultipleBarChart data={dashboardData.users} />
+              </div>
             </DashboardCard>
 
             <DashboardCard
@@ -516,7 +561,9 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
               ).toLocaleString()}`}
             >
               {" "}
-              <DashboardChart data={dashboardData.costs} isCurrency />
+              <div ref={chartRefs.cost}>
+                <DashboardChart data={dashboardData.costs} isCurrency />
+              </div>
             </DashboardCard>
 
 
