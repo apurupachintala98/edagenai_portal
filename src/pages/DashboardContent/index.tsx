@@ -254,9 +254,6 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
   const fetchFilteredProjectsForCharts = async () => {
     try {
       const selectedManagers = selectedFilters.managers.map((m) => m.label);
-      // const selectedPlatforms = selectedFilters.platforms.map((p) => p.label);
-      // const selectedPhases = selectedFilters.phases.map((p) => p.label);
-
       if (selectedManagers.length === 0) {
         console.warn("No manager selected for filtering.");
         return;
@@ -338,92 +335,94 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
     return chartImages;
   };
 
-const waitForChartWithData = (container: HTMLElement, timeout = 5000): Promise<void> => {
-  return new Promise((resolve, reject) => {
-    const startTime = Date.now();
+  const waitForChartWithData = (container: HTMLElement, timeout = 5000): Promise<void> => {
+    return new Promise((resolve, reject) => {
+      const startTime = Date.now();
 
-    const check = () => {
-      const chartReady = container.querySelector(".highcharts-container");
-      const hasData = container.textContent?.includes("No Data Found") === false;
+      const check = () => {
+        const chartReady = container.querySelector(".highcharts-container");
+        const hasData = container.textContent?.includes("No Data Found") === false;
 
-      if (chartReady && hasData) {
-        resolve();
-      } else if (Date.now() - startTime > timeout) {
-        reject("Chart or data not ready within timeout");
-      } else {
-        requestAnimationFrame(check);
+        if (chartReady && hasData) {
+          resolve();
+        } else if (Date.now() - startTime > timeout) {
+          reject("Chart or data not ready within timeout");
+        } else {
+          requestAnimationFrame(check);
+        }
+      };
+
+      check();
+    });
+  };
+
+
+  const captureGanttSlides = async () => {
+    const ganttSlides: GanttManagerSlide[] = [];
+    const managers = Array.from(new Set(projects.map((p) => p.STAFF_VP))).filter(Boolean);
+
+    for (const manager of managers) {
+      const managerProjects: projectDetails[] = projects
+        .filter(p => p.STAFF_VP === manager)
+        .map((p, idx) => ({
+          ...p,
+          SL_NO: typeof p.SL_NO === "string" ? Number(p.SL_NO) || idx + 1 : p.SL_NO,
+        }));
+
+      const tempEl = document.createElement("div");
+      tempEl.style.position = "absolute";
+      tempEl.style.top = "0";
+      tempEl.style.left = "0";
+      tempEl.style.zIndex = "-1"; // behind everything
+      tempEl.style.opacity = "0"; // fully transparent but rendered
+      tempEl.style.width = "1400px";
+      tempEl.style.height = `${Math.max(managerProjects.length * 50, 500)}px`;
+      document.body.appendChild(tempEl);
+
+      const ganttChart = (
+        <ProjectTimeline
+          projects={managerProjects}
+          selectedFilters={{ managers: [], platforms: [], phases: [] }}
+          showAllYears={true}
+          selectedYear={new Date().getFullYear()} // Ensure this is your selectedYear state
+          isChangedSelectedYears={false}
+          isModalOpen={false}
+          modalReady={true}
+          modalProjectName=""
+          setIsModalOpen={() => { }}
+        />
+      );
+
+      const root = createRoot(tempEl);
+      root.render(ganttChart);
+
+      try {
+        // Wait until Highcharts is fully rendered
+        await waitForChartWithData(tempEl);
+        const ganttImage = await toPng(tempEl, {
+          cacheBust: true,
+          backgroundColor: "white",
+          width: 1200,
+          height: 600,
+          pixelRatio: 2,
+        });
+
+
+        ganttSlides.push({
+          manager,
+          ganttImageUrl: ganttImage,
+          projectList: managerProjects.map(p => p.PROJECT_NAME),
+        });
+      } catch (err) {
+        console.error(`Failed to render Gantt chart for ${manager}:`, err);
       }
-    };
 
-    check();
-  });
-};
-
-
-const captureGanttSlides = async () => {
-  const ganttSlides: GanttManagerSlide[] = [];
-  const managers = Array.from(new Set(projects.map((p) => p.STAFF_VP))).filter(Boolean);
-
-  for (const manager of managers) {
-    const managerProjects: projectDetails[] = projects
-      .filter(p => p.STAFF_VP === manager)
-      .map((p, idx) => ({
-        ...p,
-        SL_NO: typeof p.SL_NO === "string" ? Number(p.SL_NO) || idx + 1 : p.SL_NO,
-      }));
-
-    const tempEl = document.createElement("div");
-    tempEl.style.position = "fixed";
-    tempEl.style.top = "0";
-    tempEl.style.width = "1200px";
-    tempEl.style.height = "600px";
-    tempEl.style.background = "white";
-    document.body.appendChild(tempEl);
-
-    const ganttChart = (
-      <ProjectTimeline
-        projects={managerProjects}
-        selectedFilters={{ managers: [], platforms: [], phases: [] }}
-        showAllYears={true}
-        selectedYear={new Date().getFullYear()} // Ensure this is your selectedYear state
-        isChangedSelectedYears={false}
-        isModalOpen={false}
-        modalReady={true}
-        modalProjectName=""
-        setIsModalOpen={() => {}}
-      />
-    );
-
-    const root = createRoot(tempEl);
-    root.render(ganttChart);
-
-    try {
-      // Wait until Highcharts is fully rendered
-     await waitForChartWithData(tempEl);
-const ganttImage = await toPng(tempEl, {
-  cacheBust: true,
-  backgroundColor: "white",
-  width: 1200,
-  height: 600,
-  pixelRatio: 2,
-});
-
-
-      ganttSlides.push({
-        manager,
-        ganttImageUrl: ganttImage,
-        projectList: managerProjects.map(p => p.PROJECT_NAME),
-      });
-    } catch (err) {
-      console.error(`Failed to render Gantt chart for ${manager}:`, err);
+      root.unmount();
+      document.body.removeChild(tempEl);
     }
 
-    root.unmount();
-    document.body.removeChild(tempEl);
-  }
-
-  return ganttSlides;
-};
+    return ganttSlides;
+  };
 
 
 
