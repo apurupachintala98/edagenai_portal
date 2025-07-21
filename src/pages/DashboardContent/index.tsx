@@ -338,16 +338,18 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
     return chartImages;
   };
 
- const waitForHighchartsRender = (container: HTMLElement, timeout = 5000): Promise<void> => {
+const waitForChartWithData = (container: HTMLElement, timeout = 5000): Promise<void> => {
   return new Promise((resolve, reject) => {
     const startTime = Date.now();
 
     const check = () => {
-      const chartCanvas = container.querySelector(".highcharts-container");
-      if (chartCanvas) {
+      const chartReady = container.querySelector(".highcharts-container");
+      const hasData = container.textContent?.includes("No Data Found") === false;
+
+      if (chartReady && hasData) {
         resolve();
       } else if (Date.now() - startTime > timeout) {
-        reject("Highcharts container not found within timeout");
+        reject("Chart or data not ready within timeout");
       } else {
         requestAnimationFrame(check);
       }
@@ -356,6 +358,7 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
     check();
   });
 };
+
 
 const captureGanttSlides = async () => {
   const ganttSlides: GanttManagerSlide[] = [];
@@ -396,15 +399,15 @@ const captureGanttSlides = async () => {
 
     try {
       // Wait until Highcharts is fully rendered
-      await waitForHighchartsRender(tempEl);
+     await waitForChartWithData(tempEl);
+const ganttImage = await toPng(tempEl, {
+  cacheBust: true,
+  backgroundColor: "white",
+  width: 1200,
+  height: 600,
+  pixelRatio: 2,
+});
 
-      const ganttImage = await toPng(tempEl, {
-        cacheBust: true,
-        backgroundColor: "white",
-        width: 1200,
-        height: 600,
-        pixelRatio: 2,
-      });
 
       ganttSlides.push({
         manager,
