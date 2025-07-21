@@ -118,19 +118,19 @@ const downloadDashboardPPT = (
       h: 3.5,
     });
 
-    const tableData = [
-      [{ text: "Project Name", options: { bold: true } }],
-      ...projectList.map((p) => [{ text: p }]),
-    ];
+    // const tableData = [
+    //   [{ text: "Project Name", options: { bold: true } }],
+    //   ...projectList.map((p) => [{ text: p }]),
+    // ];
 
-    slide.addTable(tableData, {
-      x: 0.5,
-      y: 4.7,
-      w: 8.5,
-      colW: [8.5],
-      fontSize: 12,
-      border: { type: "solid", color: "c2c2c2", pt: 1 },
-    });
+    // slide.addTable(tableData, {
+    //   x: 0.5,
+    //   y: 4.7,
+    //   w: 8.5,
+    //   colW: [8.5],
+    //   fontSize: 12,
+    //   border: { type: "solid", color: "c2c2c2", pt: 1 },
+    // });
   });
 
   pptx.writeFile({ fileName: "DashboardCharts.pptx" });
