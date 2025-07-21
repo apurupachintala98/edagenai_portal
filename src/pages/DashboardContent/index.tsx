@@ -412,7 +412,6 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
               <Button
                 size="md"
                 renderIcon={PresentationFile}
-                hasIconOnly
                 onClick={() => {
                   window.open("https://link-to-frameworks-presentation.com", "_blank");
                 }}
