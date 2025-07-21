@@ -412,6 +412,7 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
                 size="lg"
                 renderIcon={PresentationFile}
                 hasIconOnly
+                style={{ borderRadius: "6px" }}
                 onClick={() => {
                   window.open("https://link-to-frameworks-presentation.com", "_blank");
                 }}
