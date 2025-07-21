@@ -20,8 +20,8 @@ const downloadDashboardPPT = (charts: ChartImages[]) => {
   const width = 3.0;
   const height = 2.0;
   const positions = [
-    [0.5, 1], [3.8, 1], [7.1, 1],
-    [0.5, 3.3], [3.8, 3.3], [7.1, 3.3],
+    [0.2, 1], [3.4, 1], [6.8, 1],
+    [0.2, 3.3], [3.4, 3.3], [6.8, 3.3],
   ];
 
   charts.slice(0, 6).forEach((chart, idx) => {
