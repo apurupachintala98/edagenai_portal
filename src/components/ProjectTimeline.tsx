@@ -292,7 +292,7 @@ const ProjectTimeline = ({
   return (
     <div className="mt-0 mb-0 ml-1 mr-1 grid">
       <div className="bg-white rounded-md shadow-sm overflow-x-auto" style={{ width: "100%" }}>
-        {(projects && projects.length === 0) || seriesData.length === 0 ? (
+        {seriesData.length === 0 ? (
           <div className="flex items-center justify-center py-20 text-lg font-bold">
             No Data Found
           </div>
