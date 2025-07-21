@@ -35,7 +35,7 @@ import DashboardChart from "components/DashboardChart"; // Bar chart
 import MultipleBarChart from "components/MultipleBarChart";
 import { DropdownButton } from "components/DropdownButton";
 import { toPng } from 'html-to-image';
-import DownloadDashboardPPT from '../../hooks/DownloadDashboardPPT';
+import downloadDashboardPPT from '../../hooks/DownloadDashboardPPT';
 import ApiService from "../../services/ApiService";
 import { createRoot } from 'react-dom/client';
 import { useWindowDimensions } from "utils/hooks";
@@ -340,23 +340,22 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
 
   const handleDownloadPresentation = async () => {
     const chartImages = await captureAllCharts();
-    const event = new CustomEvent('triggerPPTDownload', { detail: chartImages });
-    window.dispatchEvent(event);
+    downloadDashboardPPT(chartImages);
   };
 
-  useEffect(() => {
-    const handler = (e: any) => {
-      const charts = e.detail;
-      const temp = document.createElement('div');
-      document.body.appendChild(temp);
-      const root = createRoot(temp);
-      root.render(<DownloadDashboardPPT charts={charts} />);
+  // useEffect(() => {
+  //   const handler = (e: any) => {
+  //     const charts = e.detail;
+  //     const temp = document.createElement('div');
+  //     document.body.appendChild(temp);
+  //     const root = createRoot(temp);
+  //     root.render(<DownloadDashboardPPT charts={charts} />);
 
-      setTimeout(() => document.body.removeChild(temp), 1000);
-    };
-    window.addEventListener('triggerPPTDownload', handler);
-    return () => window.removeEventListener('triggerPPTDownload', handler);
-  }, []);
+  //     setTimeout(() => document.body.removeChild(temp), 1000);
+  //   };
+  //   window.addEventListener('triggerPPTDownload', handler);
+  //   return () => window.removeEventListener('triggerPPTDownload', handler);
+  // }, []);
 
   useEffect(() => {
     if (projects.length > 0) {
