@@ -335,28 +335,28 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
     return chartImages;
   };
 
- const waitForChartWithData = (container: HTMLElement, timeout = 5000): Promise<void> => {
-  return new Promise((resolve, reject) => {
-    const startTime = Date.now();
+  const waitForChartWithData = (container: HTMLElement, timeout = 5000): Promise<void> => {
+    return new Promise((resolve, reject) => {
+      const startTime = Date.now();
 
-    const check = () => {
-      const chartSvg = container.querySelector(".highcharts-container svg");
-      const loadingText = container.querySelector(".highcharts-loading");
+      const check = () => {
+        const chartSvg = container.querySelector(".highcharts-container svg");
+        const loadingText = container.querySelector(".highcharts-loading");
 
-      const chartReady = !!chartSvg && !loadingText;
+        const chartReady = !!chartSvg && !loadingText;
 
-      if (chartReady) {
-        resolve();
-      } else if (Date.now() - startTime > timeout) {
-        reject("Chart not ready within timeout");
-      } else {
-        requestAnimationFrame(check);
-      }
-    };
+        if (chartReady) {
+          resolve();
+        } else if (Date.now() - startTime > timeout) {
+          reject("Chart not ready within timeout");
+        } else {
+          requestAnimationFrame(check);
+        }
+      };
 
-    check();
-  });
-};
+      check();
+    });
+  };
 
   const captureGanttSlides = async () => {
     const ganttSlides: GanttManagerSlide[] = [];
@@ -378,12 +378,14 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
       // tempEl.style.height = "600px";
       // tempEl.style.background = "white";
       tempEl.style.position = "absolute";
-tempEl.style.top = "0";
-tempEl.style.left = "0";
-tempEl.style.zIndex = "-9999";
-tempEl.style.padding = "10px";
-tempEl.style.overflow = "hidden";
-document.body.appendChild(tempEl);
+      tempEl.style.top = "0";
+      tempEl.style.left = "0";
+      // tempEl.style.zIndex = "9999";
+      tempEl.style.padding = "10px";
+      tempEl.style.overflow = "hidden";
+      tempEl.style.width = "1400px";
+      tempEl.style.height = "600px";
+      document.body.appendChild(tempEl);
 
       document.body.appendChild(tempEl);
 
@@ -405,6 +407,7 @@ document.body.appendChild(tempEl);
       root.render(ganttChart);
 
       try {
+        // Wait until Highcharts is fully rendered
         await new Promise((res) => setTimeout(res, 200));
         await waitForChartWithData(tempEl);
         const ganttImage = await toPng(tempEl, {
