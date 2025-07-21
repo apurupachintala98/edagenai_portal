@@ -408,15 +408,16 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
         <HeaderContainer>
           <PageTitle>{t("dashboard.title")}</PageTitle>
           <ButtonContainer style={{ display: "flex", gap: "1rem" }}>
+            <Tooltip label="Download Presentation" align="bottom">
               <Button
                 size="lg"
                 renderIcon={PresentationFile}
                 hasIconOnly
-                iconDescription="Download Presentation"
                 onClick={() => {
                   window.open("https://link-to-frameworks-presentation.com", "_blank");
                 }}
               />
+            </Tooltip>
             <DropdownButton
               icon={<DocumentAdd />}
               label={t("home.createButtonText")}
