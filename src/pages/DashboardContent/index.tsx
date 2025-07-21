@@ -338,6 +338,25 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
     return chartImages;
   };
 
+  const waitForChartRender = (container: HTMLElement, timeout = 5000): Promise<void> => {
+    return new Promise((resolve, reject) => {
+      const startTime = Date.now();
+
+      const check = () => {
+        const chartContainer = container.querySelector('.highcharts-container');
+        if (chartContainer) {
+          resolve();
+        } else if (Date.now() - startTime > timeout) {
+          reject(new Error("Chart did not render in time"));
+        } else {
+          requestAnimationFrame(check);
+        }
+      };
+
+      check();
+    });
+  };
+
   const captureGanttSlides = async () => {
     const ganttSlides: GanttManagerSlide[] = [];
     const managers = Array.from(new Set(projects.map((p) => p.STAFF_VP))).filter(Boolean);
@@ -353,6 +372,8 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
       const tempEl = document.createElement("div");
       tempEl.style.position = "fixed";
       tempEl.style.left = "-9999px";
+      tempEl.style.width = "1200px"; // required to make chart width correct
+      tempEl.style.height = "600px"; // optional height
       document.body.appendChild(tempEl);
 
       const ganttChart = (
@@ -372,20 +393,34 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
       const root = createRoot(tempEl);
       root.render(ganttChart);
 
-      await new Promise((resolve) => setTimeout(resolve, 1000)); // give enough time to fully render
-      const ganttImage = await toPng(tempEl);
+      try {
+        await waitForChartRender(tempEl); // wait for .highcharts-container to appear
+
+
+        const ganttImage = await toPng(tempEl, {
+          cacheBust: true,
+          width: 1200,
+          height: 600,
+          pixelRatio: 2,
+          style: { backgroundColor: "white" },
+        });
+
+        ganttSlides.push({
+          manager,
+          ganttImageUrl: ganttImage,
+          projectList: managerProjects.map(p => p.PROJECT_NAME),
+        });
+      } catch (err) {
+        console.error(`Failed to render chart for ${manager}:`, err);
+      }
+
       root.unmount();
       document.body.removeChild(tempEl);
-
-      ganttSlides.push({
-        manager,
-        ganttImageUrl: ganttImage,
-        projectList: managerProjects.map(p => p.PROJECT_NAME),
-      });
     }
 
     return ganttSlides;
   };
+
 
 
   const handleDownloadPresentation = async () => {
