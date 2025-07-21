@@ -413,6 +413,7 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
                 renderIcon={PresentationFile}
                 hasIconOnly
                 style={{ borderRadius: "6px" }}
+                title=""
                 onClick={() => {
                   window.open("https://link-to-frameworks-presentation.com", "_blank");
                 }}
