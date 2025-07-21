@@ -338,88 +338,91 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
     return chartImages;
   };
 
-  const waitForChartRender = (container: HTMLElement, timeout = 5000): Promise<void> => {
-    return new Promise((resolve, reject) => {
-      const startTime = Date.now();
+ const waitForHighchartsRender = (container: HTMLElement, timeout = 5000): Promise<void> => {
+  return new Promise((resolve, reject) => {
+    const startTime = Date.now();
 
-      const check = () => {
-        const chartContainer = container.querySelector('.highcharts-container');
-        if (chartContainer) {
-          resolve();
-        } else if (Date.now() - startTime > timeout) {
-          reject(new Error("Chart did not render in time"));
-        } else {
-          requestAnimationFrame(check);
-        }
-      };
-
-      check();
-    });
-  };
-
-  const captureGanttSlides = async () => {
-    const ganttSlides: GanttManagerSlide[] = [];
-    const managers = Array.from(new Set(projects.map((p) => p.STAFF_VP))).filter(Boolean);
-
-    for (const manager of managers) {
-      const managerProjects: projectDetails[] = projects
-        .filter(p => p.STAFF_VP === manager)
-        .map((p, idx) => ({
-          ...p,
-          SL_NO: typeof p.SL_NO === 'string' ? Number(p.SL_NO) || idx + 1 : p.SL_NO,
-        }));
-
-      const tempEl = document.createElement("div");
-      tempEl.style.position = "fixed";
-      tempEl.style.left = "-9999px";
-      tempEl.style.width = "1200px"; // required to make chart width correct
-      tempEl.style.height = "600px"; // optional height
-      document.body.appendChild(tempEl);
-
-      const ganttChart = (
-        <ProjectTimeline
-          projects={managerProjects}
-          selectedFilters={{ managers: [], platforms: [], phases: [] }}
-          showAllYears={true}
-          selectedYear={selectedYear}
-          isChangedSelectedYears={false}
-          isModalOpen={false}
-          modalReady={true}
-          modalProjectName=""
-          setIsModalOpen={() => { }}
-        />
-      );
-
-      const root = createRoot(tempEl);
-      root.render(ganttChart);
-
-      try {
-        await waitForChartRender(tempEl); // wait for .highcharts-container to appear
-
-
-        const ganttImage = await toPng(tempEl, {
-          cacheBust: true,
-          width: 1200,
-          height: 600,
-          pixelRatio: 2,
-          style: { backgroundColor: "white" },
-        });
-
-        ganttSlides.push({
-          manager,
-          ganttImageUrl: ganttImage,
-          projectList: managerProjects.map(p => p.PROJECT_NAME),
-        });
-      } catch (err) {
-        console.error(`Failed to render chart for ${manager}:`, err);
+    const check = () => {
+      const chartCanvas = container.querySelector(".highcharts-container");
+      if (chartCanvas) {
+        resolve();
+      } else if (Date.now() - startTime > timeout) {
+        reject("Highcharts container not found within timeout");
+      } else {
+        requestAnimationFrame(check);
       }
+    };
 
-      root.unmount();
-      document.body.removeChild(tempEl);
+    check();
+  });
+};
+
+const captureGanttSlides = async () => {
+  const ganttSlides: GanttManagerSlide[] = [];
+  const managers = Array.from(new Set(projects.map((p) => p.STAFF_VP))).filter(Boolean);
+
+  for (const manager of managers) {
+    const managerProjects: projectDetails[] = projects
+      .filter(p => p.STAFF_VP === manager)
+      .map((p, idx) => ({
+        ...p,
+        SL_NO: typeof p.SL_NO === "string" ? Number(p.SL_NO) || idx + 1 : p.SL_NO,
+      }));
+
+    const tempEl = document.createElement("div");
+    tempEl.style.position = "fixed";
+    tempEl.style.left = "-9999px";
+    tempEl.style.top = "0";
+    tempEl.style.width = "1200px";
+    tempEl.style.height = "600px";
+    tempEl.style.background = "white";
+    document.body.appendChild(tempEl);
+
+    const ganttChart = (
+      <ProjectTimeline
+        projects={managerProjects}
+        selectedFilters={{ managers: [], platforms: [], phases: [] }}
+        showAllYears={true}
+        selectedYear={new Date().getFullYear()} // Ensure this is your selectedYear state
+        isChangedSelectedYears={false}
+        isModalOpen={false}
+        modalReady={true}
+        modalProjectName=""
+        setIsModalOpen={() => {}}
+      />
+    );
+
+    const root = createRoot(tempEl);
+    root.render(ganttChart);
+
+    try {
+      // Wait until Highcharts is fully rendered
+      await waitForHighchartsRender(tempEl);
+
+      const ganttImage = await toPng(tempEl, {
+        cacheBust: true,
+        backgroundColor: "white",
+        width: 1200,
+        height: 600,
+        pixelRatio: 2,
+      });
+
+      ganttSlides.push({
+        manager,
+        ganttImageUrl: ganttImage,
+        projectList: managerProjects.map(p => p.PROJECT_NAME),
+      });
+    } catch (err) {
+      console.error(`Failed to render Gantt chart for ${manager}:`, err);
     }
 
-    return ganttSlides;
-  };
+    root.unmount();
+    document.body.removeChild(tempEl);
+  }
+
+  return ganttSlides;
+};
+
 
 
 
