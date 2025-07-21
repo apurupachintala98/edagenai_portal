@@ -402,8 +402,6 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
     return () => document.removeEventListener("click", handleClick);
   }, []);
 
-  //const filterProjectDetail = projectDetails.filter((v) => v.PROJECT_NAME === modalProjectName);
-
   return (
     <MainContainer>
       <PageContainer>
@@ -412,10 +410,8 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
           <ButtonContainer style={{ display: "flex", gap: "1rem" }}>
             <Tooltip label="View Presentation" align="bottom">
               <Button
-                kind="ghost"
-                size="sm"
+                size="md"
                 renderIcon={PresentationFile}
-                iconDescription="Frameworks Presentation"
                 hasIconOnly
                 onClick={() => {
                   window.open("https://link-to-frameworks-presentation.com", "_blank");
