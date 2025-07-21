@@ -370,13 +370,11 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
         }));
 
       const tempEl = document.createElement("div");
-      tempEl.style.position = "absolute";
-      tempEl.style.top = "0";
-      tempEl.style.left = "0";
-      tempEl.style.zIndex = "-1"; // behind everything
-      tempEl.style.opacity = "0"; // fully transparent but rendered
-      tempEl.style.width = "1400px";
-      tempEl.style.height = `${Math.max(managerProjects.length * 50, 500)}px`;
+     tempEl.style.position = "fixed";
+    tempEl.style.top = "0";
+    tempEl.style.width = "1200px";
+    tempEl.style.height = "600px";
+    tempEl.style.background = "white";
       document.body.appendChild(tempEl);
 
       const ganttChart = (
