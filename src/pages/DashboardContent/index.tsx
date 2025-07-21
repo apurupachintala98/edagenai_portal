@@ -380,7 +380,7 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
       tempEl.style.position = "absolute";
 tempEl.style.top = "0";
 tempEl.style.left = "0";
-tempEl.style.zIndex = "9999";
+tempEl.style.zIndex = "-9999";
 tempEl.style.padding = "10px";
 tempEl.style.overflow = "hidden";
 document.body.appendChild(tempEl);
