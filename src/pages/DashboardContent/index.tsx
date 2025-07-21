@@ -453,9 +453,9 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
     tempEl.style.position = "absolute";
     tempEl.style.top = "0";
     tempEl.style.left = "0";
-    tempEl.style.zIndex = "-1";
+    tempEl.style.zIndex = "9999";
     tempEl.style.opacity = "0";
-    tempEl.style.width = "1600px";
+    tempEl.style.width = "1800px";
     tempEl.style.height = `${Math.max(managerProjects.length * 50, 500)}px`;
     tempEl.style.background = "white"; // Ensure no transparent background
     tempEl.style.overflow = "hidden";
