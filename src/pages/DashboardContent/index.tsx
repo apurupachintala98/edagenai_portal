@@ -35,7 +35,7 @@ import DashboardChart from "components/DashboardChart"; // Bar chart
 import MultipleBarChart from "components/MultipleBarChart";
 import { DropdownButton } from "components/DropdownButton";
 import { toPng } from 'html-to-image';
-import downloadDashboardPPT from '../../hooks/DownloadDashboardPPT';
+import downloadDashboardPPT, { GanttManagerSlide } from '../../hooks/DownloadDashboardPPT';
 import ApiService from "../../services/ApiService";
 import { createRoot } from 'react-dom/client';
 import { useWindowDimensions } from "utils/hooks";
@@ -338,24 +338,61 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
     return chartImages;
   };
 
-  const handleDownloadPresentation = async () => {
-    const chartImages = await captureAllCharts();
-    downloadDashboardPPT(chartImages);
+  const captureGanttSlides = async () => {
+    const ganttSlides: GanttManagerSlide[] = [];
+    const managers = Array.from(new Set(projects.map((p) => p.STAFF_VP))).filter(Boolean);
+
+    for (const manager of managers) {
+      const managerProjects: projectDetails[] = projects
+        .filter(p => p.STAFF_VP === manager)
+        .map((p, idx) => ({
+          ...p,
+          SL_NO: typeof p.SL_NO === 'string' ? Number(p.SL_NO) || idx + 1 : p.SL_NO,
+        }));
+
+      const tempEl = document.createElement("div");
+      tempEl.style.position = "fixed";
+      tempEl.style.left = "-9999px";
+      document.body.appendChild(tempEl);
+
+      const ganttChart = (
+        <ProjectTimeline
+          projects={managerProjects}
+          selectedFilters={{ managers: [], platforms: [], phases: [] }}
+          showAllYears={true}
+          selectedYear={selectedYear}
+          isChangedSelectedYears={false}
+          isModalOpen={false}
+          modalReady={true}
+          modalProjectName=""
+          setIsModalOpen={() => { }}
+        />
+      );
+
+      const root = createRoot(tempEl);
+      root.render(ganttChart);
+
+      await new Promise((resolve) => setTimeout(resolve, 1000)); // give enough time to fully render
+      const ganttImage = await toPng(tempEl);
+      root.unmount();
+      document.body.removeChild(tempEl);
+
+      ganttSlides.push({
+        manager,
+        ganttImageUrl: ganttImage,
+        projectList: managerProjects.map(p => p.PROJECT_NAME),
+      });
+    }
+
+    return ganttSlides;
   };
 
-  // useEffect(() => {
-  //   const handler = (e: any) => {
-  //     const charts = e.detail;
-  //     const temp = document.createElement('div');
-  //     document.body.appendChild(temp);
-  //     const root = createRoot(temp);
-  //     root.render(<DownloadDashboardPPT charts={charts} />);
 
-  //     setTimeout(() => document.body.removeChild(temp), 1000);
-  //   };
-  //   window.addEventListener('triggerPPTDownload', handler);
-  //   return () => window.removeEventListener('triggerPPTDownload', handler);
-  // }, []);
+  const handleDownloadPresentation = async () => {
+    const chartImages = await captureAllCharts();
+    const ganttSlides = await captureGanttSlides();
+    downloadDashboardPPT(chartImages, ganttSlides);
+  };
 
   useEffect(() => {
     if (projects.length > 0) {
@@ -655,6 +692,7 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
           modalReady={modalReady}
           setIsModalOpen={() => setIsModalOpen(false)}
           modalProjectName={modalProjectName}
+          projects={undefined}
         />
       </PageContainer>
     </MainContainer>

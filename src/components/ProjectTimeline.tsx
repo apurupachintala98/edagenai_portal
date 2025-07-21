@@ -26,6 +26,7 @@ interface ProjectTimelineProps {
   isModalOpen: boolean;
   modalReady: boolean;
   modalProjectName: string;
+  projects?: projectDetails[];
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -38,6 +39,7 @@ const ProjectTimeline = ({
   modalReady,
   modalProjectName,
   setIsModalOpen,
+  projects,
 }: ProjectTimelineProps) => {
   const [seriesData, setSeriesData] = useState<any[]>([]);
   const [originalSeriesData, setOriginalSeriesData] = useState<any[]>([]);
