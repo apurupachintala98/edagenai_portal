@@ -283,17 +283,17 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
         {
           name: "Prod",
           value: prodCount,
-          color: "rgba(0, 85, 170, 1)",
+          color: "#1e5ae6",
         },
         {
           name: "Pre-Prod",
           value: preProdCount,
-          color: "rgba(0, 179, 159, 1)",
+          color: "#17a19c",
         },
         {
           name: "Non-Prod",
           value: nonProdCount,
-          color: "rgba(128, 128, 128, 1)",
+          color: "#64748b",
         },
       ];
 

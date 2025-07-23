@@ -41,9 +41,9 @@ const MultipleBarChart: React.FC<MultipleBarChartProps> = ({ data }) => {
           <YAxis axisLine={false} tickLine={false} />
           <Tooltip />
           <Legend />
-          <Bar dataKey="Silver" fill="#8884d8" />
-          <Bar dataKey="Gold" fill="#82ca9d" />
-          <Bar dataKey="Platinum" fill="#ffc658" />
+          <Bar dataKey="Silver" fill="#1e5ae6" />
+          <Bar dataKey="Gold" fill="#17a19c" />
+          <Bar dataKey="Platinum" fill="#64748b" />
         </BarChart>
       </ResponsiveContainer>
     </div>
