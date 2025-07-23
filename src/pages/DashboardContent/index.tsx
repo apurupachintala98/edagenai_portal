@@ -204,10 +204,10 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
           value: item.VALUE,
           color:
             index % 3 === 0
-              ? "#1f77b4"
+              ? "rgba(0, 85, 170, 1)"
               : index % 3 === 1
-                ? "#17becf"
-                : "#7f7f7f",
+                ? "rgba(23, 151, 140, 1)"
+                : "rgba(128, 128, 128, 1)",
         }));
 
         setProgressReportData(coloredData);
@@ -283,17 +283,17 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
         {
           name: "Prod",
           value: prodCount,
-          color: "#1f77b4",
+          color: "rgba(0, 85, 170, 1)",
         },
         {
           name: "Pre-Prod",
           value: preProdCount,
-          color: "#17becf",
+          color: "rgba(0, 179, 159, 1)",
         },
         {
           name: "Non-Prod",
           value: nonProdCount,
-          color: "#7f7f7f",
+          color: "rgba(128, 128, 128, 1)",
         },
       ];
 
