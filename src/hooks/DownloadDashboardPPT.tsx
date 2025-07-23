@@ -32,7 +32,7 @@ const downloadDashboardPPT = (
     { fill: { color: string }; color: string }
   > = {
     "Completed": { fill: { color: "#d1fae5" }, color: "#15803d" },
-    "On-track": { fill: { color: "#dbeafe" }, color: "#1d4ed8" },
+    "On-Track": { fill: { color: "#dbeafe" }, color: "#1d4ed8" },
     "Delayed": { fill: { color: "#fee2e2" }, color: "#b91c1c" },
   };
 
@@ -69,13 +69,37 @@ const downloadDashboardPPT = (
       color: "1f4e79",
     });
 
+    // const filteredProjects: PptxGenJS.TableRow[] = projectDetails
+    //   .filter((p) => p.STAFF_VP === manager)
+    //   .map((p, idx) => {
+    //     const status = p.STATUS || "—";
+    //     const statusStyle = statusColors[status] || {
+    //       fill: { color: "#ffffff" },
+    //       color: "#000000",
+    //     };
+
+    //     return [
+    //       { text: String(idx + 1), options: {} },
+    //       { text: p.PROJECT_NAME || "—", options: {} },
+    //       { text: p.STAFF_VP || "—", options: {} },
+    //       {
+    //         text: status,
+    //         options: {
+    //           fill: statusStyle.fill,
+    //           color: statusStyle.color,
+    //         },
+    //       },
+    //       { text: p.CURRENT_PHASE || "—", options: {} },
+    //       { text: p.DEPLOYMENT_DATE || "—", options: {} },
+    //     ];
+    //   });
     const filteredProjects: PptxGenJS.TableRow[] = projectDetails
       .filter((p) => p.STAFF_VP === manager)
       .map((p, idx) => {
         const status = p.STATUS || "—";
         const statusStyle = statusColors[status] || {
-          fill: { color: "#ffffff" },
-          color: "#000000",
+          fill: { color: "#f3f4f6" }, // light gray for unknown
+          color: "#6b7280",          // dark gray text
         };
 
         return [
@@ -87,6 +111,11 @@ const downloadDashboardPPT = (
             options: {
               fill: statusStyle.fill,
               color: statusStyle.color,
+              bold: true,
+              align: "center",
+              valign: "middle",
+              fontSize: 10,
+              margin: [2, 2, 2, 2], // [top, right, bottom, left]
             },
           },
           { text: p.CURRENT_PHASE || "—", options: {} },
@@ -112,7 +141,7 @@ const downloadDashboardPPT = (
       x: 0.5,
       y: 1.0,
       w: 9.0,
-      colW: [0.6, 3.5, 1.2, 1.2, 1.2, 1.8],
+      colW: [0.6, 3.5, 1.2, 1.2, 1.2, 1.6],
       fontSize: 11,
       border: { type: "solid", color: "c2c2c2", pt: 1 },
       align: "left",
