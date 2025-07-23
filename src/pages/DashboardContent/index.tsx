@@ -10,6 +10,7 @@ import {
   OverflowMenu,
   OverflowMenuItem,
   Tooltip,
+  Loading,
 } from "@carbon/react";
 import {
   Dashboard,
@@ -84,7 +85,7 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
     totalBUProjects: 0,
     totalPlatforms: 0,
   });
-
+  const [isDownloading, setIsDownloading] = useState(false);
   const [filteredProjectDonut, setFilteredProjectDonut] = useState<any[] | null>(null);
   const [dropdownOptions, setDropdownOptions] = useState({
     managers: [] as any[],
@@ -358,10 +359,18 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
   };
 
   const handleDownloadPresentation = async () => {
-    const chartImages = await captureAllCharts();
-    const ganttSlides = await captureGanttSlides();
-    downloadDashboardPPT(chartImages, ganttSlides, projectDetails);
+    setIsDownloading(true);
+    try {
+      const chartImages = await captureAllCharts();
+      const ganttSlides = await captureGanttSlides();
+      await downloadDashboardPPT(chartImages, ganttSlides, projectDetails);
+    } catch (error) {
+      console.error("Failed to generate presentation:", error);
+    } finally {
+      setIsDownloading(false);
+    }
   };
+
 
   useEffect(() => {
     if (projects.length > 0) {
@@ -449,14 +458,29 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
         <HeaderContainer>
           <PageTitle>{t("dashboard.title")}</PageTitle>
           <ButtonContainer style={{ display: "flex", gap: "1rem" }}>
-            <Button
+            {/* <Button
               size="lg"
               renderIcon={PresentationFile}
               hasIconOnly
               style={{ borderRadius: "6px" }}
               title=""
               onClick={handleDownloadPresentation}
-            />
+            /> */}
+            <Button
+              size="lg"
+              hasIconOnly
+              title="Download Presentation"
+              style={{ borderRadius: "6px", position: "relative", width: "48px", height: "48px" }}
+              disabled={isDownloading}
+              onClick={handleDownloadPresentation}
+            >
+              {isDownloading ? (
+                <Loading withOverlay={false} small description="Downloading..." />
+              ) : (
+                <PresentationFile />
+              )}
+            </Button>
+
             <DropdownButton
               icon={<DocumentAdd />}
               label={t("home.createButtonText")}

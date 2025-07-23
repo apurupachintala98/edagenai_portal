@@ -69,30 +69,6 @@ const downloadDashboardPPT = (
       color: "1f4e79",
     });
 
-    // const filteredProjects: PptxGenJS.TableRow[] = projectDetails
-    //   .filter((p) => p.STAFF_VP === manager)
-    //   .map((p, idx) => {
-    //     const status = p.STATUS || "—";
-    //     const statusStyle = statusColors[status] || {
-    //       fill: { color: "#ffffff" },
-    //       color: "#000000",
-    //     };
-
-    //     return [
-    //       { text: String(idx + 1), options: {} },
-    //       { text: p.PROJECT_NAME || "—", options: {} },
-    //       { text: p.STAFF_VP || "—", options: {} },
-    //       {
-    //         text: status,
-    //         options: {
-    //           fill: statusStyle.fill,
-    //           color: statusStyle.color,
-    //         },
-    //       },
-    //       { text: p.CURRENT_PHASE || "—", options: {} },
-    //       { text: p.DEPLOYMENT_DATE || "—", options: {} },
-    //     ];
-    //   });
     const filteredProjects: PptxGenJS.TableRow[] = projectDetails
       .filter((p) => p.STAFF_VP === manager)
       .map((p, idx) => {
