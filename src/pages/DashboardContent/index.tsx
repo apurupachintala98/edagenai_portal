@@ -129,12 +129,11 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
           ApiService.getAllLlmPfDetails(),
         ]);
         const colorPalette = [
-          "#1f77b4", // brand-blue
-          "#17becf", // brand-teal
-          "#7f7f7f", // muted-foreground
-          "#ff7f0e", // warning
-          "#aec7e8", // brand-blue-light
-
+          "#1e5ae6", // brand-blue
+          "#17a19c", // brand-teal
+          "#64748b", // muted-foreground
+          "#f59f05", // warning
+          "#3399ff", // brand-blue-light
         ];
 
         const costsWithColor = costRes.map((item: any, index: number) => ({
@@ -204,10 +203,10 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
           value: item.VALUE,
           color:
             index % 3 === 0
-              ? "rgba(0, 85, 170, 1)"
+              ? "#1e5ae6"
               : index % 3 === 1
-                ? "rgba(23, 151, 140, 1)"
-                : "rgba(128, 128, 128, 1)",
+                ? "#17a19c"
+                : "#64748b",
         }));
 
         setProgressReportData(coloredData);
