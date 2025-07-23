@@ -112,7 +112,7 @@ const downloadDashboardPPT = (
       x: 0.5,
       y: 1.0,
       w: 9.0,
-      colW: [0.8, 3.5, 1.2, 1.2, 1.2, 2.0],
+      colW: [0.6, 3.5, 1.2, 1.2, 1.2, 1.8],
       fontSize: 11,
       border: { type: "solid", color: "c2c2c2", pt: 1 },
       align: "left",
