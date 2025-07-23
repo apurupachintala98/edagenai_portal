@@ -50,6 +50,8 @@
 
 // ---- DownloadDashboardPPT.ts ----
 import PptxGenJS from "pptxgenjs";
+import { type projectDetails } from "../hooks/useProjectDetailsData";
+
 
 export interface ChartImages {
   title: string;
@@ -58,13 +60,13 @@ export interface ChartImages {
 
 export interface GanttManagerSlide {
   manager: string;
-  ganttImageUrl: string;
   projectList: string[];
 }
 
 const downloadDashboardPPT = (
   charts: ChartImages[],
-  ganttByManager: GanttManagerSlide[]
+  ganttByManager: GanttManagerSlide[],
+  projectDetails: projectDetails[]
 ) => {
   const pptx = new PptxGenJS();
 
@@ -101,38 +103,80 @@ const downloadDashboardPPT = (
   });
 
   // Slide for each VP with Gantt chart
-  ganttByManager.forEach(({ manager, ganttImageUrl, projectList }) => {
-    const slide = pptx.addSlide();
-    slide.addText(`Projects for ${manager}`, {
-      x: 0.5,
-      y: 0.3,
-      fontSize: 18,
-      bold: true,
-      color: "1f4e79",
-    });
+  // ganttByManager.forEach(({ manager, ganttImageUrl, projectList }) => {
+  //   const slide = pptx.addSlide();
+  //   slide.addText(`Projects for ${manager}`, {
+  //     x: 0.5,
+  //     y: 0.3,
+  //     fontSize: 18,
+  //     bold: true,
+  //     color: "1f4e79",
+  //   });
 
-    // slide.addImage({
-    //   data: ganttImageUrl,
-    //   x: 0.5,
-    //   y: 1,
-    //   w: 8.5,
-    //   h: 3.5,
-    // });
+  //   // slide.addImage({
+  //   //   data: ganttImageUrl,
+  //   //   x: 0.5,
+  //   //   y: 1,
+  //   //   w: 8.5,
+  //   //   h: 3.5,
+  //   // });
 
-    // const tableData = [
-    //   [{ text: "Project Name", options: { bold: true } }],
-    //   ...projectList.map((p) => [{ text: p }]),
-    // ];
+  //   // const tableData = [
+  //   //   [{ text: "Project Name", options: { bold: true } }],
+  //   //   ...projectList.map((p) => [{ text: p }]),
+  //   // ];
 
-    // slide.addTable(tableData, {
-    //   x: 0.5,
-    //   y: 4.7,
-    //   w: 8.5,
-    //   colW: [8.5],
-    //   fontSize: 12,
-    //   border: { type: "solid", color: "c2c2c2", pt: 1 },
-    // });
+  //   // slide.addTable(tableData, {
+  //   //   x: 0.5,
+  //   //   y: 4.7,
+  //   //   w: 8.5,
+  //   //   colW: [8.5],
+  //   //   fontSize: 12,
+  //   //   border: { type: "solid", color: "c2c2c2", pt: 1 },
+  //   // });
+  // });
+
+  ganttByManager.forEach(({ manager, projectList }) => {
+  const slide = pptx.addSlide();
+  slide.addText(`Projects for ${manager}`, {
+    x: 0.5,
+    y: 0.3,
+    fontSize: 18,
+    bold: true,
+    color: "1f4e79",
   });
+
+  const filteredProjects = projectDetails
+    .filter((p) => p.STAFF_VP === manager)
+    .map((p, idx) => [
+      { text: String(idx + 1) },
+      { text: p.PROJECT_NAME },
+      { text: p.STAFF_VP },
+      { text: p.STATUS || "—" },
+      { text: p.CURRENT_PHASE || "—" },
+    ]);
+
+  const tableData = [
+    [
+      { text: "SL NO.", options: { bold: true } },
+      { text: "Project", options: { bold: true } },
+      { text: "Manager", options: { bold: true } },
+      { text: "Status", options: { bold: true } },
+      { text: "Current Phase", options: { bold: true } },
+    ],
+    ...filteredProjects,
+  ];
+
+  slide.addTable(tableData, {
+    x: 0.5,
+    y: 1.0,
+    w: 9.0,
+    colW: [0.8, 3.5, 1.5, 1.2, 2.0],
+    fontSize: 11,
+    border: { type: "solid", color: "c2c2c2", pt: 1 },
+    align: "left",
+  });
+});
 
   pptx.writeFile({ fileName: "DashboardCharts.pptx" });
 };
