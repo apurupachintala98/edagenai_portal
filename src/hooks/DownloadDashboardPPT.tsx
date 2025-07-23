@@ -74,12 +74,12 @@ const downloadDashboardPPT = (
       .map((p, idx) => {
         const status = p.STATUS || "—";
         const statusStyle = statusColors[status] || {
-          fill: { color: "#f3f4f6" }, // light gray for unknown
-          color: "#6b7280",          // dark gray text
+          fill: { color: "#f3f4f6" }, 
+          color: "#6b7280",  
         };
 
         return [
-          { text: String(idx + 1), options: {} },
+          { text: String(idx + 1), options: { align: "center", valign: "middle" } },
           { text: p.PROJECT_NAME || "—", options: {} },
           { text: p.STAFF_VP || "—", options: {} },
           {
@@ -94,23 +94,23 @@ const downloadDashboardPPT = (
               margin: [2, 2, 2, 2], // [top, right, bottom, left]
             },
           },
-          { text: p.CURRENT_PHASE || "—", options: {} },
-          { text: p.DEPLOYMENT_DATE || "—", options: {} },
+          { text: p.CURRENT_PHASE || "—", options: { align: "center", valign: "middle" } },
+          { text: p.DEPLOYMENT_DATE || "—", options: { align: "center", valign: "middle" } },
         ];
       });
 
     const tableData: PptxGenJS.TableRow[] = [
-      [
-        { text: "SL NO.", options: { bold: true } },
-        { text: "Project", options: { bold: true } },
-        { text: "Manager", options: { bold: true } },
-        { text: "Status", options: { bold: true } },
-        { text: "Current Phase", options: { bold: true } },
-        { text: "Deployment Date", options: { bold: true } },
+  [
+    { text: "SL NO.", options: { bold: true, align: "center" } },
+    { text: "Project", options: { bold: true } },
+    { text: "Manager", options: { bold: true } },
+    { text: "Status", options: { bold: true, align: "center" } },
+    { text: "Current Phase", options: { bold: true, align: "center" } },
+    { text: "Deployment Date", options: { bold: true, align: "center" } },
+  ],
+  ...filteredProjects,
+];
 
-      ],
-      ...filteredProjects,
-    ];
 
 
     slide.addTable(tableData, {
