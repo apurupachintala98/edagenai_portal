@@ -129,11 +129,12 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
           ApiService.getAllLlmPfDetails(),
         ]);
         const colorPalette = [
-          "hsl(var(--brand-blue))",
-          "hsl(var(--brand-teal))",
-          "hsl(var(--muted-foreground))",
-          "hsl(var(--warning))",
-          "hsl(var(--brand-blue-light))",
+          "#1f77b4", // brand-blue
+          "#17becf", // brand-teal
+          "#7f7f7f", // muted-foreground
+          "#ff7f0e", // warning
+          "#aec7e8", // brand-blue-light
+
         ];
 
         const costsWithColor = costRes.map((item: any, index: number) => ({
@@ -203,10 +204,10 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
           value: item.VALUE,
           color:
             index % 3 === 0
-              ? "hsl(var(--brand-blue))"
+              ? "#1f77b4"
               : index % 3 === 1
-                ? "hsl(var(--brand-teal))"
-                : "hsl(var(--muted-foreground))",
+                ? "#17becf"
+                : "#7f7f7f",
         }));
 
         setProgressReportData(coloredData);
@@ -282,17 +283,17 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
         {
           name: "Prod",
           value: prodCount,
-          color: "hsl(var(--brand-blue))",
+          color: "#1f77b4",
         },
         {
           name: "Pre-Prod",
           value: preProdCount,
-          color: "hsl(var(--brand-teal))",
+          color: "#17becf",
         },
         {
           name: "Non-Prod",
           value: nonProdCount,
-          color: "hsl(var(--muted-foreground))",
+          color: "#7f7f7f",
         },
       ];
 
@@ -335,28 +336,28 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
     return chartImages;
   };
 
-  const waitForChartWithData = (container: HTMLElement, timeout = 5000): Promise<void> => {
-    return new Promise((resolve, reject) => {
-      const startTime = Date.now();
+  // const waitForChartWithData = (container: HTMLElement, timeout = 5000): Promise<void> => {
+  //   return new Promise((resolve, reject) => {
+  //     const startTime = Date.now();
 
-      const check = () => {
-        const chartSvg = container.querySelector(".highcharts-container svg");
-        const loadingText = container.querySelector(".highcharts-loading");
+  //     const check = () => {
+  //       const chartSvg = container.querySelector(".highcharts-container svg");
+  //       const loadingText = container.querySelector(".highcharts-loading");
 
-        const chartReady = !!chartSvg && !loadingText;
+  //       const chartReady = !!chartSvg && !loadingText;
 
-        if (chartReady) {
-          resolve();
-        } else if (Date.now() - startTime > timeout) {
-          reject("Chart not ready within timeout");
-        } else {
-          requestAnimationFrame(check);
-        }
-      };
+  //       if (chartReady) {
+  //         resolve();
+  //       } else if (Date.now() - startTime > timeout) {
+  //         reject("Chart not ready within timeout");
+  //       } else {
+  //         requestAnimationFrame(check);
+  //       }
+  //     };
 
-      check();
-    });
-  };
+  //     check();
+  //   });
+  // };
 
   // const captureGanttSlides = async () => {
   //   const ganttSlides: GanttManagerSlide[] = [];
@@ -436,91 +437,91 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
   // };
 
   const captureGanttSlides = async () => {
-  const ganttSlides: GanttManagerSlide[] = [];
+    const ganttSlides: GanttManagerSlide[] = [];
 
-  const managers = Array.from(new Set(projects.map((p) => p.STAFF_VP))).filter(Boolean);
+    const managers = Array.from(new Set(projects.map((p) => p.STAFF_VP))).filter(Boolean);
 
-  for (const manager of managers) {
-    const managerProjects: projectDetails[] = projects
-      .filter((p) => p.STAFF_VP === manager)
-      .map((p, idx) => ({
-        ...p,
-        SL_NO: typeof p.SL_NO === "string" ? Number(p.SL_NO) || idx + 1 : p.SL_NO,
-      }));
+    for (const manager of managers) {
+      const managerProjects: projectDetails[] = projects
+        .filter((p) => p.STAFF_VP === manager)
+        .map((p, idx) => ({
+          ...p,
+          SL_NO: typeof p.SL_NO === "string" ? Number(p.SL_NO) || idx + 1 : p.SL_NO,
+        }));
 
-    // STEP 1: Create a visible but transparent container
-    const tempEl = document.createElement("div");
-    tempEl.style.position = "absolute";
-    tempEl.style.top = "0";
-    tempEl.style.left = "0";
-    tempEl.style.zIndex = "9999";
-    tempEl.style.opacity = "0";
-    tempEl.style.width = "1800px";
-    tempEl.style.height = `${Math.max(managerProjects.length * 50, 500)}px`;
-    tempEl.style.background = "white"; // Ensure no transparent background
-    tempEl.style.overflow = "hidden";
-    document.body.appendChild(tempEl);
+      // STEP 1: Create a visible but transparent container
+      const tempEl = document.createElement("div");
+      tempEl.style.position = "absolute";
+      tempEl.style.top = "0";
+      tempEl.style.left = "0";
+      tempEl.style.zIndex = "9999";
+      tempEl.style.opacity = "0";
+      tempEl.style.width = "1800px";
+      tempEl.style.height = `${Math.max(managerProjects.length * 50, 500)}px`;
+      tempEl.style.background = "white"; // Ensure no transparent background
+      tempEl.style.overflow = "hidden";
+      document.body.appendChild(tempEl);
 
-    // STEP 2: Render the chart with proper props
-    const ganttChart = (
-      <ProjectTimeline
-        projects={managerProjects}
-        selectedFilters={{ managers: [], platforms: [], phases: [] }}
-        showAllYears={true}
-        selectedYear={new Date().getFullYear()}
-        isChangedSelectedYears={false}
-        isModalOpen={false}
-        modalReady={true}
-        modalProjectName=""
-        setIsModalOpen={() => {}}
-      />
-    );
+      // STEP 2: Render the chart with proper props
+      const ganttChart = (
+        <ProjectTimeline
+          projects={managerProjects}
+          selectedFilters={{ managers: [], platforms: [], phases: [] }}
+          showAllYears={true}
+          selectedYear={new Date().getFullYear()}
+          isChangedSelectedYears={false}
+          isModalOpen={false}
+          modalReady={true}
+          modalProjectName=""
+          setIsModalOpen={() => { }}
+        />
+      );
 
-    const root = createRoot(tempEl);
-    root.render(ganttChart);
+      const root = createRoot(tempEl);
+      root.render(ganttChart);
 
-    // STEP 3: Wait for Highcharts Gantt to fully render
-    await new Promise<void>((resolve, reject) => {
-      const start = Date.now();
+      // STEP 3: Wait for Highcharts Gantt to fully render
+      await new Promise<void>((resolve, reject) => {
+        const start = Date.now();
 
-      const checkRendered = () => {
-        const chartReady = tempEl.querySelector(".highcharts-container");
-        const barsDrawn = tempEl.querySelector(".highcharts-series-group");
+        const checkRendered = () => {
+          const chartReady = tempEl.querySelector(".highcharts-container");
+          const barsDrawn = tempEl.querySelector(".highcharts-series-group");
 
-        if (chartReady && barsDrawn) {
-          resolve();
-        } else if (Date.now() - start > 5000) {
-          console.warn(`Gantt chart timeout for ${manager}`);
-          resolve(); // Proceed anyway to avoid blocking
-        } else {
-          requestAnimationFrame(checkRendered);
-        }
-      };
+          if (chartReady && barsDrawn) {
+            resolve();
+          } else if (Date.now() - start > 5000) {
+            console.warn(`Gantt chart timeout for ${manager}`);
+            resolve(); // Proceed anyway to avoid blocking
+          } else {
+            requestAnimationFrame(checkRendered);
+          }
+        };
 
-      checkRendered();
-    });
+        checkRendered();
+      });
 
-    // STEP 4: Convert to PNG
-    const ganttImage = await toPng(tempEl, {
-      cacheBust: true,
-      backgroundColor: "white",
-      width: 1600,
-      height: tempEl.clientHeight,
-      pixelRatio: 2,
-    });
+      // STEP 4: Convert to PNG
+      const ganttImage = await toPng(tempEl, {
+        cacheBust: true,
+        backgroundColor: "white",
+        width: 1600,
+        height: tempEl.clientHeight,
+        pixelRatio: 2,
+      });
 
-    ganttSlides.push({
-      manager,
-      ganttImageUrl: ganttImage,
-      projectList: managerProjects.map((p) => p.PROJECT_NAME),
-    });
+      ganttSlides.push({
+        manager,
+        ganttImageUrl: ganttImage,
+        projectList: managerProjects.map((p) => p.PROJECT_NAME),
+      });
 
-    root.unmount();
-    document.body.removeChild(tempEl);
-  }
+      root.unmount();
+      document.body.removeChild(tempEl);
+    }
 
-  return ganttSlides;
-};
+    return ganttSlides;
+  };
 
   const handleDownloadPresentation = async () => {
     const chartImages = await captureAllCharts();

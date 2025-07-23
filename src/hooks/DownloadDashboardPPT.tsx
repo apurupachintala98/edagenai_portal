@@ -111,13 +111,13 @@ const downloadDashboardPPT = (
       color: "1f4e79",
     });
 
-    slide.addImage({
-      data: ganttImageUrl,
-      x: 0.5,
-      y: 1,
-      w: 8.5,
-      h: 3.5,
-    });
+    // slide.addImage({
+    //   data: ganttImageUrl,
+    //   x: 0.5,
+    //   y: 1,
+    //   w: 8.5,
+    //   h: 3.5,
+    // });
 
     // const tableData = [
     //   [{ text: "Project Name", options: { bold: true } }],
