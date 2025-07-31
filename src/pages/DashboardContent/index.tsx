@@ -21,6 +21,7 @@ import {
   DataCategorical,
   Platforms,
   PresentationFile,
+  Chat,
   SalesOps /*CurrencyDollar*/,
 } from "@carbon/react/icons";
 import { ChevronLeft, ChevronRight, DollarSign } from "lucide-react";
@@ -35,6 +36,7 @@ import { ButtonContainer, DashboardCardsWrapper } from "./styled.components";
 import DashboardChart from "components/DashboardChart"; // Bar chart
 import MultipleBarChart from "components/MultipleBarChart";
 import { DropdownButton } from "components/DropdownButton";
+import ChatWidget from "components/ChatWidget";
 import { toPng } from 'html-to-image';
 import downloadDashboardPPT, { GanttManagerSlide } from '../../hooks/DownloadDashboardPPT';
 import ApiService from "../../services/ApiService";
@@ -110,6 +112,8 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
   const hasFetchedAllProjectDetails = useRef<boolean>(false);
   const hasFetchedGanttChart = useRef<boolean>(false);
 
+  
+
   const chartRefs = {
     status: useRef(null),
     platform: useRef(null),
@@ -125,6 +129,7 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
         const [usersRes, costRes, programTypeRes, buRes, platformRes] = await Promise.all([
           ApiService.getAllUsersDetails(),
           ApiService.getAllCostsDetails(),
+          ApiService.getAllStaffVpDetails(),
           ApiService.getAllProgramTypeDetails(),
           ApiService.getAllBUDetails(),
           ApiService.getAllLlmPfDetails(),
@@ -594,8 +599,6 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
                 <DashboardChart data={dashboardData.costs} isCurrency />
               </div>
             </DashboardCard>
-
-
           </Carousel>
         </DashboardCardsWrapper>
 
@@ -688,6 +691,7 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
           projects={undefined}
         />
       </PageContainer>
+      <ChatWidget />
     </MainContainer>
   );
 }

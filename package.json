@@ -20,7 +20,7 @@
     "html-to-image": "^1.11.13",
     "i18next": "^23.10.1",
     "i18next-browser-languagedetector": "^7.2.0",
-    "lucide-react": "^0.503.0",
+    "lucide-react": "^0.534.0",
     "pptxgenjs": "^3.6.0",
     "react": "19.0.0",
     "react-app-polyfill": "^3.0.0",

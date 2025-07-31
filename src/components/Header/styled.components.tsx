@@ -64,7 +64,6 @@ export const LogoContainer = styled.div`
 `;
 
 export const TagLine = styled.div`
-  padding-left: ${(props) => props.theme.space["16"]};
   font-size: ${(props) => props.theme.fontSize.xl};
   line-height: ${(props) => props.theme.lineHeight.md};
   color: #000000;

@@ -46,7 +46,7 @@ interface CustomDataTableHeader {
 }
 
 const headers: CustomDataTableHeader[] = [
-  { header: "SL.NO", key: "SL_NO", isSortable: true },
+  { header: "S#", key: "SL_NO", isSortable: true },
   { header: "Program Name", key: "PROGRAM_NAME", isSortable: true },
   { header: "Project Name", key: "PROJECT_NAME", isSortable: true },
   { header: "BU", key: "BU", isSortable: true },

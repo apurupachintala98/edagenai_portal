@@ -46,7 +46,7 @@ type MenuItem = {
 };
 
 const drawerWidth = {
-  full: 350,
+  full: 309,
   mini: 80,
 };
 

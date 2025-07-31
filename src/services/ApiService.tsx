@@ -71,6 +71,11 @@ const ApiService = {
     return response.status === 200 ? response.data : [];
   },
 
+    getAllStaffVpDetails: async () => {
+    const response = await axios.get(`${Dashboard_BASE_URL}/get_all_details_costs_by_staffvp/`);
+    return response.status === 200 ? response.data : [];
+  },
+
   getAllUsersDetails: async () => {
     const response = await axios.get(`${Dashboard_BASE_URL}/get_all_users_details/`);
     return response.status === 200 ? response.data : [];

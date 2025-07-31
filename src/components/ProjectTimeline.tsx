@@ -152,10 +152,9 @@ const ProjectTimeline = ({
     return `
       <b>${this.series.name}</b><br/>
       <span style="font-weight: 500">${name}</span><br/>
-      ${
-        !point.milestone
-          ? `<span>Start: ${startDate}</span><br/><span>End: ${endDate}</span>`
-          : `<span>Date: ${startDate}</span>`
+      ${!point.milestone
+        ? `<span>Start: ${startDate}</span><br/><span>End: ${endDate}</span>`
+        : `<span>Date: ${startDate}</span>`
       }
     `;
   }
@@ -178,7 +177,7 @@ const ProjectTimeline = ({
           columns: [
             {
               title: {
-                text: "SL NO.",
+                text: "S#",
               },
               labels: {
                 formatter(this: Highcharts.AxisLabelsFormatterContextObject) {
@@ -241,14 +240,14 @@ const ProjectTimeline = ({
                 },
               },
             },
-            {
-              title: { text: "Current Phase" },
-              labels: {
-                formatter(this: Highcharts.AxisLabelsFormatterContextObject) {
-                  return seriesData[this.pos]?.current_phase || "";
-                },
-              },
-            },
+            // {
+            //   title: { text: "Current Phase" },
+            //   labels: {
+            //     formatter(this: Highcharts.AxisLabelsFormatterContextObject) {
+            //       return seriesData[this.pos]?.current_phase || "";
+            //     },
+            //   },
+            // },
           ],
         },
       },

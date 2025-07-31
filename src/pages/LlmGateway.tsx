@@ -162,7 +162,7 @@ const LlmGateway = ({ sidebarType, setSidebarType, theme }: LlmGatewayProps) => 
                     </Typography>
                     <Box
                         component={Link}
-                        to="/home" // Replace with your home route
+                        to="/" // Replace with your home route
                         sx={{
                             display: "flex",
                             alignItems: "center",

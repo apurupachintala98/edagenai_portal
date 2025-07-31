@@ -9,7 +9,7 @@ import LlmGateway from "../pages/LlmGateway";
 import useIdleTimer from "../hooks/useIdleTimer";
 import { useAuth } from "../contexts/AuthContext";
 
-const Login = lazy(() => import("pages/Login"));
+// const Login = lazy(() => import("pages/Login"));
 const Dashboard = lazy(() => import("pages/Dashboard"));
 const Home = lazy(() => import("pages/Home"));
 const Admin = lazy(() => import("pages/Admin"));
@@ -33,9 +33,8 @@ function ReactRoute() {
       </Helmet>
       <Suspense fallback={<Spinner />}>
         <Routes>
-          <Route path="/" element={<Login />} />
-          <Route path="/home" element={<PrivateRoute element={<Home />} />} />
-          <Route path="/dashboard" element={<PrivateRoute element={<Dashboard />} />} />
+          <Route path="/" element={<Home />} />
+          <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/admin" element={<PrivateRoute element={<Admin />} />} />
           <Route
             path="/llm-gateway"

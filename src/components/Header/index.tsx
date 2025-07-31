@@ -14,7 +14,8 @@ import {
 
 import { checkValidUserInfo } from "utils/common/index";
 import { useLogout } from "utils/hooks";
-
+import { Home } from "@carbon/icons-react";
+import { useNavigate } from "react-router-dom";
 import avatar from "assests/images/avatar.svg";
 import LogoImg from "assests/images/Logo.svg";
 import { useAuth } from "contexts/AuthContext";
@@ -31,38 +32,34 @@ function Header({
   const { t } = useTranslation();
   const { isAuthenticated, userInfo } = useAuth();
   const { handleLogout } = useLogout();
+  const navigate = useNavigate();
 
   return (
     <Container zIndex={zIndex} type={type} ref={dynamicWidth}>
       <div>
-        {sidebarType === "mini" && (
-          <LogoContainer>
-            <Logo src={LogoImg} alt="logo" />
-            <TagLine>
+        <LogoContainer>
+          {/* <Logo src={LogoImg} alt="logo" /> */}
+          {/* <TagLine>
               {currentTab === "dashboard"
                 ? "Data Intelligence Platform"
                 : "Elevance Data Intelligence Platform Dashboard"}
-            </TagLine>
-          </LogoContainer>
-        )}
+            </TagLine> */}
+          <TagLine>
+            Data Intelligence Platform
+          </TagLine>
+        </LogoContainer>
       </div>
-      {(isSearchEnabled || isAuthenticated) && (
+      <div>
         <RightHeaderContainer>
-          {/* {isSearchEnabled && (
-            <SearchField
-              labelText={t("header.searchPlaceholder")}
-              placeholder={t("header.searchPlaceholder")}
+          <AuthContainer>
+            <Home
+              size={24}
+              style={{ cursor: "pointer", marginLeft: "1rem" }}
+              onClick={() => navigate("/")}
             />
-          )} */}
-          {isAuthenticated && checkValidUserInfo(userInfo) && (
-            <AuthContainer>
-              {t("header.welcomeText")} {userInfo.user.username}!
-              <AvatarImage src={avatar} width={25} height={25} />
-              <LogoutContainer onClick={handleLogout}>{t("header.logoutText")}</LogoutContainer>
-            </AuthContainer>
-          )}
+          </AuthContainer>
         </RightHeaderContainer>
-      )}
+      </div>
     </Container>
   );
 }

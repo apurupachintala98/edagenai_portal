@@ -101,7 +101,7 @@ const downloadDashboardPPT = (
 
     const tableData: PptxGenJS.TableRow[] = [
   [
-    { text: "SL NO.", options: { bold: true, align: "center" } },
+    { text: "S#", options: { bold: true, align: "center" } },
     { text: "Project", options: { bold: true } },
     { text: "Manager", options: { bold: true } },
     { text: "Status", options: { bold: true, align: "center" } },
