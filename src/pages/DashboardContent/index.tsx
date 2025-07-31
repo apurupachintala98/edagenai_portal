@@ -129,7 +129,6 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
         const [usersRes, costRes, programTypeRes, buRes, platformRes] = await Promise.all([
           ApiService.getAllUsersDetails(),
           ApiService.getAllCostsDetails(),
-          ApiService.getAllStaffVpDetails(),
           ApiService.getAllProgramTypeDetails(),
           ApiService.getAllBUDetails(),
           ApiService.getAllLlmPfDetails(),
