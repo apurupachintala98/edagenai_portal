@@ -298,7 +298,7 @@ function ChatWidget() {
 
   const fetchBotReply = async (userMessage: string): Promise<React.ReactNode> => {
     try {
-      const response = await fetch("https://10.126.192.122:8222/chat", {
+      const response = await fetch("http://10.126.192.122:8222/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ prompt: userMessage, session_id }),
