@@ -431,18 +431,17 @@ function ChatWidget() {
                 </div>
               </div>
             )}
-            {loading && (
-              <div style={{ display: "flex", justifyContent: "center", paddingBottom: "1rem" }}>
-                <PulseLoader size={10} color="#1a3673" />
-              </div>
-            )}
-
             {messages.map((msg, idx) => (
               <div key={idx} style={{
                 display: "flex",
                 justifyContent: msg.sender === "user" ? "flex-end" : "flex-start",
                 marginBottom: "0.75rem",
               }}>
+                {loading && (
+                  <div style={{ display: "flex", justifyContent: "center", paddingBottom: "1rem" }}>
+                    <PulseLoader size={10} color="#1a3673" />
+                  </div>
+                )}
                 <div style={{
                   backgroundColor: msg.sender === "user" ? "#1a3673" : "#e8f0fe",
                   color: msg.sender === "user" ? "#fff" : "#000",
