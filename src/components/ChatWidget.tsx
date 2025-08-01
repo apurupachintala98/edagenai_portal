@@ -171,7 +171,7 @@ function ChatWidget() {
             position: "fixed",
             bottom: "100px",
             right: "30px",
-            width: "850px",
+            width: "866px",
             height: "100%",
             maxHeight: "740px",
             backgroundColor: "white",
