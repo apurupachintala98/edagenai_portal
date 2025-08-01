@@ -227,6 +227,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Chat, SendFilled } from "@carbon/icons-react";
 import { v4 as uuidv4 } from "uuid";
+import { PulseLoader } from "react-spinners";
 
 interface Message {
   sender: "user" | "bot";
@@ -242,6 +243,8 @@ function ChatWidget() {
   const [inputValue, setInputValue] = useState("");
   const [hasStarted, setHasStarted] = useState(false);
   const messageEndRef = useRef<HTMLDivElement | null>(null);
+  const [loading, setLoading] = useState(false);
+
 
   const handleToggleChat = () => {
     if (isOpen) {
@@ -328,9 +331,11 @@ function ChatWidget() {
     setMessages((prev) => [...prev, userMsg]);
     setInputValue("");
     setHasStarted(true);
+    setLoading(true);
 
     const botReply = await fetchBotReply(trimmed);
     setMessages((prev) => [...prev, { sender: "bot", content: botReply }]);
+    setLoading(false);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -347,7 +352,7 @@ function ChatWidget() {
 
   return (
     <>
-       <button
+      <button
         onClick={handleToggleChat}
         title={isOpen ? "Close Chat" : "Open Chat"}
         style={{
@@ -426,6 +431,12 @@ function ChatWidget() {
                 </div>
               </div>
             )}
+            {loading && (
+              <div style={{ display: "flex", justifyContent: "center", paddingBottom: "1rem" }}>
+                <PulseLoader size={10} color="#1a3673" />
+              </div>
+            )}
+
             {messages.map((msg, idx) => (
               <div key={idx} style={{
                 display: "flex",
@@ -449,7 +460,7 @@ function ChatWidget() {
           </div>
 
           {/* Input box remains unchanged */}
-           <div style={{ padding: "0.75rem", borderTop: "1px solid #eee", display: "flex", alignItems: "center" }}>
+          <div style={{ padding: "0.75rem", borderTop: "1px solid #eee", display: "flex", alignItems: "center" }}>
             <input
               placeholder="Write a message"
               value={inputValue}
