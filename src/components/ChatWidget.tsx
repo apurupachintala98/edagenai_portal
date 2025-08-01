@@ -323,6 +323,21 @@ function ChatWidget() {
     }
   };
 
+  // const handleSendMessage = async () => {
+  //   const trimmed = inputValue.trim();
+  //   if (!trimmed) return;
+
+  //   const userMsg: Message = { sender: "user", content: trimmed };
+  //   setMessages((prev) => [...prev, userMsg]);
+  //   setInputValue("");
+  //   setHasStarted(true);
+  //   setLoading(true);
+
+  //   const botReply = await fetchBotReply(trimmed);
+  //   setMessages((prev) => [...prev, { sender: "bot", content: botReply }]);
+  //   setLoading(false);
+  // };
+
   const handleSendMessage = async () => {
     const trimmed = inputValue.trim();
     if (!trimmed) return;
@@ -331,11 +346,24 @@ function ChatWidget() {
     setMessages((prev) => [...prev, userMsg]);
     setInputValue("");
     setHasStarted(true);
-    setLoading(true);
+
+    // Add a loader as bot placeholder
+    const loaderMsg: Message = {
+      sender: "bot",
+      content: (
+        <div style={{ display: "flex", alignItems: "center", padding: "0.3rem 0" }}>
+          <PulseLoader size={8} color="#1a3673" />
+        </div>
+      ),
+    };
+    setMessages((prev) => [...prev, loaderMsg]);
 
     const botReply = await fetchBotReply(trimmed);
-    setMessages((prev) => [...prev, { sender: "bot", content: botReply }]);
-    setLoading(false);
+
+    setMessages((prev) => [
+      ...prev.slice(0, -1),
+      { sender: "bot", content: botReply },
+    ]);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -437,11 +465,6 @@ function ChatWidget() {
                 justifyContent: msg.sender === "user" ? "flex-end" : "flex-start",
                 marginBottom: "0.75rem",
               }}>
-                {loading && (
-                  <div style={{ display: "flex", justifyContent: "center", paddingBottom: "1rem" }}>
-                    <PulseLoader size={10} color="#1a3673" />
-                  </div>
-                )}
                 <div style={{
                   backgroundColor: msg.sender === "user" ? "#1a3673" : "#e8f0fe",
                   color: msg.sender === "user" ? "#fff" : "#000",
