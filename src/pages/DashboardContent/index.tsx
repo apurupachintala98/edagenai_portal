@@ -780,7 +780,6 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
       size="sm"
         open={showNoCostModal}
         modalHeading="No Cortex Cost Data"
-        primaryButtonText="Okay"
         onRequestClose={() => setShowNoCostModal(false)}      >
         <p style={{ marginBottom: '1rem' }}>
           The selected manager(s) currently do not have any Cortex Cost data to display.
