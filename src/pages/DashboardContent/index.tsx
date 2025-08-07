@@ -326,7 +326,7 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
   //   }));
   // };
 
-  const handleMultiSelectChange = async (
+const handleMultiSelectChange = async (
   field: "managers" | "platforms" | "phases",
   selectedItems: any[],
 ) => {
@@ -336,54 +336,66 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
   }));
 
   if (field === "managers") {
-  if (selectedItems.length === 0) {
-    setStaffVpCostData([]); // reset
-  } else {
-    try {
-      const selectedVpNames = selectedItems.map((m) => m.label);
-      const apiData = await ApiService.getAllStaffVpDetails(); // assumed full data
-
-      // Filter only selected managers
-      const filtered = apiData.filter((item: any) =>
-        selectedVpNames.includes(item.STAFF_VP)
-      );
-
-      // Convert to month-wise format
-      const monthMap = new Map<string, number>();
-
-      filtered.forEach((item: any) => {
-        const month = item.MONTH?.substring(0, 3) || "Unknown"; // e.g., "January" → "Jan"
-        const currentValue = monthMap.get(month) || 0;
-        const value = Number(item.VALUE) || 0;
-        monthMap.set(month, currentValue + value);
-      });
-
-      const colorPalette = ["#1e5ae6", "#17a19c", "#64748b", "#f59f05", "#3399ff", "#ff5733", "#8e44ad"];
-      const monthOrder = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-
-      const formatted = monthOrder
-        .filter((month) => monthMap.has(month))
-        .map((month, i) => ({
-          name: month,
-          value: monthMap.get(month)!,
-          color: colorPalette[i % colorPalette.length],
-        }));
-
-      setStaffVpCostData(formatted);
-
-      // Update total cost
-      const totalFilteredCost = formatted.reduce((acc, cur) => acc + cur.value, 0);
+    if (selectedItems.length === 0) {
+      setStaffVpCostData([]);
+      // Reset to default total cost
       setDashboardTotals((prev) => ({
         ...prev,
-        totalCost: totalFilteredCost,
+        totalCost: dashboardData.costs.reduce((acc, item) => acc + item.value, 0),
       }));
-    } catch (error) {
-      console.error("Failed to transform VP cost data:", error);
+    } else {
+      try {
+        const selectedVpNames = selectedItems.map((m) => m.label);
+        const apiData = await ApiService.getAllStaffVpDetails();
+
+        // Filter only selected managers
+        const filtered = apiData.filter((item: any) =>
+          selectedVpNames.includes(item.STAFF_VP)
+        );
+
+        // Aggregate costs by month
+        const monthMap = new Map<string, number>();
+
+        filtered.forEach((item: any) => {
+          const month = item.NAME?.substring(0, 3); // Use 'NAME' for month
+          const currentValue = monthMap.get(month) || 0;
+          const value = Number(item.VALUE) || 0;
+          monthMap.set(month, currentValue + value);
+        });
+
+        const colorPalette = [
+          "#1e5ae6", "#17a19c", "#64748b", "#f59f05",
+          "#3399ff", "#ff5733", "#8e44ad", "#00b894",
+          "#e17055", "#6c5ce7", "#fab1a0", "#ffeaa7"
+        ];
+
+        const monthOrder = [
+          "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+          "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+        ];
+
+        const formatted = monthOrder
+          .filter((month) => monthMap.has(month))
+          .map((month, i) => ({
+            name: month,
+            value: parseFloat(monthMap.get(month)!.toFixed(2)),
+            color: colorPalette[i % colorPalette.length],
+          }));
+
+        setStaffVpCostData(formatted);
+
+        const totalFilteredCost = formatted.reduce((acc, cur) => acc + cur.value, 0);
+        setDashboardTotals((prev) => ({
+          ...prev,
+          totalCost: totalFilteredCost,
+        }));
+      } catch (error) {
+        console.error("Failed to transform VP cost data:", error);
+      }
     }
   }
-}
-
 };
+
 
 
   const captureAllCharts = async () => {
