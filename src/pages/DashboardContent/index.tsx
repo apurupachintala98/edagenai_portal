@@ -777,13 +777,18 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
       </PageContainer>
       <ChatWidget />
       <Modal
-      size="sm"
-        open={showNoCostModal}
-        modalHeading="No Cortex Cost Data">
-        <p style={{ marginBottom: '1rem' }}>
-          The selected manager(s) currently do not have any Cortex Cost data to display.
-        </p>
-      </Modal>
+  open={showNoCostModal}
+  size="sm"
+  modalHeading="No Cortex Cost Data"
+  passiveModal={true}
+  onRequestClose={() => setShowNoCostModal(false)}
+>
+  <p style={{ marginBottom: '1rem' }}>
+    The selected manager(s) currently do not have any Cortex Cost data to display.
+  </p>
+</Modal>
+
+
 
     </MainContainer>
   );
