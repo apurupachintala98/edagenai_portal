@@ -248,6 +248,39 @@ const ProjectTimeline = ({
                 },
               },
             },
+            {
+              title: { text: "Tech Used" },
+              labels: {
+                useHTML: true,
+                align: "left",
+                formatter(this: Highcharts.AxisLabelsFormatterContextObject) {
+                  const rawTech = projectDetails.find(
+                    (p) => p.PROJECT_NAME === seriesData[this.pos]?.name
+                  );
+
+                  if (!rawTech) return "";
+
+                  const tech = rawTech as unknown as Record<string, boolean>;
+
+                  const keys = ["ARCHITECTURE", "UI", "PLATFORM", "DEVOPS", "FRAMEWORK", "MCP"];
+
+                  return keys.map((key) => {
+                    const active = tech[key];
+                    return `<span style="
+      display:inline-block;
+      background-color:${active ? '#d1fae5' : '#fee2e2'};
+      color:${active ? '#065f46' : '#991b1b'};
+      padding:2px 6px;
+      font-size:10px;
+      border-radius:4px;
+      margin-right:2px;
+    ">${key.slice(0, 3)}</span>`;
+                  }).join(" ");
+                }
+
+
+              },
+            },
           ],
         },
       },
