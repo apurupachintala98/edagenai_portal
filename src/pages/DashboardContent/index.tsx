@@ -104,6 +104,8 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
   const [modalProjectName, setModalProjectName] = useState("");
   const { projectDetails } = useProjectDetailsData();
   const [staffVpCostData, setStaffVpCostData] = useState<any[]>([]);
+  const [showNoCostModal, setShowNoCostModal] = useState(false);
+
 
 
   const inputRef = useRef<HTMLInputElement>(null);
@@ -326,76 +328,90 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
   //   }));
   // };
 
-const handleMultiSelectChange = async (
-  field: "managers" | "platforms" | "phases",
-  selectedItems: any[],
-) => {
-  setSelectedFilters((prev) => ({
-    ...prev,
-    [field]: selectedItems ?? [],
-  }));
+  const handleMultiSelectChange = async (
+    field: "managers" | "platforms" | "phases",
+    selectedItems: any[],
+  ) => {
+    setSelectedFilters((prev) => ({
+      ...prev,
+      [field]: selectedItems ?? [],
+    }));
 
-  if (field === "managers") {
-    if (selectedItems.length === 0) {
-      setStaffVpCostData([]);
-      // Reset to default total cost
-      setDashboardTotals((prev) => ({
-        ...prev,
-        totalCost: dashboardData.costs.reduce((acc, item) => acc + item.value, 0),
-      }));
-    } else {
-      try {
-        const selectedVpNames = selectedItems.map((m) => m.label);
-        const apiData = await ApiService.getAllStaffVpDetails();
-
-        // Filter only selected managers
-        const filtered = apiData.filter((item: any) =>
-          selectedVpNames.includes(item.STAFF_VP)
-        );
-
-        // Aggregate costs by month
-        const monthMap = new Map<string, number>();
-
-        filtered.forEach((item: any) => {
-          const month = item.NAME?.substring(0, 3); // Use 'NAME' for month
-          const currentValue = monthMap.get(month) || 0;
-          const value = Number(item.VALUE) || 0;
-          monthMap.set(month, currentValue + value);
-        });
-
-        const colorPalette = [
-          "#1e5ae6", "#17a19c", "#64748b", "#f59f05",
-          "#3399ff", "#ff5733", "#8e44ad", "#00b894",
-          "#e17055", "#6c5ce7", "#fab1a0", "#ffeaa7"
-        ];
-
-        const monthOrder = [
-          "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-          "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
-        ];
-
-        const formatted = monthOrder
-          .filter((month) => monthMap.has(month))
-          .map((month, i) => ({
-            name: month,
-            value: parseFloat(monthMap.get(month)!.toFixed(2)),
-            color: colorPalette[i % colorPalette.length],
-          }));
-
-        setStaffVpCostData(formatted);
-
-        const totalFilteredCost = formatted.reduce((acc, cur) => acc + cur.value, 0);
+    if (field === "managers") {
+      if (selectedItems.length === 0) {
+        setStaffVpCostData([]);
+        // Reset to default total cost
         setDashboardTotals((prev) => ({
           ...prev,
-          totalCost: totalFilteredCost,
+          totalCost: dashboardData.costs.reduce((acc, item) => acc + item.value, 0),
         }));
-      } catch (error) {
-        console.error("Failed to transform VP cost data:", error);
+      } else {
+        try {
+          const selectedVpNames = selectedItems.map((m) => m.label);
+          const apiData = await ApiService.getAllStaffVpDetails();
+
+          // Filter only selected managers
+          // const filtered = apiData.filter((item: any) =>
+          //   selectedVpNames.includes(item.STAFF_VP)
+          // );
+
+          const filtered = apiData.filter((item: any) =>
+            selectedVpNames.includes(item.STAFF_VP)
+          );
+
+          if (filtered.length === 0) {
+            // No cost data for selected VPs
+            setStaffVpCostData([]);
+            setDashboardTotals((prev) => ({
+              ...prev,
+              totalCost: 0,
+            }));
+            setShowNoCostModal(true);
+            return;
+          }
+
+          // Aggregate costs by month
+          const monthMap = new Map<string, number>();
+
+          filtered.forEach((item: any) => {
+            const month = item.NAME?.substring(0, 3); // Use 'NAME' for month
+            const currentValue = monthMap.get(month) || 0;
+            const value = Number(item.VALUE) || 0;
+            monthMap.set(month, currentValue + value);
+          });
+
+          const colorPalette = [
+            "#1e5ae6", "#17a19c", "#64748b", "#f59f05",
+            "#3399ff", "#ff5733", "#8e44ad", "#00b894",
+            "#e17055", "#6c5ce7", "#fab1a0", "#ffeaa7"
+          ];
+
+          const monthOrder = [
+            "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+            "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+          ];
+
+          const formatted = monthOrder
+            .filter((month) => monthMap.has(month))
+            .map((month, i) => ({
+              name: month,
+              value: parseFloat(monthMap.get(month)!.toFixed(2)),
+              color: colorPalette[i % colorPalette.length],
+            }));
+
+          setStaffVpCostData(formatted);
+
+          const totalFilteredCost = formatted.reduce((acc, cur) => acc + cur.value, 0);
+          setDashboardTotals((prev) => ({
+            ...prev,
+            totalCost: totalFilteredCost,
+          }));
+        } catch (error) {
+          console.error("Failed to transform VP cost data:", error);
+        }
       }
     }
-  }
-};
-
+  };
 
 
   const captureAllCharts = async () => {
@@ -660,10 +676,10 @@ const handleMultiSelectChange = async (
               ).toLocaleString()}`}
             >
               <div ref={chartRefs.cost}>
-               <DashboardChart
-  data={staffVpCostData.length > 0 ? staffVpCostData : dashboardData.costs}
-  isCurrency
-/>
+                <DashboardChart
+                  data={staffVpCostData.length > 0 ? staffVpCostData : dashboardData.costs}
+                  isCurrency
+                />
               </div>
             </DashboardCard>
 
@@ -760,6 +776,18 @@ const handleMultiSelectChange = async (
         />
       </PageContainer>
       <ChatWidget />
+      <Modal
+        open={showNoCostModal}
+        modalHeading="No Cortex Cost Data"
+        primaryButtonText="Okay"
+        onRequestClose={() => setShowNoCostModal(false)}
+        onRequestSubmit={() => setShowNoCostModal(false)}
+      >
+        <p style={{ marginBottom: '1rem' }}>
+          The selected manager(s) currently do not have any Cortex Cost data to display.
+        </p>
+      </Modal>
+
     </MainContainer>
   );
 }
