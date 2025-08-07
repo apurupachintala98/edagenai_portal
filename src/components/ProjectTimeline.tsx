@@ -249,7 +249,7 @@ const ProjectTimeline = ({
               },
             },
             {
-              title: { text: "Tech Used" },
+              title: { text: "Platforms Used" },
               labels: {
                 useHTML: true,
                 align: "center",
@@ -268,8 +268,8 @@ const ProjectTimeline = ({
                     const active = tech[key];
                     return `<span style="
       display:inline-block;
-      background-color:${active ? '#d1fae5' : '#fee2e2'};
-      color:${active ? '#065f46' : '#991b1b'};
+      background-color:${active ? '#cbeffd' : '#e3e3e3'};
+      color:${active ? '#065f46' : '#000000'};
       padding:2px 6px;
       font-size:10px;
       border-radius:4px;
