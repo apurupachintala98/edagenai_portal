@@ -336,34 +336,53 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
   }));
 
   if (field === "managers") {
-    if (selectedItems.length === 0) {
-      setStaffVpCostData([]); // Reset to default
-    } else {
-      try {
-        const apiData = await ApiService.getAllStaffVpDetails(); // contains VP + cost
-        const selectedVpNames = selectedItems.map((m) => m.label);
+  if (selectedItems.length === 0) {
+    setStaffVpCostData([]); // reset
+  } else {
+    try {
+      const selectedVpNames = selectedItems.map((m) => m.label);
+      const apiData = await ApiService.getAllStaffVpDetails(); // assumed full data
 
-        const filteredData = apiData
-          .filter((item: any) => selectedVpNames.includes(item.STAFF_VP))
-          .map((item: any) => ({
-            name: item.STAFF_VP,
-            value: Number(item.VALUE) || 0,
-            color: "#1e5ae6", // or dynamic color logic
-          }));
+      // Filter only selected managers
+      const filtered = apiData.filter((item: any) =>
+        selectedVpNames.includes(item.STAFF_VP)
+      );
 
-        setStaffVpCostData(filteredData);
+      // Convert to month-wise format
+      const monthMap = new Map<string, number>();
 
-        // Optional: Update total cost in dashboardTotals
-        const totalFilteredCost = filteredData.reduce((acc: any, cur: { value: any; }) => acc + cur.value, 0);
-        setDashboardTotals((prev) => ({
-          ...prev,
-          totalCost: totalFilteredCost,
+      filtered.forEach((item: any) => {
+        const month = item.MONTH?.substring(0, 3) || "Unknown"; // e.g., "January" → "Jan"
+        const currentValue = monthMap.get(month) || 0;
+        const value = Number(item.VALUE) || 0;
+        monthMap.set(month, currentValue + value);
+      });
+
+      const colorPalette = ["#1e5ae6", "#17a19c", "#64748b", "#f59f05", "#3399ff", "#ff5733", "#8e44ad"];
+      const monthOrder = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+      const formatted = monthOrder
+        .filter((month) => monthMap.has(month))
+        .map((month, i) => ({
+          name: month,
+          value: monthMap.get(month)!,
+          color: colorPalette[i % colorPalette.length],
         }));
-      } catch (error) {
-        console.error("Error fetching staff VP cost data:", error);
-      }
+
+      setStaffVpCostData(formatted);
+
+      // Update total cost
+      const totalFilteredCost = formatted.reduce((acc, cur) => acc + cur.value, 0);
+      setDashboardTotals((prev) => ({
+        ...prev,
+        totalCost: totalFilteredCost,
+      }));
+    } catch (error) {
+      console.error("Failed to transform VP cost data:", error);
     }
   }
+}
+
 };
 
 
@@ -629,10 +648,10 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
               ).toLocaleString()}`}
             >
               <div ref={chartRefs.cost}>
-                <DashboardChart
-                  data={staffVpCostData.length > 0 ? staffVpCostData : dashboardData.costs}
-                  isCurrency
-                />
+               <DashboardChart
+  data={staffVpCostData.length > 0 ? staffVpCostData : dashboardData.costs}
+  isCurrency
+/>
               </div>
             </DashboardCard>
 
