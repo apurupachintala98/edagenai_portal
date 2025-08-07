@@ -252,7 +252,7 @@ const ProjectTimeline = ({
               title: { text: "Tech Used" },
               labels: {
                 useHTML: true,
-                align: "left",
+                align: "center",
                 formatter(this: Highcharts.AxisLabelsFormatterContextObject) {
                   const rawTech = projectDetails.find(
                     (p) => p.PROJECT_NAME === seriesData[this.pos]?.name
