@@ -103,6 +103,8 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
   const [modalReady, setModalReady] = useState(false);
   const [modalProjectName, setModalProjectName] = useState("");
   const { projectDetails } = useProjectDetailsData();
+  const [staffVpCostData, setStaffVpCostData] = useState<any[]>([]);
+
 
   const inputRef = useRef<HTMLInputElement>(null);
   const handleOpen = () => {
@@ -112,7 +114,7 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
   const hasFetchedAllProjectDetails = useRef<boolean>(false);
   const hasFetchedGanttChart = useRef<boolean>(false);
 
-  
+
 
   const chartRefs = {
     status: useRef(null),
@@ -314,15 +316,56 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
     }
   };
 
-  const handleMultiSelectChange = (
-    field: "managers" | "platforms" | "phases",
-    selectedItems: any[],
-  ) => {
-    setSelectedFilters((prev) => ({
-      ...prev,
-      [field]: selectedItems ?? [],
-    }));
-  };
+  // const handleMultiSelectChange = (
+  //   field: "managers" | "platforms" | "phases",
+  //   selectedItems: any[],
+  // ) => {
+  //   setSelectedFilters((prev) => ({
+  //     ...prev,
+  //     [field]: selectedItems ?? [],
+  //   }));
+  // };
+
+  const handleMultiSelectChange = async (
+  field: "managers" | "platforms" | "phases",
+  selectedItems: any[],
+) => {
+  setSelectedFilters((prev) => ({
+    ...prev,
+    [field]: selectedItems ?? [],
+  }));
+
+  if (field === "managers") {
+    if (selectedItems.length === 0) {
+      setStaffVpCostData([]); // Reset to default
+    } else {
+      try {
+        const apiData = await ApiService.getAllStaffVpDetails(); // contains VP + cost
+        const selectedVpNames = selectedItems.map((m) => m.label);
+
+        const filteredData = apiData
+          .filter((item: any) => selectedVpNames.includes(item.STAFF_VP))
+          .map((item: any) => ({
+            name: item.STAFF_VP,
+            value: Number(item.VALUE) || 0,
+            color: "#1e5ae6", // or dynamic color logic
+          }));
+
+        setStaffVpCostData(filteredData);
+
+        // Optional: Update total cost in dashboardTotals
+        const totalFilteredCost = filteredData.reduce((acc: any, cur: { value: any; }) => acc + cur.value, 0);
+        setDashboardTotals((prev) => ({
+          ...prev,
+          totalCost: totalFilteredCost,
+        }));
+      } catch (error) {
+        console.error("Error fetching staff VP cost data:", error);
+      }
+    }
+  }
+};
+
 
   const captureAllCharts = async () => {
     const chartImages = await Promise.all([
@@ -462,14 +505,6 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
         <HeaderContainer>
           <PageTitle>{t("dashboard.title")}</PageTitle>
           <ButtonContainer style={{ display: "flex", gap: "1rem" }}>
-            {/* <Button
-              size="lg"
-              renderIcon={PresentationFile}
-              hasIconOnly
-              style={{ borderRadius: "6px" }}
-              title=""
-              onClick={handleDownloadPresentation}
-            /> */}
             <Button
               size="lg"
               hasIconOnly
@@ -593,11 +628,14 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
                 dashboardTotals.totalCost,
               ).toLocaleString()}`}
             >
-              {" "}
               <div ref={chartRefs.cost}>
-                <DashboardChart data={dashboardData.costs} isCurrency />
+                <DashboardChart
+                  data={staffVpCostData.length > 0 ? staffVpCostData : dashboardData.costs}
+                  isCurrency
+                />
               </div>
             </DashboardCard>
+
           </Carousel>
         </DashboardCardsWrapper>
 

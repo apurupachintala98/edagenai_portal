@@ -240,14 +240,14 @@ const ProjectTimeline = ({
                 },
               },
             },
-            // {
-            //   title: { text: "Current Phase" },
-            //   labels: {
-            //     formatter(this: Highcharts.AxisLabelsFormatterContextObject) {
-            //       return seriesData[this.pos]?.current_phase || "";
-            //     },
-            //   },
-            // },
+            {
+              title: { text: "Current Phase" },
+              labels: {
+                formatter(this: Highcharts.AxisLabelsFormatterContextObject) {
+                  return seriesData[this.pos]?.current_phase || "";
+                },
+              },
+            },
           ],
         },
       },

@@ -136,7 +136,6 @@ function ChatWidget() {
     messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-
   return (
     <>
       <button
