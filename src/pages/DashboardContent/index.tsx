@@ -318,16 +318,6 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
     }
   };
 
-  // const handleMultiSelectChange = (
-  //   field: "managers" | "platforms" | "phases",
-  //   selectedItems: any[],
-  // ) => {
-  //   setSelectedFilters((prev) => ({
-  //     ...prev,
-  //     [field]: selectedItems ?? [],
-  //   }));
-  // };
-
   const handleMultiSelectChange = async (
     field: "managers" | "platforms" | "phases",
     selectedItems: any[],
@@ -351,16 +341,10 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
           const apiData = await ApiService.getAllStaffVpDetails();
 
           // Filter only selected managers
-          // const filtered = apiData.filter((item: any) =>
-          //   selectedVpNames.includes(item.STAFF_VP)
-          // );
-
           const filtered = apiData.filter((item: any) =>
             selectedVpNames.includes(item.STAFF_VP)
           );
-
           if (filtered.length === 0) {
-            // No cost data for selected VPs
             setStaffVpCostData([]);
             setDashboardTotals((prev) => ({
               ...prev,
@@ -412,7 +396,6 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
       }
     }
   };
-
 
   const captureAllCharts = async () => {
     const chartImages = await Promise.all([

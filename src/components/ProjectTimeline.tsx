@@ -248,6 +248,39 @@ const ProjectTimeline = ({
                 },
               },
             },
+            //         {
+            //           title: { text: "Platforms Used" },
+            //           labels: {
+            //             useHTML: true,
+            //             align: "center",
+            //             formatter(this: Highcharts.AxisLabelsFormatterContextObject) {
+            //               const rawTech = projectDetails.find(
+            //                 (p) => p.PROJECT_NAME === seriesData[this.pos]?.name
+            //               );
+
+            //               if (!rawTech) return "";
+
+            //               const tech = rawTech as unknown as Record<string, boolean>;
+
+            //               const keys = ["ARCHITECTURE", "UI", "PLATFORM", "DEVOPS", "FRAMEWORK", "MCP"];
+
+            //               return keys.map((key) => {
+            //                 const active = tech[key];
+            //                 return `<span style="
+            //   display:inline-block;
+            //   background-color:${active ? '#cbeffd' : '#e3e3e3'};
+            //   color:${active ? '#065f46' : '#000000'};
+            //   padding:2px 6px;
+            //   font-size:10px;
+            //   border-radius:4px;
+            //   margin-right:2px;
+            // ">${key.slice(0, 3)}</span>`;
+            //               }).join(" ");
+            //             }
+
+
+            //           },
+            //         },
             {
               title: { text: "Platforms Used" },
               labels: {
@@ -266,21 +299,30 @@ const ProjectTimeline = ({
 
                   return keys.map((key) => {
                     const active = tech[key];
-                    return `<span style="
-      display:inline-block;
-      background-color:${active ? '#cbeffd' : '#e3e3e3'};
-      color:${active ? '#065f46' : '#000000'};
-      padding:2px 6px;
-      font-size:10px;
-      border-radius:4px;
-      margin-right:2px;
-    ">${key.slice(0, 3)}</span>`;
-                  }).join(" ");
-                }
+                    const short = key.slice(0, 3).toUpperCase();
 
-
+                    return `
+          <div style="
+            display: inline-block;
+            margin: 2px;
+            padding: 4px 2px;
+            border-radius: 4px;
+            width: 18px;
+            background-color: ${active ? '#0f62fe' : '#e0e0e0'};
+            color: ${active ? '#ffffff' : '#666666'};
+            font-size: 10px;
+            font-weight: bold;
+            text-align: center;
+            line-height: 12px;
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+          ">${short}</div>
+        `;
+                  }).join("");
+                },
               },
-            },
+            }
+
           ],
         },
       },
