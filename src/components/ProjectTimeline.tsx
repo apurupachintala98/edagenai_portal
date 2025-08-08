@@ -253,6 +253,9 @@ const ProjectTimeline = ({
                 useHTML: true,
                 text: `
       <div style="
+      position: relative;
+        left: 796px;
+        top: 25px;
         display: grid;
         grid-template-columns: repeat(6, 32px); /* wider columns */
         gap: 6px;
