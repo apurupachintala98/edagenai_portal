@@ -253,7 +253,7 @@ const ProjectTimeline = ({
                 useHTML: true,
                 text: `
       <div style="
-      position: relative;
+      position: static;
         left: 796px;
         top: 25px;
         display: grid;
