@@ -302,11 +302,11 @@ const ProjectTimeline = ({
     text: `
       <div style="
         display: grid;
-        grid-template-columns: repeat(6, 24px);
-        gap: 4px;
+        grid-template-columns: repeat(6, 32px); /* wider columns */
+        gap: 6px;
         justify-content: center;
-        margin-top: 20px;
-        height: 100px;
+        align-items: start;
+        padding-top: 10px;
       ">
         ${["ARCHITECTURE", "UI", "PLATFORM", "DEVOPS", "FRAMEWORK", "MCP"].map(label => `
           <div style="
@@ -316,7 +316,6 @@ const ProjectTimeline = ({
             font-weight: bold;
             line-height: 1;
             white-space: nowrap;
-            padding-top: 10px;
             text-align: left;
           ">${label}</div>
         `).join("")}
@@ -339,8 +338,8 @@ const ProjectTimeline = ({
       return `
         <div style="
           display: grid;
-          grid-template-columns: repeat(6, 24px);
-          gap: 4px;
+          grid-template-columns: repeat(6, 32px); /* match width */
+          gap: 6px;
           justify-content: center;
         ">
           ${keys.map((key) => {
@@ -357,6 +356,7 @@ const ProjectTimeline = ({
     },
   },
 }
+
 
           ],
         },
