@@ -321,7 +321,6 @@ const ProjectTimeline = ({
         height: 80px; 
         overflow: visible;
         position: relative;
-        top: -8px; 
       ">
         ${["ARCHITECTURE", "UI", "PLATFORM", "DEVOPS", "FRAMEWORK", "MCP"].map(label => `
           <div style="
