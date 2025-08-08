@@ -318,10 +318,10 @@ const ProjectTimeline = ({
         gap: 6px;
         justify-content: center;
         align-items: start;
-        height: 80px; /* Ensures enough space */
+        height: 80px; 
         overflow: visible;
         position: relative;
-        top: 25px; /* Adjust if needed */
+        top: -8px; 
       ">
         ${["ARCHITECTURE", "UI", "PLATFORM", "DEVOPS", "FRAMEWORK", "MCP"].map(label => `
           <div style="
@@ -336,7 +336,7 @@ const ProjectTimeline = ({
             height: 100%;
             overflow: visible;
             display: flex;
-            align-items: flex-start; /* 👈 Top-align text vertically */
+            align-items: flex-start; 
             justify-content: center;
           ">${label}</div>
         `).join("")}
