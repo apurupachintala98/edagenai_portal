@@ -319,7 +319,7 @@ const ProjectTimeline = ({
         gap: 6px;
         justify-content: center;
         align-items: start;
-        padding-top: 24px; /* 👈 gives space to prevent clipping */
+        overflow: visible; /* 👈 prevent clipping */
       ">
         ${["ARCHITECTURE", "UI", "PLATFORM", "DEVOPS", "FRAMEWORK", "MCP"].map(label => `
           <div style="
@@ -327,10 +327,10 @@ const ProjectTimeline = ({
             text-orientation: mixed;
             font-size: 10px;
             font-weight: bold;
-            line-height: 1;
+            line-height: 1.2;
             white-space: nowrap;
-            text-align: left;
-            margin-top: -20px; /* 👈 visually shifts upward without cutting */
+            transform: translateY(-16px); /* 👈 shifts upward visibly */
+            overflow: visible; /* 👈 makes sure it's not clipped */
           ">${label}</div>
         `).join("")}
       </div>
@@ -370,6 +370,7 @@ const ProjectTimeline = ({
     },
   },
 }
+
 
           ],
         },
