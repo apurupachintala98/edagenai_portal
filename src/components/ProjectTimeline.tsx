@@ -319,6 +319,7 @@ const ProjectTimeline = ({
         gap: 6px;
         justify-content: center;
         align-items: start;
+        padding-top: 24px; /* 👈 gives space to prevent clipping */
       ">
         ${["ARCHITECTURE", "UI", "PLATFORM", "DEVOPS", "FRAMEWORK", "MCP"].map(label => `
           <div style="
@@ -329,7 +330,7 @@ const ProjectTimeline = ({
             line-height: 1;
             white-space: nowrap;
             text-align: left;
-            transform: translateY(-20px); /* 👈 manual upward shift */
+            margin-top: -20px; /* 👈 visually shifts upward without cutting */
           ">${label}</div>
         `).join("")}
       </div>
