@@ -30,6 +30,7 @@ const GlobalStyle = createGlobalStyle`
     font-weight: bold !important;
     font-size: 0.8em !important;
     color: rgb(51,51,51) !important;
+    top: 24px !important;
   }
 
   code {
