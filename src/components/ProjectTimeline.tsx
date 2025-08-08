@@ -308,7 +308,6 @@ const ProjectTimeline = ({
     //             },
     //           },
     //         }
-
 {
   title: {
     useHTML: true,
@@ -319,18 +318,26 @@ const ProjectTimeline = ({
         gap: 6px;
         justify-content: center;
         align-items: start;
-        overflow: visible; /* 👈 prevent clipping */
+        height: 80px; /* Ensures enough space */
+        overflow: visible;
+        position: relative;
+        top: 25px; /* Adjust if needed */
       ">
         ${["ARCHITECTURE", "UI", "PLATFORM", "DEVOPS", "FRAMEWORK", "MCP"].map(label => `
           <div style="
             writing-mode: vertical-rl;
             text-orientation: mixed;
+            transform: rotate(180deg);
             font-size: 10px;
             font-weight: bold;
             line-height: 1.2;
             white-space: nowrap;
-            transform: translateY(-16px); /* 👈 shifts upward visibly */
-            overflow: visible; /* 👈 makes sure it's not clipped */
+            text-align: start;
+            height: 100%;
+            overflow: visible;
+            display: flex;
+            align-items: flex-start; /* 👈 Top-align text vertically */
+            justify-content: center;
           ">${label}</div>
         `).join("")}
       </div>
@@ -370,7 +377,6 @@ const ProjectTimeline = ({
     },
   },
 }
-
 
           ],
         },
