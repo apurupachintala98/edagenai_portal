@@ -248,52 +248,67 @@ const ProjectTimeline = ({
                 },
               },
             },
-            //         {
-            //           title: { text: "Platforms Used" },
-            //           labels: {
-            //             useHTML: true,
-            //             align: "center",
-            //             formatter(this: Highcharts.AxisLabelsFormatterContextObject) {
-            //               const rawTech = projectDetails.find(
-            //                 (p) => p.PROJECT_NAME === seriesData[this.pos]?.name
-            //               );
+    
+//           {
+//   title: {
+//     text: `
+//       <div style="display:flex; justify-content:center; gap:6px;">
+//         ${["ARC", "UI", "PLA", "DEV", "FRA", "MCP"].map(label => `
+//           <div style="
+//             writing-mode: vertical-rl;
+//             text-orientation: mixed;
+//             font-size:10px;
+//             font-weight:bold;
+//             color:#000;
+//             height:45px;
+//             line-height:1;
+//           ">${label}</div>
+//         `).join("")}
+//       </div>
+//     `
+//   },
+//   labels: {
+//     useHTML: true,
+//     align: "center",
+//     formatter(this: Highcharts.AxisLabelsFormatterContextObject) {
+//       const rawTech = projectDetails.find(
+//         (p) => p.PROJECT_NAME === seriesData[this.pos]?.name
+//       );
 
-            //               if (!rawTech) return "";
+//       if (!rawTech) return "";
 
-            //               const tech = rawTech as unknown as Record<string, boolean>;
+//       const tech = rawTech as unknown as Record<string, boolean>;
+//       const keys = ["ARCHITECTURE", "UI", "PLATFORM", "DEVOPS", "FRAMEWORK", "MCP"];
 
-            //               const keys = ["ARCHITECTURE", "UI", "PLATFORM", "DEVOPS", "FRAMEWORK", "MCP"];
-
-            //               return keys.map((key) => {
-            //                 const active = tech[key];
-            //                 return `<span style="
-            //   display:inline-block;
-            //   background-color:${active ? '#cbeffd' : '#e3e3e3'};
-            //   color:${active ? '#065f46' : '#000000'};
-            //   padding:2px 6px;
-            //   font-size:10px;
-            //   border-radius:4px;
-            //   margin-right:2px;
-            // ">${key.slice(0, 3)}</span>`;
-            //               }).join(" ");
-            //             }
-
-
-            //           },
-            //         },
-          {
+//       return `
+//         <div style="display:flex; justify-content:center; gap:6px;">
+//           ${keys.map((key) => {
+//             const active = tech[key];
+//             return `<div style="
+//               width: 18px;
+//               height: 18px;
+//               border-radius: 4px;
+//               background-color: ${active ? '#0f62fe' : '#e0e0e0'};
+//             "></div>`;
+//           }).join("")}
+//         </div>
+//       `;
+//     },
+//   }
+// }
+{
   title: {
+    useHTML: true,
     text: `
-      <div style="display:flex; justify-content:center; gap:6px;">
-        ${["ARC", "UI", "PLA", "DEV", "FRA", "MCP"].map(label => `
+      <div style="display: grid; grid-template-columns: repeat(6, 24px); gap: 4px; justify-content: center;">
+        ${["ARCHITECTURE", "UI", "PLATFORM", "DEVOPS", "FRAMEWORK", "MCP"].map(label => `
           <div style="
             writing-mode: vertical-rl;
             text-orientation: mixed;
-            font-size:10px;
-            font-weight:bold;
-            color:#000;
-            height:45px;
-            line-height:1;
+            font-size: 10px;
+            font-weight: bold;
+            line-height: 1;
+            white-space: nowrap;
           ">${label}</div>
         `).join("")}
       </div>
@@ -313,7 +328,7 @@ const ProjectTimeline = ({
       const keys = ["ARCHITECTURE", "UI", "PLATFORM", "DEVOPS", "FRAMEWORK", "MCP"];
 
       return `
-        <div style="display:flex; justify-content:center; gap:6px;">
+        <div style="display: grid; grid-template-columns: repeat(6, 24px); gap: 4px; justify-content: center;">
           ${keys.map((key) => {
             const active = tech[key];
             return `<div style="
@@ -326,8 +341,9 @@ const ProjectTimeline = ({
         </div>
       `;
     },
-  }
+  },
 }
+
 
           ],
         },
