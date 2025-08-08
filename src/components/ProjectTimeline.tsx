@@ -262,8 +262,9 @@ const ProjectTimeline = ({
       ">
         ${["ARCHITECTURE", "UI", "PLATFORM", "DEVOPS", "FRAMEWORK", "MCP"].map(label => `
           <div style="
-            writing-mode: vertical-lr;
+            writing-mode: vertical-rl;
             text-orientation: mixed;
+            transform: rotate(180deg);
             font-size: 10px;
             font-weight: bold;
             line-height: 1;
