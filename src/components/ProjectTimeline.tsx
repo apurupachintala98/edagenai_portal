@@ -248,17 +248,77 @@ const ProjectTimeline = ({
                 },
               },
             },
-            {
-              title: {
-                useHTML: true,
-                text: `
+    //         {
+    //           title: {
+    //             useHTML: true,
+    //             text: `
+    //   <div style="
+    //     display: grid;
+    //     grid-template-columns: repeat(6, 32px); /* wider columns */
+    //     gap: 6px;
+    //     justify-content: center;
+    //     align-items: start;
+    //     padding-top: 10px;
+    //   ">
+    //     ${["ARCHITECTURE", "UI", "PLATFORM", "DEVOPS", "FRAMEWORK", "MCP"].map(label => `
+    //       <div style="
+    //         writing-mode: vertical-rl;
+    //         text-orientation: mixed;
+    //         font-size: 10px;
+    //         font-weight: bold;
+    //         line-height: 1;
+    //         white-space: nowrap;
+    //         text-align: left;
+    //       ">${label}</div>
+    //     `).join("")}
+    //   </div>
+    // `
+    //           },
+    //           labels: {
+    //             useHTML: true,
+    //             align: "center",
+    //             formatter(this: Highcharts.AxisLabelsFormatterContextObject) {
+    //               const rawTech = projectDetails.find(
+    //                 (p) => p.PROJECT_NAME === seriesData[this.pos]?.name
+    //               );
+
+    //               if (!rawTech) return "";
+
+    //               const tech = rawTech as unknown as Record<string, boolean>;
+    //               const keys = ["ARCHITECTURE", "UI", "PLATFORM", "DEVOPS", "FRAMEWORK", "MCP"];
+
+    //               return `
+    //     <div style="
+    //       display: grid;
+    //       grid-template-columns: repeat(6, 32px); /* match width */
+    //       gap: 6px;
+    //       justify-content: center;
+    //     ">
+    //       ${keys.map((key) => {
+    //                 const active = tech[key];
+    //                 return `<div style="
+    //           width: 18px;
+    //           height: 18px;
+    //           border-radius: 4px;
+    //           background-color: ${active ? '#0f62fe' : '#e0e0e0'};
+    //         "></div>`;
+    //               }).join("")}
+    //     </div>
+    //   `;
+    //             },
+    //           },
+    //         }
+
+{
+  title: {
+    useHTML: true,
+    text: `
       <div style="
         display: grid;
-        grid-template-columns: repeat(6, 32px); /* wider columns */
+        grid-template-columns: repeat(6, 32px);
         gap: 6px;
         justify-content: center;
         align-items: start;
-        padding-top: 10px;
       ">
         ${["ARCHITECTURE", "UI", "PLATFORM", "DEVOPS", "FRAMEWORK", "MCP"].map(label => `
           <div style="
@@ -269,46 +329,46 @@ const ProjectTimeline = ({
             line-height: 1;
             white-space: nowrap;
             text-align: left;
+            transform: translateY(-20px); /* 👈 manual upward shift */
           ">${label}</div>
         `).join("")}
       </div>
     `
-              },
-              labels: {
-                useHTML: true,
-                align: "center",
-                formatter(this: Highcharts.AxisLabelsFormatterContextObject) {
-                  const rawTech = projectDetails.find(
-                    (p) => p.PROJECT_NAME === seriesData[this.pos]?.name
-                  );
+  },
+  labels: {
+    useHTML: true,
+    align: "center",
+    formatter(this: Highcharts.AxisLabelsFormatterContextObject) {
+      const rawTech = projectDetails.find(
+        (p) => p.PROJECT_NAME === seriesData[this.pos]?.name
+      );
 
-                  if (!rawTech) return "";
+      if (!rawTech) return "";
 
-                  const tech = rawTech as unknown as Record<string, boolean>;
-                  const keys = ["ARCHITECTURE", "UI", "PLATFORM", "DEVOPS", "FRAMEWORK", "MCP"];
+      const tech = rawTech as unknown as Record<string, boolean>;
+      const keys = ["ARCHITECTURE", "UI", "PLATFORM", "DEVOPS", "FRAMEWORK", "MCP"];
 
-                  return `
+      return `
         <div style="
           display: grid;
-          grid-template-columns: repeat(6, 32px); /* match width */
+          grid-template-columns: repeat(6, 32px);
           gap: 6px;
           justify-content: center;
         ">
           ${keys.map((key) => {
-                    const active = tech[key];
-                    return `<div style="
+            const active = tech[key];
+            return `<div style="
               width: 18px;
               height: 18px;
               border-radius: 4px;
               background-color: ${active ? '#0f62fe' : '#e0e0e0'};
             "></div>`;
-                  }).join("")}
+          }).join("")}
         </div>
       `;
-                },
-              },
-            }
-
+    },
+  },
+}
 
           ],
         },
