@@ -248,58 +248,10 @@ const ProjectTimeline = ({
                 },
               },
             },
-    
-//           {
-//   title: {
-//     text: `
-//       <div style="display:flex; justify-content:center; gap:6px;">
-//         ${["ARC", "UI", "PLA", "DEV", "FRA", "MCP"].map(label => `
-//           <div style="
-//             writing-mode: vertical-rl;
-//             text-orientation: mixed;
-//             font-size:10px;
-//             font-weight:bold;
-//             color:#000;
-//             height:45px;
-//             line-height:1;
-//           ">${label}</div>
-//         `).join("")}
-//       </div>
-//     `
-//   },
-//   labels: {
-//     useHTML: true,
-//     align: "center",
-//     formatter(this: Highcharts.AxisLabelsFormatterContextObject) {
-//       const rawTech = projectDetails.find(
-//         (p) => p.PROJECT_NAME === seriesData[this.pos]?.name
-//       );
-
-//       if (!rawTech) return "";
-
-//       const tech = rawTech as unknown as Record<string, boolean>;
-//       const keys = ["ARCHITECTURE", "UI", "PLATFORM", "DEVOPS", "FRAMEWORK", "MCP"];
-
-//       return `
-//         <div style="display:flex; justify-content:center; gap:6px;">
-//           ${keys.map((key) => {
-//             const active = tech[key];
-//             return `<div style="
-//               width: 18px;
-//               height: 18px;
-//               border-radius: 4px;
-//               background-color: ${active ? '#0f62fe' : '#e0e0e0'};
-//             "></div>`;
-//           }).join("")}
-//         </div>
-//       `;
-//     },
-//   }
-// }
-{
-  title: {
-    useHTML: true,
-    text: `
+            {
+              title: {
+                useHTML: true,
+                text: `
       <div style="
         display: grid;
         grid-template-columns: repeat(6, 32px); /* wider columns */
@@ -310,7 +262,7 @@ const ProjectTimeline = ({
       ">
         ${["ARCHITECTURE", "UI", "PLATFORM", "DEVOPS", "FRAMEWORK", "MCP"].map(label => `
           <div style="
-            writing-mode: vertical-rl;
+            writing-mode: vertical-lr;
             text-orientation: mixed;
             font-size: 10px;
             font-weight: bold;
@@ -321,21 +273,21 @@ const ProjectTimeline = ({
         `).join("")}
       </div>
     `
-  },
-  labels: {
-    useHTML: true,
-    align: "center",
-    formatter(this: Highcharts.AxisLabelsFormatterContextObject) {
-      const rawTech = projectDetails.find(
-        (p) => p.PROJECT_NAME === seriesData[this.pos]?.name
-      );
+              },
+              labels: {
+                useHTML: true,
+                align: "center",
+                formatter(this: Highcharts.AxisLabelsFormatterContextObject) {
+                  const rawTech = projectDetails.find(
+                    (p) => p.PROJECT_NAME === seriesData[this.pos]?.name
+                  );
 
-      if (!rawTech) return "";
+                  if (!rawTech) return "";
 
-      const tech = rawTech as unknown as Record<string, boolean>;
-      const keys = ["ARCHITECTURE", "UI", "PLATFORM", "DEVOPS", "FRAMEWORK", "MCP"];
+                  const tech = rawTech as unknown as Record<string, boolean>;
+                  const keys = ["ARCHITECTURE", "UI", "PLATFORM", "DEVOPS", "FRAMEWORK", "MCP"];
 
-      return `
+                  return `
         <div style="
           display: grid;
           grid-template-columns: repeat(6, 32px); /* match width */
@@ -343,19 +295,19 @@ const ProjectTimeline = ({
           justify-content: center;
         ">
           ${keys.map((key) => {
-            const active = tech[key];
-            return `<div style="
+                    const active = tech[key];
+                    return `<div style="
               width: 18px;
               height: 18px;
               border-radius: 4px;
               background-color: ${active ? '#0f62fe' : '#e0e0e0'};
             "></div>`;
-          }).join("")}
+                  }).join("")}
         </div>
       `;
-    },
-  },
-}
+                },
+              },
+            }
 
 
           ],
