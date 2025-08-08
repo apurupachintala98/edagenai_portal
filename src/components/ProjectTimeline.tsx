@@ -281,47 +281,53 @@ const ProjectTimeline = ({
 
             //           },
             //         },
-            {
-              title: { text: "Platforms Used" },
-              labels: {
-                useHTML: true,
-                align: "center",
-                formatter(this: Highcharts.AxisLabelsFormatterContextObject) {
-                  const rawTech = projectDetails.find(
-                    (p) => p.PROJECT_NAME === seriesData[this.pos]?.name
-                  );
-
-                  if (!rawTech) return "";
-
-                  const tech = rawTech as unknown as Record<string, boolean>;
-
-                  const keys = ["ARCHITECTURE", "UI", "PLATFORM", "DEVOPS", "FRAMEWORK", "MCP"];
-
-                  return keys.map((key) => {
-                    const active = tech[key];
-                    const short = key.slice(0, 3).toUpperCase();
-
-                    return `
+          {
+  title: {
+    text: `
+      <div style="display:flex; justify-content:center; gap:6px;">
+        ${["ARC", "UI", "PLA", "DEV", "FRA", "MCP"].map(label => `
           <div style="
-            display: inline-block;
-            margin: 2px;
-            padding: 4px 2px;
-            border-radius: 4px;
-            width: 18px;
-            background-color: ${active ? '#0f62fe' : '#e0e0e0'};
-            color: ${active ? '#ffffff' : '#666666'};
-            font-size: 10px;
-            font-weight: bold;
-            text-align: center;
-            line-height: 12px;
             writing-mode: vertical-rl;
             text-orientation: mixed;
-          ">${short}</div>
-        `;
-                  }).join("");
-                },
-              },
-            }
+            font-size:10px;
+            font-weight:bold;
+            color:#000;
+            height:45px;
+            line-height:1;
+          ">${label}</div>
+        `).join("")}
+      </div>
+    `
+  },
+  labels: {
+    useHTML: true,
+    align: "center",
+    formatter(this: Highcharts.AxisLabelsFormatterContextObject) {
+      const rawTech = projectDetails.find(
+        (p) => p.PROJECT_NAME === seriesData[this.pos]?.name
+      );
+
+      if (!rawTech) return "";
+
+      const tech = rawTech as unknown as Record<string, boolean>;
+      const keys = ["ARCHITECTURE", "UI", "PLATFORM", "DEVOPS", "FRAMEWORK", "MCP"];
+
+      return `
+        <div style="display:flex; justify-content:center; gap:6px;">
+          ${keys.map((key) => {
+            const active = tech[key];
+            return `<div style="
+              width: 18px;
+              height: 18px;
+              border-radius: 4px;
+              background-color: ${active ? '#0f62fe' : '#e0e0e0'};
+            "></div>`;
+          }).join("")}
+        </div>
+      `;
+    },
+  }
+}
 
           ],
         },
