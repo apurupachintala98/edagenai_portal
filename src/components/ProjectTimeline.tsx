@@ -170,7 +170,6 @@ const ProjectTimeline = ({
         min: 0,
         max: originalSeriesData.length,
         type: "category",
-        margin: 20,
         grid: {
           enabled: true,
           borderColor: "rgba(0,0,0,0.3)",
