@@ -308,6 +308,7 @@ const ProjectTimeline = ({
         const active =
           rawValue === true ||
           rawValue === "on" ||
+          rawValue === "ON" ||
           rawValue === "TRUE" ||
           rawValue === "true" ||
           rawValue === 1;
