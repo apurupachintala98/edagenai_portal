@@ -345,19 +345,40 @@ function Project() {
     });
   }, [projects, filters]);
 
+  // const projectRows = useMemo(() => {
+  //   return filteredProjects.map((proj, index) => ({
+  //     id: proj.SL_NO,
+  //     SL_NO: String(index + 1),
+  //     PROJECT_NAME: proj.PROJECT_NAME,
+  //     LEAD_NM: proj.LEAD_NM,
+  //     STAFF_VP: proj.STAFF_VP,
+  //     STATUS: proj.STATUS,
+  //     LLM_PLATFORM: proj.LLM_PLATFORM,
+  //     DEPLOYMENT_DATE: proj.DEPLOYMENT_DATE,
+  //     actions: "",
+  //   }));
+  // }, [filteredProjects]);
   const projectRows = useMemo(() => {
-    return filteredProjects.map((proj, index) => ({
-      id: proj.SL_NO,
-      SL_NO: String(index + 1),
-      PROJECT_NAME: proj.PROJECT_NAME,
-      LEAD_NM: proj.LEAD_NM,
-      STAFF_VP: proj.STAFF_VP,
-      STATUS: proj.STATUS,
-      LLM_PLATFORM: proj.LLM_PLATFORM,
-      DEPLOYMENT_DATE: proj.DEPLOYMENT_DATE,
-      actions: "",
-    }));
-  }, [filteredProjects]);
+  const sortedProjects = [...filteredProjects].sort((a, b) =>
+    (a.PROJECT_NAME || "").localeCompare(b.PROJECT_NAME || "", undefined, {
+      sensitivity: "base",
+      ignorePunctuation: true,
+    })
+  );
+
+  return sortedProjects.map((proj, index) => ({
+    id: proj.SL_NO,
+    SL_NO: String(index + 1), // renumber after sorting
+    PROJECT_NAME: proj.PROJECT_NAME,
+    LEAD_NM: proj.LEAD_NM,
+    STAFF_VP: proj.STAFF_VP,
+    STATUS: proj.STATUS,
+    LLM_PLATFORM: proj.LLM_PLATFORM,
+    DEPLOYMENT_DATE: proj.DEPLOYMENT_DATE,
+    actions: "",
+  }));
+}, [filteredProjects]);
+
 
   const paginatedRows = useMemo(() => {
     const startIndex = (currentPage - 1) * pageSize;
