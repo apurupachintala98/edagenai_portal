@@ -253,26 +253,32 @@ const ProjectTimeline = ({
                 useHTML: true,
                 text: `
     <div style="
-   display: grid;
-  grid-template-columns: repeat(6, 28px); /* tighter columns */
-  gap: 6px;
-  justify-content: center;
-  align-items: end;
-  height: 60px; /* fit inside chart */
+  display: grid;
+        grid-template-columns: repeat(6, 32px);
+        gap: 6px;
+        justify-content: center;
+        align-items: start;
+        height: 80px; 
+        overflow: visible;
+        position: relative;
+        height: 60px;
 ">
   ${["ARCHITECTURE", "UI", "PLATFORM", "DEVOPS", "FRAMEWORK", "MCP"]
                     .map(
                       (label) => `
       <div style="
-        writing-mode: vertical-rl;
-        text-orientation: mixed;
-        font-size: 9px;
-        font-weight: bold;
-        white-space: nowrap;
-        line-height: 1;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        text-align: center;
+           text-orientation: mixed;
+            transform: rotate(180deg);
+            font-size: 10px;
+            font-weight: bold;
+            line-height: 1.2;
+            white-space: nowrap;
+            text-align: start;
+            height: 100%;
+            overflow: visible;
+            display: flex;
+            align-items: flex-start; 
+            justify-content: center;
       ">
         ${label}
       </div>
