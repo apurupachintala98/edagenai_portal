@@ -96,7 +96,7 @@ function ProjectModel({ projectDetails, modalProjectName, setIsModalOpen }: Proj
         <Column sm={12} md={12} lg={12} fullWidth>
           <Grid fullWidth>
             <Column sm={12} md={12} lg={12} className="m-0 p-0">
-              <span className="HeadingLabel">Plateform Services Usage:</span>
+              <span className="HeadingLabel">Platform Services Usage:</span>
             </Column>
             <Column sm={12} md={4} lg={5} className="mp-0 p-r-10">
               <table className="tableWidth">
@@ -108,7 +108,7 @@ function ProjectModel({ projectDetails, modalProjectName, setIsModalOpen }: Proj
                           <span className="HeadingLabel">{field}</span>
                         </td>
                         <td className="tdCls" width={"20%"} align="center">
-                          {detail[0][field] === "on" ? (
+                          {detail[0][field] === "True" ? (
                             <CheckmarkFilled fill="green" size={"20"} />
                           ) : (
                             <Misuse fill="red" size={"20"} />
@@ -130,7 +130,7 @@ function ProjectModel({ projectDetails, modalProjectName, setIsModalOpen }: Proj
                           <span className="HeadingLabel">{field}</span>
                         </td>
                         <td className="tdCls" width={"20%"} align="center">
-                          {detail[0][field] === "on" ? (
+                          {detail[0][field] === "True" ? (
                             <CheckmarkFilled fill="green" size={"20"} />
                           ) : (
                             <Misuse fill="red" size={"20"} />

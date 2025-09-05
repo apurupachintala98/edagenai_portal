@@ -208,27 +208,31 @@ function ProjectDetails() {
   };
 
   const filteredProjects = useMemo(() => {
-    if (Object.keys(filters).length === 0) {
-      return projects;
+    let result = projects;
+
+    if (Object.keys(filters).length > 0) {
+      result = projects.filter((proj) => {
+        return Object.entries(filters).every(([key, values]) => {
+          if (!values.length) return true;
+          let projValue = proj[key as keyof project] as string;
+          if (key === "LLM_PLATFORM") {
+            projValue = projValue.trim();
+            projValue = projValue.split(/[(/]/)[0].trim();
+            projValue = projValue.toLowerCase() === "open ai" ? "Open AI" : projValue;
+          }
+          if (!projValue) return false;
+          return values.includes(projValue);
+        });
+      });
     }
 
-    return projects.filter((proj) => {
-      return Object.entries(filters).every(([key, values]) => {
-        if (!values.length) return true;
-        let projValue = proj[key as keyof project] as string;
-        if (key === "LLM_PLATFORM") {
-          projValue = projValue.trim();
-          projValue = projValue.split(/[(/]/)[0].trim();
-          projValue = projValue.toLowerCase() === "open ai" ? "Open AI" : projValue;
-        }
-        if (projValue === undefined || projValue === null) return false;
-        return values.includes(projValue);
-      });
-    });
+    return result.sort((a, b) =>
+      (a.PROJECT_NAME || "").localeCompare(b.PROJECT_NAME || "", undefined, { sensitivity: "base" })
+    );
   }, [projects, filters]);
 
   const projectRows = useMemo(() => {
-    return [
+    const rows = [
       {
         id: "1",
         SL_NO: "1",
@@ -258,6 +262,9 @@ function ProjectDetails() {
         SAVED: "",
       },
     ];
+    return rows.sort((a, b) =>
+      a.PROJECT_NAME.localeCompare(b.PROJECT_NAME, undefined, { sensitivity: "base" })
+    );
   }, []);
 
   const paginatedRows = useMemo(() => {
