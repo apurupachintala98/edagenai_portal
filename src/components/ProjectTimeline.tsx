@@ -252,34 +252,33 @@ const ProjectTimeline = ({
               title: {
                 useHTML: true,
                 text: `
+    <div style="
+  display: grid;
+  grid-template-columns: repeat(6, 40px); /* wider columns */
+  gap: 12px; /* more space between */
+  justify-content: center;
+  align-items: end; /* align text neatly at bottom */
+  height: 100px; /* taller for better spacing */
+">
+  ${["ARCHITECTURE", "UI", "PLATFORM", "DEVOPS", "FRAMEWORK", "MCP"]
+                    .map(
+                      (label) => `
       <div style="
-        display: grid;
-        grid-template-columns: repeat(6, 32px);
-        gap: 6px;
+        display: flex;
         justify-content: center;
-        align-items: start;
-        height: 80px; 
-        overflow: visible;
-        position: relative;
+        align-items: flex-end;
+        transform: rotate(-90deg); /* rotate once instead of writing-mode+180 */
+        transform-origin: bottom left;
+        font-size: 11px;
+        font-weight: bold;
+        white-space: nowrap;
       ">
-        ${["ARCHITECTURE", "UI", "PLATFORM", "DEVOPS", "FRAMEWORK", "MCP"].map(label => `
-          <div style="
-            writing-mode: vertical-rl;
-            text-orientation: mixed;
-            transform: rotate(180deg);
-            font-size: 10px;
-            font-weight: bold;
-            line-height: 1.2;
-            white-space: nowrap;
-            text-align: start;
-            height: 100%;
-            overflow: visible;
-            display: flex;
-            align-items: flex-start; 
-            justify-content: center;
-          ">${label}</div>
-        `).join("")}
+        ${label}
       </div>
+    `
+                    )
+                    .join("")}
+</div>
     `
               },
               labels: {
@@ -302,45 +301,45 @@ const ProjectTimeline = ({
     justify-content: center;
   ">
     ${keys
-      .map((key) => {
-        const rawValue = (rawTech as any)[key];
-        // normalize value
-        const active =
-          rawValue === true ||
-          rawValue === "on" ||
-          rawValue === "ON" ||
-          rawValue === "TRUE" ||
-          rawValue === "true" ||
-          rawValue === 1;
+                      .map((key) => {
+                        const rawValue = (rawTech as any)[key];
+                        // normalize value
+                        const active =
+                          rawValue === true ||
+                          rawValue === "on" ||
+                          rawValue === "ON" ||
+                          rawValue === "TRUE" ||
+                          rawValue === "true" ||
+                          rawValue === 1;
 
-        return `<div style="
+                        return `<div style="
           width: 18px;
           height: 18px;
           border-radius: 4px;
           background-color: ${active ? "#0f62fe" : "#e0e0e0"};
         "></div>`;
-      })
-      .join("")}
+                      })
+                      .join("")}
   </div>
 `;
-      //             return `
-      //   <div style="
-      //     display: grid;
-      //     grid-template-columns: repeat(6, 32px);
-      //     gap: 6px;
-      //     justify-content: center;
-      //   ">
-      //     ${keys.map((key) => {
-      //               const active = tech[key];
-      //               return `<div style="
-      //         width: 18px;
-      //         height: 18px;
-      //         border-radius: 4px;
-      //         background-color: ${active ? '#0f62fe' : '#e0e0e0'};
-      //       "></div>`;
-      //             }).join("")}
-      //   </div>
-      // `;
+                  //             return `
+                  //   <div style="
+                  //     display: grid;
+                  //     grid-template-columns: repeat(6, 32px);
+                  //     gap: 6px;
+                  //     justify-content: center;
+                  //   ">
+                  //     ${keys.map((key) => {
+                  //               const active = tech[key];
+                  //               return `<div style="
+                  //         width: 18px;
+                  //         height: 18px;
+                  //         border-radius: 4px;
+                  //         background-color: ${active ? '#0f62fe' : '#e0e0e0'};
+                  //       "></div>`;
+                  //             }).join("")}
+                  //   </div>
+                  // `;
                 },
               },
             }
