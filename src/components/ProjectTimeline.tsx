@@ -302,45 +302,45 @@ const ProjectTimeline = ({
     justify-content: center;
   ">
     ${keys
-      .map((key) => {
-        const rawValue = (rawTech as any)[key];
-        // normalize value
-        const active =
-          rawValue === true ||
-          rawValue === "on" ||
-          rawValue === "ON" ||
-          rawValue === "TRUE" ||
-          rawValue === "true" ||
-          rawValue === 1;
+                      .map((key) => {
+                        const rawValue = (rawTech as any)[key];
+                        // normalize value
+                        const active =
+                          rawValue === true ||
+                          rawValue === "on" ||
+                          rawValue === "ON" ||
+                          rawValue === "TRUE" ||
+                          rawValue === "true" ||
+                          rawValue === 1;
 
-        return `<div style="
+                        return `<div style="
           width: 18px;
           height: 18px;
           border-radius: 4px;
           background-color: ${active ? "#0f62fe" : "#e0e0e0"};
         "></div>`;
-      })
-      .join("")}
+                      })
+                      .join("")}
   </div>
 `;
-      //             return `
-      //   <div style="
-      //     display: grid;
-      //     grid-template-columns: repeat(6, 32px);
-      //     gap: 6px;
-      //     justify-content: center;
-      //   ">
-      //     ${keys.map((key) => {
-      //               const active = tech[key];
-      //               return `<div style="
-      //         width: 18px;
-      //         height: 18px;
-      //         border-radius: 4px;
-      //         background-color: ${active ? '#0f62fe' : '#e0e0e0'};
-      //       "></div>`;
-      //             }).join("")}
-      //   </div>
-      // `;
+                  //             return `
+                  //   <div style="
+                  //     display: grid;
+                  //     grid-template-columns: repeat(6, 32px);
+                  //     gap: 6px;
+                  //     justify-content: center;
+                  //   ">
+                  //     ${keys.map((key) => {
+                  //               const active = tech[key];
+                  //               return `<div style="
+                  //         width: 18px;
+                  //         height: 18px;
+                  //         border-radius: 4px;
+                  //         background-color: ${active ? '#0f62fe' : '#e0e0e0'};
+                  //       "></div>`;
+                  //             }).join("")}
+                  //   </div>
+                  // `;
                 },
               },
             }

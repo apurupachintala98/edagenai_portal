@@ -534,7 +534,7 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
       <PageContainer>
         <HeaderContainer>
           <PageTitle>{t("dashboard.title")}</PageTitle>
-          <ButtonContainer style={{ display: "flex", gap: "1rem" }}>
+          {/* <ButtonContainer style={{ display: "flex", gap: "1rem" }}>
             <Button
               size="lg"
               hasIconOnly
@@ -585,7 +585,7 @@ function DashboardContent({ containerWidth }: DashboardContentProps) {
                 { label: "FHIR Chat", url: "http://10.126.192.122:3090/" },
               ]}
             />
-          </ButtonContainer>
+          </ButtonContainer> */}
         </HeaderContainer>
 
         <Breadcrumb>
