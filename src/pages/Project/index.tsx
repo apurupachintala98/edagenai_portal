@@ -1253,7 +1253,7 @@ function Project() {
         <HeaderContainer>
           <PageTitle>Project</PageTitle>
           <ButtonContainer style={{ display: "flex", gap: "1rem" }}>
-            <Button
+            {/* <Button
               size="lg"
               hasIconOnly
               title="Download Presentation"
@@ -1302,7 +1302,7 @@ function Project() {
                 { label: "Conversational Chat", url: "http://10.126.192.122:3050/" },
                 { label: "FHIR Chat", url: "http://10.126.192.122:3090/" },
               ]}
-            />
+            /> */}
             <Button kind="primary" size="lg" onClick={openAddModal} renderIcon={Add}>
               Add Project
             </Button>
